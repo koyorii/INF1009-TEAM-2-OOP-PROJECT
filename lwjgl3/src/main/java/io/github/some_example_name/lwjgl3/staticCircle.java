@@ -2,23 +2,23 @@ package io.github.some_example_name.lwjgl3;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.math.Circle;
 
-public class Circle extends Entity {
+public class staticCircle extends nonMovableEntity{
     // Specific attribute for Circle
     private float radius;
-
+    private Circle circleBound;
     // Default Constructor
-    public Circle() {
+    public staticCircle() {
         super(); // Call parent constructor
         this.radius = 0;
     }
 
     // Parameterized Constructor
-    public Circle(float x, float y, float speed, float radius, Color color) {
-        super(x, y, speed, color); // Call parent constructor
+    public staticCircle(float x, float y, float speed, float radius, Color color) {
+        super(x, y, color); // Call parent constructor
         this.radius = radius;
+        this.circleBound = new Circle(x,y,radius);
     }
 
     // Getter and Setter for radius
@@ -31,15 +31,14 @@ public class Circle extends Entity {
         shape.circle(x, y, radius);
     }
 
-    // Movement method (Overriding - controlled by UP and DOWN arrow keys)
     @Override
-    public void movement() {
-        if (Gdx.input.isKeyPressed(Keys.UP)) {
-            y += speed;
-        }
-        if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-            y -= speed;
-        }
+    public void update(){
+        System.out.println("In circle of radius " +  this.radius + " at " + super.getX() + "," + super.getY() + " position");
+    }
+    
+    public Circle getCircleBounds(){
+        circleBound.setPosition(x, y);
+        return circleBound;
     }
 }
 
