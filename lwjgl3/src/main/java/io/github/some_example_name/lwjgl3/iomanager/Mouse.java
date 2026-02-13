@@ -6,28 +6,32 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Mouse {
 
-    private Vector2 position;
+    private final Vector2 position;
     private boolean isLeftPressed;
     private boolean isRightPressed;
 
     public Mouse() {
-        this.position = new Vector2(0, 0); //setting starting state of mouse
+        this.position = new Vector2(0, 0);
         this.isLeftPressed = false;
         this.isRightPressed = false;
     }
 
     public void update() {
-        this.position.set(Gdx.input.getX(), Gdx.input.getY()); 
+
+        this.position.set(
+                Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()  //reads the current mouse position, converts it to  game’s coordinate system and updates position vector
+        );
+
         this.isLeftPressed = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
         this.isRightPressed = Gdx.input.isButtonPressed(Input.Buttons.RIGHT);
     }
 
-    public Vector2 getMousePosition() {
-        return this.position;
-    }
+    //allows other classes to read the value safely, but not modify it
 
-    public boolean isButtonDown(int code) { //code = 0 means left button etc
-        return Gdx.input.isButtonPressed(code);
-    }
+    public Vector2 getMousePosition() {return new Vector2(position);}
 
+    public boolean isLeftPressed() {return isLeftPressed;}
+
+    public boolean isRightPressed() {return isRightPressed;}
+    
 }

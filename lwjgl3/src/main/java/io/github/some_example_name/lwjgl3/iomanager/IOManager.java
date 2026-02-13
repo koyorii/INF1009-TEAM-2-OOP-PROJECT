@@ -23,9 +23,7 @@ public class IOManager {
     //methods
     
      public void update() {
-        if (mouse != null) {
             mouse.update(); //updates mouse position
-        }
     }
 
     public void log(String msg) { 
