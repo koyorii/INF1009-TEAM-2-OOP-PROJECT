@@ -1,4 +1,4 @@
-package io.github.some_example_name.iomanager;
+package io.github.some_example_name.lwjgl3.iomanager;
 
 public class IOManager {
 
