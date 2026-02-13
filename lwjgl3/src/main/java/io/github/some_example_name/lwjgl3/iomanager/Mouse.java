@@ -17,7 +17,7 @@ public class Mouse {
     }
 
     public void update() {
-        this.position.set(Gdx.input.getX(), Gdx.input.getY()); //updates position
+        this.position.set(Gdx.input.getX(), Gdx.input.getY()); 
         this.isLeftPressed = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
         this.isRightPressed = Gdx.input.isButtonPressed(Input.Buttons.RIGHT);
     }
