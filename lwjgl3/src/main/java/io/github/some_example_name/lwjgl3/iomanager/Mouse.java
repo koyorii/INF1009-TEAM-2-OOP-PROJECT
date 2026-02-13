@@ -22,7 +22,7 @@ public class Mouse {
                 Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()  //reads the current mouse position, converts it to  game’s coordinate system and updates position vector
         );
 
-        this.isLeftPressed = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
+        this.isLeftPressed = Gdx.input.isButtonPressed(Input.Buttons.LEFT); //checks if LEFT click is pressed and stores it in isLeftPressed
         this.isRightPressed = Gdx.input.isButtonPressed(Input.Buttons.RIGHT);
     }
 
