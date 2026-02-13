@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 
 public class Keyboard {
 
-  
     public Keyboard() { //this.keyboard = new Keyboard(); will look for this constructor
     } 
 

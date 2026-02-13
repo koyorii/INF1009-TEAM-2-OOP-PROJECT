@@ -16,17 +16,9 @@ public class IOManager {
     
     //getters
 
-    public Mouse getMouse() {
-        return mouse;
-    }
-
-    public Keyboard getKeyboard() {
-        return keyboard;
-    }
-
-    public Audio getAudio() {
-        return audio;
-    }
+    public Mouse getMouse() {return mouse;}
+    public Keyboard getKeyboard() {return keyboard;}
+    public Audio getAudio() {return audio;}
 
     //methods
     

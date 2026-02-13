@@ -11,7 +11,7 @@ public class Mouse {
     private boolean isRightPressed;
 
     public Mouse() {
-        this.position = new Vector2(0, 0);
+        this.position = new Vector2(0, 0); //setting starting state of mouse
         this.isLeftPressed = false;
         this.isRightPressed = false;
     }
@@ -26,7 +26,8 @@ public class Mouse {
         return this.position;
     }
 
-    public boolean isButtonDown(int code) {
+    public boolean isButtonDown(int code) { //code = 0 means left button etc
         return Gdx.input.isButtonPressed(code);
     }
+
 }
