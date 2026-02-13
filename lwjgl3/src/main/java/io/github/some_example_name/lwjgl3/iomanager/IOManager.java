@@ -2,9 +2,9 @@ package io.github.some_example_name.lwjgl3.iomanager;
 
 public class IOManager {
 
-    private Mouse mouse; //Mouse is class, mouse is object
-    private Keyboard keyboard;
-    private Audio audio;
+    private Mouse mouse; //private variable of type Mouse called mouse
+    private Keyboard keyboard; //private variable of type Keyboard called keyboard
+    private Audio audio; //private variable of Audio called audio
 
     //constructor
 
