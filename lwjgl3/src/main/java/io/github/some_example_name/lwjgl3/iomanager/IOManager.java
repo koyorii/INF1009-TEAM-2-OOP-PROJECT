@@ -6,15 +6,7 @@ public class IOManager {
     private Keyboard keyboard;
     private Audio audio;
 
-    public void update() {
-        if (mouse != null) {
-            mouse.update(); //updates mouse position
-        }
-    }
-
-    public void log(String msg) { //method
-        System.out.println("[ENGINE LOG]: " + msg);
-    }
+    //constructor
 
     public IOManager() {
         this.mouse = new Mouse();
@@ -35,7 +27,18 @@ public class IOManager {
     public Audio getAudio() {
         return audio;
     }
+
+    //methods
     
+     public void update() {
+        if (mouse != null) {
+            mouse.update(); //updates mouse position
+        }
+    }
+
+    public void log(String msg) { 
+        System.out.println("[ENGINE LOG]: " + msg);
+    }
     
 }
 
