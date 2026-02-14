@@ -20,8 +20,8 @@ public class GameMaster extends ApplicationAdapter {
     public void create() {
         IoM = new IOManager();
         EntityM = new EntityManager();
-        collisionM = new CollisionManager(EntityM);
         MoveM = new MovementManager(IoM);
+        collisionM = new CollisionManager(EntityM,MoveM);
         batch = new SpriteBatch();
         shape = new ShapeRenderer();
         

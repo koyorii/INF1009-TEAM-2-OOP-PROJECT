@@ -26,4 +26,8 @@ public class MovementManager implements MovementCalculator{
             }
         }   
     }
+    public void collisionMovement(Entity e, float x, float y){
+        e.setX(x);
+        e.setY(y);
+    }
 }

@@ -3,6 +3,11 @@ package io.github.some_example_name.lwjgl3;
 import com.badlogic.gdx.Gdx;
 
 public class ResolveCollision implements CollisionResolver {
+    private MovementCalculator colMove;
+
+    public ResolveCollision(MovementCalculator colMove){
+        this.colMove = colMove;
+    }
 
     @Override
     public void collisionResolve(Entity a, Entity b) {
@@ -57,8 +62,10 @@ public class ResolveCollision implements CollisionResolver {
 
     // ─── Droplet caught by Bucket ───
     private void handleCatch(TextureObject droplet) {
+        float screenHeight = Gdx.graphics.getHeight();
         System.out.println("Score! Droplet caught.");
-        droplet.setY(Gdx.graphics.getHeight());
+        float randomX = (float) Math.random() * 800;
+        colMove.collisionMovement(droplet, randomX, screenHeight);
     }
 
     // ─── Droplet slides off Circle ───
@@ -86,9 +93,9 @@ public class ResolveCollision implements CollisionResolver {
 
         // Push the droplet outward along the normal away from circle center
         // Horizontal slide component is stronger so it looks like it rolls off
-        droplet.setX(droplet.getX() + nx * slideStrength);
-        droplet.setY(droplet.getY() + ny * slideStrength);
-
+        float nextx =droplet.getX() + nx * slideStrength;
+        float nexty =droplet.getY() + ny * slideStrength;
+        colMove.collisionMovement(droplet, nextx, nexty);
         System.out.println("Droplet sliding off circle!");
     }
 
@@ -104,12 +111,14 @@ public class ResolveCollision implements CollisionResolver {
 
         if (dropCenterX < triX) {
             // Droplet is on the left slope — slide left and down
-            droplet.setX(droplet.getX() - slideStrength);
-            droplet.setY(droplet.getY() - slideStrength * 0.5f);
+            float nextx = droplet.getX() - slideStrength;
+            float nexty = droplet.getY() - slideStrength * 0.5f;
+            colMove.collisionMovement(droplet, nextx, nexty);
         } else {
             // Droplet is on the right slope — slide right and down
-            droplet.setX(droplet.getX() + slideStrength);
-            droplet.setY(droplet.getY() - slideStrength * 0.5f);
+            float nextx = droplet.getX() + slideStrength;
+            float nexty = droplet.getY() - slideStrength * 0.5f;
+            colMove.collisionMovement(droplet, nextx, nexty);
         }
 
         System.out.println("Droplet sliding off triangle!");
@@ -125,7 +134,8 @@ public class ResolveCollision implements CollisionResolver {
         // Push the triangle away from the circle horizontally
         float pushStrength = 2.0f;
         float direction = dx > 0 ? 1 : -1;
-        tri.setX(tri.getX() + direction * pushStrength);
+        float nextx = tri.getX() + direction * pushStrength;
+        colMove.collisionMovement(tri, nextx, tri.getY());
 
         System.out.println("Triangle hit an obstacle! Pushed back.");
     }

@@ -4,12 +4,13 @@ import java.util.List;
 
 public class CollisionManager {
     private CheckCollision checker = new CheckCollision();
-    private ResolveCollision resolver = new ResolveCollision();
+    private ResolveCollision resolver;
     private getEntityList provider;
     private List<Entity> entities;
     
-    public CollisionManager(getEntityList provider) {
+    public CollisionManager(getEntityList provider, MovementCalculator colMove) {
         this.provider = provider;
+        this.resolver = new ResolveCollision(colMove);
     }
 
     public void update() {
