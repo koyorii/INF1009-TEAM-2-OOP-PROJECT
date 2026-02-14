@@ -1,9 +1,10 @@
 package io.github.some_example_name.lwjgl3;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
-
 
 public class Triangle extends MovableEntity {
     // Specific attribute for Triangle
@@ -22,7 +23,6 @@ public class Triangle extends MovableEntity {
         this.size = size;
 
         // Define vertices relative to (0,0)
-        // P1 (-size, -size), P2 (size, -size), P3 (0, size)
         float[] vertices = new float[] {
             -size, -size, // Bottom Left
              size, -size, // Bottom Right
@@ -38,29 +38,44 @@ public class Triangle extends MovableEntity {
     // Draw method (Overriding)
     public void draw(ShapeRenderer shape) {
         shape.setColor(color);
-        
-        // Triangle vertices centered around (x, y)
-        // P1 (bottom-left), P2 (bottom-right), P3 (top-middle)
-        float x1 = x - size;      // P1 x
-        float y1 = y - size;      // P1 y
-        float x2 = x + size;      // P2 x
-        float y2 = y - size;      // P2 y
-        float x3 = x;             // P3 x
-        float y3 = y + size;      // P3 y
-        
+
+        float x1 = x - size;
+        float y1 = y - size;
+        float x2 = x + size;
+        float y2 = y - size;
+        float x3 = x;
+        float y3 = y + size;
+
         shape.triangle(x1, y1, x2, y2, x3, y3);
     }
 
     // Movement method (Overriding - controlled by A and D keys)
-    // This demonstrates polymorphism - Triangle has different movement than Circle
     @Override
-    public void update(){
+    public void movement() {
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+
+        if (Gdx.input.isKeyPressed(Keys.A)) {
+            x -= speed;
+        }
+        if (Gdx.input.isKeyPressed(Keys.D)) {
+            x += speed;
+        }
+
+        // Clamp triangle within screen bounds (accounting for size offset)
+        if (x - size < 0) x = size;
+        if (x + size > screenWidth) x = screenWidth - size;
+        if (y - size < 0) y = size;
+        if (y + size > screenHeight) y = screenHeight - size;
+    }
+
+    @Override
+    public void update() {
         System.out.println("In Triangle at " + super.getX() + "," + super.getY() + " position");
     }
-    
+
     @Override
     public Polygon getBounds() {
-        // Update polygon position to the entity's current x, y
         trianglePolygon.setPosition(x, y);
         return trianglePolygon;
     }

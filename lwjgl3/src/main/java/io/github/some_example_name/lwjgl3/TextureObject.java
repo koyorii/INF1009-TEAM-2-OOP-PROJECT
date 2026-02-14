@@ -17,7 +17,7 @@ public class TextureObject extends MovableEntity {
     }
 
     // Parameterized Constructor
-    public TextureObject(String path, float x, float y, float speed,boolean isFalling) {
+    public TextureObject(String path, float x, float y, float speed, boolean isFalling) {
         super(x, y, speed, null); // Call parent constructor
         this.tex = new Texture(Gdx.files.internal(path));
         this.isFalling = isFalling;
@@ -37,26 +37,47 @@ public class TextureObject extends MovableEntity {
     // Getter and Setter for texture
     public Texture getTexture() { return tex; }
     public void setTexture(Texture t) { this.tex = t; }
-    public boolean getIsFalling() {return isFalling;}
-    
+    public boolean getIsFalling() { return isFalling; }
+
     // Movement method for bucket (Overriding - controlled by LEFT and RIGHT arrow keys)
+    @Override
+    public void movement() {
+        if (isFalling) {
+            y -= speed;
+            if (y < 0) y = 480;
+        } else {
+            // Bucket movement
+            if (Gdx.input.isKeyPressed(Keys.LEFT)) x -= speed;
+            if (Gdx.input.isKeyPressed(Keys.RIGHT)) x += speed;
+        }
+    }
     
     // Movement method for droplets (Overloading - different signature)
     // This demonstrates method overloading - same class, different method signatures
+    public void movement(boolean isFalling) {
+        if (isFalling) {
+            y -= speed;
+            
+            // Reset if it hits the bottom
+            if (y < 0) {
+                y = 480;
+            }
+        }
+    }
     @Override
-    public void update(){
+    public void update() {
         String type = isFalling ? "Droplet" : "Bucket";
         System.out.println("In TextureObject of " + type + " at " + super.getX() + "," + super.getY() + " position");
     }
 
     @Override
-    public Polygon getBounds(){
+    public Polygon getBounds() {
         rectPolygon.setPosition(x, y);
         return rectPolygon;
     }
 
     @Override
-    public void draw(SpriteBatch batch){
+    public void draw(SpriteBatch batch) {
         batch.draw(this.tex, super.getX(), super.getY(), this.tex.getWidth(), this.tex.getHeight());
     }
 }
