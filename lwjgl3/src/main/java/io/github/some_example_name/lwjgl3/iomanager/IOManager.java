@@ -1,6 +1,6 @@
 package io.github.some_example_name.lwjgl3.iomanager;
 
-public class IOManager {
+public class IOManager implements getInputs{
 
     private Mouse mouse; //private variable of type Mouse called mouse
     private Keyboard keyboard; //private variable of type Keyboard called keyboard
@@ -22,7 +22,7 @@ public class IOManager {
 
     //methods
     
-     public void update() {
+    public void update() {
             mouse.update(); //updates mouse position
     }
 

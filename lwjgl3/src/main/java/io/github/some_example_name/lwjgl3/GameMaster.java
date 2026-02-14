@@ -4,6 +4,9 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
+
+import io.github.some_example_name.lwjgl3.iomanager.IOManager;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameMaster extends ApplicationAdapter {
@@ -11,15 +14,19 @@ public class GameMaster extends ApplicationAdapter {
     private ShapeRenderer shape;
     private EntityManager EntityM;
     private CollisionManager collisionM;
+    private MovementManager MoveM;
+    private IOManager IoM;
     @Override
     public void create() {
+        IoM = new IOManager();
         EntityM = new EntityManager();
-        collisionM = new CollisionManager();
+        collisionM = new CollisionManager(EntityM);
+        MoveM = new MovementManager(IoM);
         batch = new SpriteBatch();
         shape = new ShapeRenderer();
         
         // Instantiate the bucket object 
-        EntityM.addEntity(new TextureObject("bucket.png", 200, 20, 5,false));
+        EntityM.addEntity(new TextureObject("bucket.png", 200, 20, 2,false));
         // Instantiate the array of 10 droplets 
         for (int i = 0; i < 10; i++){
             float randomX = (float) Math.random() * 800;
@@ -38,8 +45,8 @@ public class GameMaster extends ApplicationAdapter {
     public void render() {
         ScreenUtils.clear(0, 0, 0.2f, 1);
         
-        EntityM.update();
-        collisionM.update(EntityM.getEntities());
+        EntityM.update(MoveM);
+        collisionM.update();
         EntityM.draw(shape, batch); 
         
     }

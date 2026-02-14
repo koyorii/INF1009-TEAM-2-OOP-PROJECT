@@ -3,8 +3,7 @@ package io.github.some_example_name.lwjgl3;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
+
 
 public class Triangle extends MovableEntity {
     // Specific attribute for Triangle
@@ -54,15 +53,6 @@ public class Triangle extends MovableEntity {
 
     // Movement method (Overriding - controlled by A and D keys)
     // This demonstrates polymorphism - Triangle has different movement than Circle
-    @Override
-    public void movement() {
-        if (Gdx.input.isKeyPressed(Keys.A)) {
-            x -= speed;
-        }
-        if (Gdx.input.isKeyPressed(Keys.D)) {
-            x += speed;
-        }
-    }
     @Override
     public void update(){
         System.out.println("In Triangle at " + super.getX() + "," + super.getY() + " position");

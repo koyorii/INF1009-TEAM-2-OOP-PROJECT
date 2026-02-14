@@ -1,7 +1,6 @@
 package io.github.some_example_name.lwjgl3;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Polygon;
@@ -41,30 +40,9 @@ public class TextureObject extends MovableEntity {
     public boolean getIsFalling() {return isFalling;}
     
     // Movement method for bucket (Overriding - controlled by LEFT and RIGHT arrow keys)
-    @Override
-    public void movement() {
-        if (isFalling) {
-            y -= speed;
-            if (y < 0) y = 480;
-        } else {
-            // Bucket movement
-            if (Gdx.input.isKeyPressed(Keys.LEFT)) x -= speed;
-            if (Gdx.input.isKeyPressed(Keys.RIGHT)) x += speed;
-        }
-    }
     
     // Movement method for droplets (Overloading - different signature)
     // This demonstrates method overloading - same class, different method signatures
-    public void movement(boolean isFalling) {
-        if (isFalling) {
-            y -= speed;
-            
-            // Reset if it hits the bottom
-            if (y < 0) {
-                y = 480;
-            }
-        }
-    }
     @Override
     public void update(){
         String type = isFalling ? "Droplet" : "Bucket";

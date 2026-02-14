@@ -15,7 +15,9 @@ public abstract class MovableEntity extends Entity {
         this.speed = speed;
     }
 
-    public abstract void movement();
+    public float getSpeed(){
+        return speed;
+    }
     
     public abstract Polygon getBounds();
 }

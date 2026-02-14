@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityManager {
+public class EntityManager implements getEntityList {
     // List to store all entities (Movable and NonMovable)
     private List<Entity> entityList;
 
@@ -18,13 +18,22 @@ public class EntityManager {
     }
 
     // Handles logic and movement for all entities
-    public void update() {
+    public void update(MovementCalculator moveM) {
         for (Entity entity : entityList) {
             entity.update(); // Call standard update
             
             // If it's movable, call its specific movement logic
             if (entity instanceof MovableEntity) {
-                ((MovableEntity) entity).movement();
+                MovableEntity moveEntity = (MovableEntity) entity;
+                if (moveEntity instanceof TextureObject) {
+                    TextureObject tobj = (TextureObject) moveEntity;
+                    if(!tobj.getIsFalling()){ //for the bucket movement
+                    moveM.calculateMovement(tobj, tobj.getIsFalling(), tobj.getSpeed());
+                    }
+                    moveM.calculateMovement(tobj, tobj.getIsFalling(), tobj.getSpeed());
+                    
+                }
+                moveM.calculateMovement(moveEntity, false, moveEntity.getSpeed());
             }
         }
     }
@@ -48,6 +57,7 @@ public class EntityManager {
     }
 
     // Returns the list for collision detection outside this class if needed
+    @Override
     public List<Entity> getEntities() {
         return entityList;
     }
