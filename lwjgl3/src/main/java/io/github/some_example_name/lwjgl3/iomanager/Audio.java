@@ -2,8 +2,8 @@ package io.github.some_example_name.lwjgl3.iomanager;
 
 public class Audio {
 
-    private String path;
-    private boolean isPlaying;
+    private String path; //atrributes
+    private boolean isPlaying; //attributes
 
     public Audio() { //constructor
         this.path = "";
