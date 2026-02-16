@@ -2,14 +2,13 @@ package io.github.some_example_name.lwjgl3;
 
 import com.badlogic.gdx.Gdx;
 
-public class ResolveCollision implements CollisionResolver {
+public class ResolveCollision{
     private MovementCalculator colMove;
 
     public ResolveCollision(MovementCalculator colMove){
         this.colMove = colMove;
     }
 
-    @Override
     public void collisionResolve(Entity a, Entity b) {
         // Rule 1: Droplet hits the Bucket
         if (a instanceof TextureObject && b instanceof TextureObject) {

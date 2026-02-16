@@ -5,11 +5,11 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 
-public class CheckCollision implements CollisionChecker{
+public class CheckCollision{
     private static final Vector2 center = new Vector2();
     private static final Vector2 v1 = new Vector2();
     private static final Vector2 v2 = new Vector2();
-    @Override
+
     public boolean checkCollision(Entity a, Entity b) {
         // Handle Polygon vs Polygon (e.g., Triangle vs TextureObject)
         if (a instanceof MovableEntity && b instanceof MovableEntity) {
