@@ -58,4 +58,9 @@ public class Triangle extends MovableEntity {
         trianglePolygon.setPosition(x, y);
         return trianglePolygon;
     }
+
+    @Override
+    public void dispose() {
+
+    }
 }

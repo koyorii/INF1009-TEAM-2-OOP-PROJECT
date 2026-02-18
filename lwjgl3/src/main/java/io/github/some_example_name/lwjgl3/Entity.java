@@ -33,13 +33,15 @@ public abstract class Entity{
 
     public abstract void update();
 
-    
+
     public void draw(ShapeRenderer shape) {
 
     }
     public void draw(SpriteBatch batch) {
 
     }
-    
+
+    public abstract void dispose();
+
 }
 
