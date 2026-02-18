@@ -21,7 +21,7 @@ public class EntityManager implements getEntityList {
     public void update(MovementCalculator moveM) {
         for (Entity entity : entityList) {
             entity.update(); // Call standard update
-            
+
             // If it's movable, call its specific movement logic
             if (entity instanceof MovableEntity) {
                 MovableEntity moveEntity = (MovableEntity) entity;
@@ -31,7 +31,7 @@ public class EntityManager implements getEntityList {
                     moveM.calculateMovement(tobj, tobj.getIsFalling(), tobj.getSpeed());
                     }
                     moveM.calculateMovement(tobj, tobj.getIsFalling(), tobj.getSpeed());
-                    
+
                 }
                 moveM.calculateMovement(moveEntity, false, moveEntity.getSpeed());
             }
@@ -44,14 +44,14 @@ public class EntityManager implements getEntityList {
         for (Entity e : entityList){
             if (e instanceof TextureObject){
                 e.draw(batch);
-            } 
+            }
         }
         batch.end();
         shape.begin(ShapeRenderer.ShapeType.Filled);
         for (Entity e : entityList){
             if (!(e instanceof TextureObject)){
                 e.draw(shape);
-            } 
+            }
         }
         shape.end();
     }
@@ -60,5 +60,14 @@ public class EntityManager implements getEntityList {
     @Override
     public List<Entity> getEntities() {
         return entityList;
+    }
+
+    public void dispose() {
+        for (Entity e : entityList) {
+            // We tell every entity to clean up its own specific resources
+            e.dispose();
+        }
+        // Clear the list so we don't hold references to disposed objects
+        entityList.clear();
     }
 }

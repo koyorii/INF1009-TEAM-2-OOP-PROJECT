@@ -55,4 +55,15 @@ public class TextureObject extends MovableEntity {
     public void draw(SpriteBatch batch) {
         batch.draw(this.tex, super.getX(), super.getY(), this.tex.getWidth(), this.tex.getHeight());
     }
+
+    @Override
+    public void dispose() {
+        // Check if texture exists to avoid a NullPointerException
+        if (tex != null) {
+            tex.dispose();
+            // Good practice: set to null so we don't accidentally try to draw it again
+            tex = null;
+        }
+    }
+
 }

@@ -35,10 +35,15 @@ public class staticCircle extends nonMovableEntity{
     public void update(){
         System.out.println("In circle of radius " +  this.radius + " at " + super.getX() + "," + super.getY() + " position");
     }
-    
+
     public Circle getCircleBounds(){
         circleBound.setPosition(x, y);
         return circleBound;
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }
 
