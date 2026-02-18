@@ -1,5 +1,5 @@
 package io.github.some_example_name.lwjgl3;
-
+import io.github.some_example_name.lwjgl3.iomanager.Audio;
 import java.util.List;
 
 public class CollisionManager {
@@ -7,10 +7,12 @@ public class CollisionManager {
     private ResolveCollision resolver;
     private getEntityList provider;
     private List<Entity> entities;
+    private Audio audio;
     
-    public CollisionManager(getEntityList provider, MovementCalculator colMove) {
+    public CollisionManager(getEntityList provider, MovementCalculator colMove, Audio audio) {
         this.provider = provider;
-        this.resolver = new ResolveCollision(colMove);
+        this.audio = audio;
+        this.resolver = new ResolveCollision(colMove, audio);
     }
 
     public void update() {

@@ -1,12 +1,15 @@
 package io.github.some_example_name.lwjgl3;
+import io.github.some_example_name.lwjgl3.iomanager.Audio;
 
 import com.badlogic.gdx.Gdx;
 
 public class ResolveCollision{
     private MovementCalculator colMove;
+    private Audio audio;
 
-    public ResolveCollision(MovementCalculator colMove){
+    public ResolveCollision(MovementCalculator colMove, Audio audio){
         this.colMove = colMove;
+        this.audio = audio;
     }
 
     public void collisionResolve(Entity a, Entity b) {
@@ -63,6 +66,8 @@ public class ResolveCollision{
     private void handleCatch(TextureObject droplet) {
         float screenHeight = Gdx.graphics.getHeight();
         System.out.println("Score! Droplet caught.");
+        System.out.println("[DEBUG] handleCatch triggered");
+        audio.playSound("catch");
         float randomX = (float) Math.random() * 800;
         colMove.collisionMovement(droplet, randomX, screenHeight);
     }
@@ -121,6 +126,8 @@ public class ResolveCollision{
         }
 
         System.out.println("Droplet sliding off triangle!");
+        audio.playSound("hit");
+
     }
 
     // ─── Triangle pushed back from Circle obstacle ───
@@ -137,5 +144,6 @@ public class ResolveCollision{
         colMove.collisionMovement(tri, nextx, tri.getY());
 
         System.out.println("Triangle hit an obstacle! Pushed back.");
+        audio.playSound("hit");
     }
 }

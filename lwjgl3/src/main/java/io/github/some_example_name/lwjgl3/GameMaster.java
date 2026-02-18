@@ -16,17 +16,38 @@ public class GameMaster extends ApplicationAdapter {
     protected SceneManager sceneM;
     protected IOManager IoM;
     protected MovementManager MoveM;
+    protected EntityManager EntityM;
+    protected CollisionManager collisionM;
 
     @Override
     public void create() {
+    	// Initialize Managers
         batch = new SpriteBatch();
         shape = new ShapeRenderer();
         IoM = new IOManager();
         MoveM = new MovementManager(IoM);
+        
+        // New Managers from your local changes
+        EntityM = new EntityManager(); // Ensure this variable is declared at the class level
+        collisionM = new CollisionManager(EntityM, MoveM, IoM.getAudio());
 
+        // Load Audio Assets
+        IoM.getAudio().loadSound("catch", "catch.wav");
+        IoM.getAudio().loadSound("hit", "hit.wav");
+
+        // Instantiate Game Objects
+        EntityM.addEntity(new TextureObject("bucket.png", 200, 20, 2, false));
+        for (int i = 0; i < 10; i++) {
+            float randomX = (float) Math.random() * 800;
+            float randomY = 400 + (i * 50); 
+            EntityM.addEntity(new TextureObject("droplet.png", randomX, randomY, 2, true));
+        }
+        EntityM.addEntity(new staticCircle(400, 350, 5, 30, Color.RED));
+        EntityM.addEntity(new Triangle(600, 200, 5, 50, Color.GREEN));
+
+        // Initialize Scene (from HEAD)
         sceneM = new SceneManager(this);
-        sceneM.setScene(SceneManager.State.MENU); // Start the game at MENU scene
-    }
+        sceneM.setScene(SceneManager.State.MENU);    }
 
     @Override
     public void render() {
@@ -41,6 +62,7 @@ public class GameMaster extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         shape.dispose();
-        sceneM.dispose();
+        sceneM.dispose(); // Keep from HEAD
+        IoM.getAudio().dispose(); // Keep from your changes
     }
 }
