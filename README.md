@@ -43,3 +43,7 @@ This project uses externally sourced audio files. We would like to thank the ori
 * **`hit.wav`**
   * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
   * **Creator:** [Anthousai]
+
+* **`arcade-ui gdx-skins`**
+  * **Source:** [https://github.com/czyzby/gdx-skins]
+  * **Creator:** [yuripourre, czyzby. crykn]
