@@ -31,3 +31,15 @@ Useful Gradle tasks and flags:
 
 Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
 For example, `core:clean` removes `build` folder only from the `core` project.
+
+## Credits & Attributions
+
+This project uses externally sourced audio files. We would like to thank the original creators:
+
+* **`catch.wav`**
+  * **Source:** [https://freesound.org/people/gkillhour/sounds/267221/]
+  * **Creator:** [gkillhour]
+
+* **`hit.wav`**
+  * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
+  * **Creator:** [Anthousai]
