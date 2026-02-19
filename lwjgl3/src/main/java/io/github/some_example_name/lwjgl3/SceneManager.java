@@ -35,7 +35,7 @@ public class SceneManager implements ISceneManager {
                     cachedGame = null;
                     Gdx.input.setInputProcessor(null);
                 } else {
-                    
+
                     currentScene = new SceneGame(gm);
                 }
                 break;
@@ -46,7 +46,7 @@ public class SceneManager implements ISceneManager {
         }
     }
 
-  
+
 
     @Override
     public void update(float delta) {
@@ -67,16 +67,16 @@ public class SceneManager implements ISceneManager {
     }
 
     @Override
-public void dispose() {
-    if (currentScene != null) {
-        currentScene.dispose();
-        currentScene = null;
+    public void dispose() {
+        if (currentScene != null) {
+            currentScene.dispose();
+            currentScene = null;
+        }
+        if (cachedGame != null) {
+            cachedGame.dispose();
+            cachedGame = null;
+        }
     }
-    if (cachedGame != null) {
-        cachedGame.dispose();
-        cachedGame = null;
-    }
-}
 
     // exposes current scene through interface for external access
     public Scene getCurrentScene() {
