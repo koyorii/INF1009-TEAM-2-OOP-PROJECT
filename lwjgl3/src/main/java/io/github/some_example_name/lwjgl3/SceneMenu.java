@@ -33,7 +33,7 @@ public class SceneMenu extends Scene{
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                gm.sceneM.setScene(SceneManager.State.GAME);
+                gm.getSceneManager().setScene(SceneManager.State.GAME);
             }
         });
 

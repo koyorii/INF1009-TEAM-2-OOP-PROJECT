@@ -40,7 +40,7 @@ public class ScenePause extends Scene{
 
         // Pause the game when the player hits escape
         if (gm.IoM.getKeyboard().isKeyJustPressed(Input.Keys.ESCAPE)) {
-            gm.sceneM.setScene(SceneManager.State.GAME);
+            gm.getSceneManager().setScene(SceneManager.State.GAME);
         }
     }
 

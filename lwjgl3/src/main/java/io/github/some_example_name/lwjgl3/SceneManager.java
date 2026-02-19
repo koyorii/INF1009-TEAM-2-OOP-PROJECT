@@ -96,8 +96,7 @@ public class SceneManager implements ISceneManager {
         }
     }
 
-    // controlled read access via getter
-    @Override
+   // exposes current scene through interface for external access
     public Scene getCurrentScene() {
         return currentScene;
     }

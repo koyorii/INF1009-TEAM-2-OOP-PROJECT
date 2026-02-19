@@ -11,6 +11,4 @@ public interface ISceneManager {
     void update(float delta);
     void render(ShapeRenderer shape, SpriteBatch batch);
     void dispose();
-    Scene getCurrentScene();
-    
 }

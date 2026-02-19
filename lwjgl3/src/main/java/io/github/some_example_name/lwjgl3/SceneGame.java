@@ -41,7 +41,7 @@ public class SceneGame extends Scene{
         collisionM.update();
 
         if (gm.IoM.getKeyboard().isKeyJustPressed(Input.Keys.ESCAPE)) {
-            gm.sceneM.setScene(SceneManager.State.PAUSE);
+            gm.getSceneManager().setScene(SceneManager.State.PAUSE);
         }
     }
 

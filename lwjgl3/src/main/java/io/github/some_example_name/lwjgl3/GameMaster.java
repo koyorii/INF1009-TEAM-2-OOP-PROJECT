@@ -13,7 +13,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class GameMaster extends ApplicationAdapter {
     private SpriteBatch batch;
     private ShapeRenderer shape;
-    protected SceneManager sceneM;
+
+    // sceneM typed as ISceneManager interface, not SceneManager directly
+    // GameMaster only sees what ISceneManager exposes (abstraction)
+    private ISceneManager sceneM;
     protected IOManager IoM;
     protected MovementManager MoveM;
     protected EntityManager EntityM;
@@ -45,10 +48,16 @@ public class GameMaster extends ApplicationAdapter {
         EntityM.addEntity(new staticCircle(400, 350, 5, 30, Color.RED));
         EntityM.addEntity(new Triangle(600, 200, 5, 50, Color.GREEN));
 
-        // Initialize Scene (from HEAD)
+       // SceneManager instantiated here but stored as ISceneManager
+        // other classes communicate with it only through the interface
         sceneM = new SceneManager(this);
         sceneM.setScene(SceneManager.State.MENU);    }
 
+    // getter allows other classes to access sceneM through interface only
+    // encapsulation - sceneM field stays private
+    public ISceneManager getSceneManager() {
+    return sceneM;
+}
     @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
