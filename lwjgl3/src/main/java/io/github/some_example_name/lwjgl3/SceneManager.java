@@ -3,18 +3,26 @@ package io.github.some_example_name.lwjgl3;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import java.util.HashMap;
+import java.util.Map;
 
-public class SceneManager {
-    private GameMaster gm;
+// abstraction via interface
+public class SceneManager implements ISceneManager {
+
+    // all fields are private (encapsulation)
+    private final GameMaster gm;
     private Scene currentScene;
     private Scene cachedGame;
+    private final Map<String, Scene> sceneRegistry; // stores registered scenes
 
-    // All the possible states of our game
-    public enum State {MENU, GAME, PAUSE};
+    public enum State { MENU, GAME, PAUSE }
 
     public SceneManager(GameMaster gm) {
         this.gm = gm;
+        this.sceneRegistry = new HashMap<>();
     }
+
+
 
     // Function to set scenes accordingly to conditions
     public void setScene(State state) {
@@ -26,11 +34,13 @@ public class SceneManager {
                 currentScene = new SceneMenu(gm);
                 break;
 
+
             case GAME:
                 // If a cache of your progress exists, restore, else start new
                 if (cachedGame != null) {
                     currentScene = cachedGame;
                     cachedGame = null; // Reset
+
 
                     Gdx.input.setInputProcessor(null);
                 }
@@ -42,6 +52,7 @@ public class SceneManager {
                 }
                 break;
 
+
             case PAUSE:
                 cachedGame = currentScene;
                 currentScene = new ScenePause(gm);
@@ -49,28 +60,57 @@ public class SceneManager {
         }
     }
 
-    // Runs the logic for the active scene
+
+    // hides dispose logic (encapsulation)
+    private void disposeCurrentScene() {
+        if (currentScene != null) {
+            currentScene.dispose();
+            currentScene = null;
+        }
+    }
+
+    // implementing interface methods
+    @Override
     public void update(float delta) {
         if (currentScene != null) {
             currentScene.update(delta);
         }
     }
 
-    // Handles the drawing, with capability to add overlay like in the pause scene
+    @Override
     public void render(ShapeRenderer shape, SpriteBatch batch) {
+        // Render cached game first (underneath pause overlay)
         if (cachedGame != null) {
             cachedGame.render(shape, batch);
         }
-
         if (currentScene != null) {
             currentScene.render(shape, batch);
         }
     }
 
-    // Cleans up resources when done with them
+    @Override
     public void dispose() {
-        if (currentScene != null) {
-            currentScene.dispose();
+        disposeCurrentScene();
+        if (cachedGame != null) {
+            cachedGame.dispose();
         }
+    }
+
+    // controlled read access via getter
+    @Override
+    public Scene getCurrentScene() {
+        return currentScene;
+    }
+
+    // check if a specific state is currently active (by enum) (overload)
+    public boolean isCurrentScene(State state) {
+        return currentScene != null && currentScene.getClass().getSimpleName()
+               .equalsIgnoreCase("Scene" + state.name().charAt(0) 
+               + state.name().substring(1).toLowerCase());
+    }
+
+    //check by class type (overload)
+    public boolean isCurrentScene(Class<? extends Scene> sceneClass) {
+        return currentScene != null && currentScene.getClass() == sceneClass;
     }
 }
