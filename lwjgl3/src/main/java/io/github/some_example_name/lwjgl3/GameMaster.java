@@ -63,6 +63,7 @@ public class GameMaster extends ApplicationAdapter {
         batch.dispose();
         shape.dispose();
         sceneM.dispose(); // Keep from HEAD
+        EntityM.dispose();
         IoM.getAudio().dispose(); // Keep from your changes
     }
 }
