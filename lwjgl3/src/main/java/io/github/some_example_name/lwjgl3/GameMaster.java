@@ -57,7 +57,8 @@ public class GameMaster extends ApplicationAdapter {
     // encapsulation - sceneM field stays private
     public ISceneManager getSceneManager() {
         return sceneM;
-}
+    }
+
     @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
