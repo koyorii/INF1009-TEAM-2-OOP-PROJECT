@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 // implements ISceneManager interface (abstraction)
 public class SceneManager implements ISceneManager {
 
-     // all fields are private (encapsulation)
+    // all fields are private (encapsulation)
     private final GameMaster gm;
     private Scene currentScene;
     private Scene cachedGame;
 
-    public enum State { MENU, GAME, PAUSE }
+    public enum State {MENU, GAME, PAUSE}
 
     public SceneManager(GameMaster gm) {
         this.gm = gm;
@@ -28,7 +28,7 @@ public class SceneManager implements ISceneManager {
                 }
                 currentScene = new SceneMenu(gm);
                 break;
-             // If a cache of your progress exists, restore, else start new
+            // If a cache of your progress exists, restore, else start new
             case GAME:
                 if (cachedGame != null) {
                     currentScene = cachedGame;
@@ -47,7 +47,6 @@ public class SceneManager implements ISceneManager {
     }
 
 
-
     @Override
     public void update(float delta) {
         if (currentScene != null) {
@@ -57,7 +56,7 @@ public class SceneManager implements ISceneManager {
 
     @Override
     public void render(ShapeRenderer shape, SpriteBatch batch) {
-         // Render cached game first (underneath pause overlay)
+        // Render cached game first (underneath pause overlay)
         if (cachedGame != null) {
             cachedGame.render(shape, batch);
         }
@@ -66,6 +65,7 @@ public class SceneManager implements ISceneManager {
         }
     }
 
+    // This would allow top level clear of progression so as to properly clear resources
     @Override
     public void dispose() {
         if (currentScene != null) {
@@ -76,10 +76,5 @@ public class SceneManager implements ISceneManager {
             cachedGame.dispose();
             cachedGame = null;
         }
-    }
-
-    // exposes current scene through interface for external access
-    public Scene getCurrentScene() {
-        return currentScene;
     }
 }

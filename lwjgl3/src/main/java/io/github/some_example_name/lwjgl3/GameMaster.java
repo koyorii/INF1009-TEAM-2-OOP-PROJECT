@@ -29,7 +29,7 @@ public class GameMaster extends ApplicationAdapter {
         shape = new ShapeRenderer();
         IoM = new IOManager();
         MoveM = new MovementManager(IoM);
-        
+
         // New Managers from your local changes
         EntityM = new EntityManager(); // Ensure this variable is declared at the class level
         collisionM = new CollisionManager(EntityM, MoveM, IoM.getAudio());
@@ -42,7 +42,7 @@ public class GameMaster extends ApplicationAdapter {
         EntityM.addEntity(new TextureObject("bucket.png", 200, 20, 2, false));
         for (int i = 0; i < 10; i++) {
             float randomX = (float) Math.random() * 800;
-            float randomY = 400 + (i * 50); 
+            float randomY = 400 + (i * 50);
             EntityM.addEntity(new TextureObject("droplet.png", randomX, randomY, 2, true));
         }
         EntityM.addEntity(new staticCircle(400, 350, 5, 30, Color.RED));
@@ -56,7 +56,7 @@ public class GameMaster extends ApplicationAdapter {
     // getter allows other classes to access sceneM through interface only
     // encapsulation - sceneM field stays private
     public ISceneManager getSceneManager() {
-    return sceneM;
+        return sceneM;
 }
     @Override
     public void render() {
