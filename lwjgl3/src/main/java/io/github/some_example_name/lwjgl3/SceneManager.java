@@ -77,4 +77,9 @@ public class SceneManager implements ISceneManager {
             cachedGame = null;
         }
     }
+
+    // exposes current scene through interface for external access
+    public Scene getCurrentScene() {
+        return currentScene;
+    }
 }
