@@ -109,7 +109,6 @@ public class ResolveCollision{
         float dropCenterX = droplet.getX() + droplet.getTexture().getWidth() / 2f;
 
         float triX = tri.getX();
-        float size = tri.getSize();
 
         float slideStrength = 3.5f;
 

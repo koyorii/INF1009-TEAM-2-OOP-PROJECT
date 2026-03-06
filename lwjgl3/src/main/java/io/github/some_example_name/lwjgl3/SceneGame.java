@@ -16,7 +16,7 @@ public class SceneGame extends Scene{
 
         MoveM = gm.MoveM;
         EntityM = new EntityManager();
-        collisionM = new CollisionManager(EntityM,MoveM, gm.IoM.getAudio());
+        collisionM = new CollisionManager(EntityM,MoveM, gm.IoM);
 
         // Instantiate the bucket object
         EntityM.addEntity(new TextureObject("bucket.png", 200, 20, 2,false));

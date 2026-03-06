@@ -22,17 +22,21 @@ public class GameMaster extends ApplicationAdapter {
     protected EntityManager EntityM;
     protected CollisionManager collisionM;
 
+
+    public GameMaster(){
+        this.IoM = new IOManager();
+        this.MoveM = new MovementManager(IoM);
+        this.EntityM = new EntityManager();
+        this.collisionM = new CollisionManager(EntityM, MoveM, IoM);
+        this.sceneM = new SceneManager(this);
+
+    }
+
     @Override
     public void create() {
     	// Initialize Managers
         batch = new SpriteBatch();
         shape = new ShapeRenderer();
-        IoM = new IOManager();
-        MoveM = new MovementManager(IoM);
-
-        // New Managers from your local changes
-        EntityM = new EntityManager(); // Ensure this variable is declared at the class level
-        collisionM = new CollisionManager(EntityM, MoveM, IoM.getAudio());
 
         // Load Audio Assets
         IoM.getAudio().loadSound("catch", "catch.wav");
@@ -50,7 +54,6 @@ public class GameMaster extends ApplicationAdapter {
 
        // SceneManager instantiated here but stored as ISceneManager
         // other classes communicate with it only through the interface
-        sceneM = new SceneManager(this);
         sceneM.setScene(SceneManager.State.MENU);    }
 
     // getter allows other classes to access sceneM through interface only
