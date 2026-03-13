@@ -1,15 +1,19 @@
-package io.github.some_example_name.lwjgl3;
+package io.github.some_example_name.lwjgl3.movementManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
+import io.github.some_example_name.lwjgl3.TextureObject;
+import io.github.some_example_name.lwjgl3.Triangle;
+import io.github.some_example_name.lwjgl3.entityManager.Entity;
 import io.github.some_example_name.lwjgl3.iomanager.Keyboard;
 
 public class UserMovement {
-    float screenWidth = Gdx.graphics.getWidth();
-    float screenHeight = Gdx.graphics.getHeight();
+
     // Logic for Arrow Keys (used by the Bucket)
     public void moveArrows(Entity e, float speed, Keyboard kb) {
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
         TextureObject tobj = (TextureObject) e;
         float w = tobj.getTexture().getWidth();
         float h = tobj.getTexture().getHeight();
@@ -29,6 +33,8 @@ public class UserMovement {
 
     // Logic for WASD Keys (used by the Triangle)
     public void moveWASD(Entity e, float speed, Keyboard kb) {
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
         Triangle triObj = (Triangle) e;
         if (kb.isKeyPressed(Keys.A)) {
             triObj.setX(triObj.getX() - speed);

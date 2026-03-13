@@ -1,6 +1,9 @@
-package io.github.some_example_name.lwjgl3;
+package io.github.some_example_name.lwjgl3.movementManager;
 
 import io.github.some_example_name.lwjgl3.iomanager.getInputs;
+import io.github.some_example_name.lwjgl3.TextureObject;
+import io.github.some_example_name.lwjgl3.Triangle;
+import io.github.some_example_name.lwjgl3.entityManager.Entity;
 import io.github.some_example_name.lwjgl3.iomanager.Keyboard;
 
 public class MovementManager implements MovementCalculator{

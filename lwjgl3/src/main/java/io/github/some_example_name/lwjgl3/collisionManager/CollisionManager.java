@@ -1,5 +1,8 @@
-package io.github.some_example_name.lwjgl3;
+package io.github.some_example_name.lwjgl3.collisionManager;
+import io.github.some_example_name.lwjgl3.entityManager.Entity;
+import io.github.some_example_name.lwjgl3.entityManager.getEntityList;
 import io.github.some_example_name.lwjgl3.iomanager.getInputs;
+import io.github.some_example_name.lwjgl3.movementManager.MovementCalculator;
 
 import java.util.List;
 

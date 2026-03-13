@@ -11,6 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import io.github.some_example_name.lwjgl3.sceneManager.Scene;
+import io.github.some_example_name.lwjgl3.sceneManager.SceneManager;
+
 public class ScenePause extends Scene{
     private Stage stage; // Handles UI drawing and input events
     private Skin skin; // Container for styling through a separate JSON file (In Assets)

@@ -1,4 +1,4 @@
-package io.github.some_example_name.lwjgl3;
+package io.github.some_example_name.lwjgl3.entityManager;
 import com.badlogic.gdx.graphics.Color;
 
 public abstract class nonMovableEntity extends Entity{

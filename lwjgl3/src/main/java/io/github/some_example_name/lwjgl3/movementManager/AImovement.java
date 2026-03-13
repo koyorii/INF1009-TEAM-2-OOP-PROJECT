@@ -1,6 +1,9 @@
-package io.github.some_example_name.lwjgl3;
+package io.github.some_example_name.lwjgl3.movementManager;
 
 import com.badlogic.gdx.Gdx;
+
+import io.github.some_example_name.lwjgl3.TextureObject;
+import io.github.some_example_name.lwjgl3.entityManager.Entity;
 
 public class AImovement {
     public void move(Entity e, float speed){

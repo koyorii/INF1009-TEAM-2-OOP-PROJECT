@@ -1,5 +1,10 @@
-package io.github.some_example_name.lwjgl3;
+package io.github.some_example_name.lwjgl3.collisionManager;
+import io.github.some_example_name.lwjgl3.TextureObject;
+import io.github.some_example_name.lwjgl3.Triangle;
+import io.github.some_example_name.lwjgl3.staticCircle;
+import io.github.some_example_name.lwjgl3.entityManager.Entity;
 import io.github.some_example_name.lwjgl3.iomanager.Audio;
+import io.github.some_example_name.lwjgl3.movementManager.MovementCalculator;
 
 import com.badlogic.gdx.Gdx;
 

@@ -1,7 +1,9 @@
-package io.github.some_example_name.lwjgl3;
+package io.github.some_example_name.lwjgl3.sceneManager;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
+import io.github.some_example_name.lwjgl3.GameMaster;
 
 // Blueprint for all subsequent scenes, by forcing necessary functions through abstract
 public abstract class Scene {

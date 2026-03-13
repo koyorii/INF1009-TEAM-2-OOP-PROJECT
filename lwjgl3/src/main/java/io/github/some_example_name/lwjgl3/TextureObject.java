@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Polygon;
 
+import io.github.some_example_name.lwjgl3.entityManager.MovableEntity;
+
 public class TextureObject extends MovableEntity {
     // Specific attribute for TextureObject
     private Texture tex;

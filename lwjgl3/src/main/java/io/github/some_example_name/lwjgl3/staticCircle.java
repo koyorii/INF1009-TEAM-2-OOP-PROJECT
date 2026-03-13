@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 
+import io.github.some_example_name.lwjgl3.entityManager.nonMovableEntity;
+
 public class staticCircle extends nonMovableEntity{
     // Specific attribute for Circle
     private float radius;

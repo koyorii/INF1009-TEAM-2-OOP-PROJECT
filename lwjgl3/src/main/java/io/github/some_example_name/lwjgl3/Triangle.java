@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Polygon;
 
+import io.github.some_example_name.lwjgl3.entityManager.MovableEntity;
+
 public class Triangle extends MovableEntity {
     // Specific attribute for Triangle
     private float size;

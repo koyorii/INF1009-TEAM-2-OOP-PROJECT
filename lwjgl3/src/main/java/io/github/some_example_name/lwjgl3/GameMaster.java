@@ -6,7 +6,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import io.github.some_example_name.lwjgl3.collisionManager.CollisionManager;
+import io.github.some_example_name.lwjgl3.entityManager.EntityManager;
 import io.github.some_example_name.lwjgl3.iomanager.IOManager;
+import io.github.some_example_name.lwjgl3.movementManager.MovementManager;
+import io.github.some_example_name.lwjgl3.sceneManager.ISceneManager;
+import io.github.some_example_name.lwjgl3.sceneManager.SceneManager;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 

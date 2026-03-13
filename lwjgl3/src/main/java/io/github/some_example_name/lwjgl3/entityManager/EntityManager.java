@@ -1,7 +1,11 @@
-package io.github.some_example_name.lwjgl3;
+package io.github.some_example_name.lwjgl3.entityManager;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
+import io.github.some_example_name.lwjgl3.TextureObject;
+import io.github.some_example_name.lwjgl3.movementManager.MovementCalculator;
+
 import java.util.ArrayList;
 import java.util.List;
 

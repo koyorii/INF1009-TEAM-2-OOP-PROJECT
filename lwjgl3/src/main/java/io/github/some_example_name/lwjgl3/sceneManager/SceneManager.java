@@ -1,8 +1,13 @@
-package io.github.some_example_name.lwjgl3;
+package io.github.some_example_name.lwjgl3.sceneManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
+import io.github.some_example_name.lwjgl3.GameMaster;
+import io.github.some_example_name.lwjgl3.SceneGame;
+import io.github.some_example_name.lwjgl3.SceneMenu;
+import io.github.some_example_name.lwjgl3.ScenePause;
 
 // implements ISceneManager interface (abstraction)
 public class SceneManager implements ISceneManager {
