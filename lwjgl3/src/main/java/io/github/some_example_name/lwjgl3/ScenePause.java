@@ -25,7 +25,7 @@ public class ScenePause extends Scene{
         Gdx.input.setInputProcessor(stage);
 
         // Applies design to the paused text
-        skin = new Skin(Gdx.files.internal("skin/arcade-ui.json"));
+        skin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
         Table menuContainer = new Table();
         menuContainer.setFillParent(true);
         stage.addActor(menuContainer);

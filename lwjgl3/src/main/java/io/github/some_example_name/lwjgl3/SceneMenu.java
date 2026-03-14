@@ -26,12 +26,14 @@ public class SceneMenu extends Scene{
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        skin = new Skin(Gdx.files.internal("skin/arcade-ui.json"));
+        skin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
         Table menuContainer = new Table();
         menuContainer.setFillParent(true);
         stage.addActor(menuContainer);
 
-        TextButton playButton = new TextButton("Play", skin, "blue");
+        TextButton playButton = new TextButton("New Game", skin, "default");
+        TextButton leadButton = new TextButton("Leaderboard", skin, "default");
+        TextButton exitButton = new TextButton("Exit", skin, "default");
 
         playButton.addListener(new ClickListener() {
             @Override
@@ -40,7 +42,15 @@ public class SceneMenu extends Scene{
             }
         });
 
-        menuContainer.add(playButton).width(200).height(80);
+        leadButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //gm.getSceneManager().setScene(SceneManager.State.Leaderboard);
+            }
+        });
+
+        menuContainer.add(playButton).width(255).height(45);
+        menuContainer.add(leadButton).width(255).height(50);
     }
 
     // Update input logic
