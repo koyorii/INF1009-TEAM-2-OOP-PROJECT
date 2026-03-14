@@ -29,6 +29,7 @@ public class SceneMenu extends Scene{
         menuContainer.setFillParent(true);
         stage.addActor(menuContainer);
 
+        // Dirt background
         menuContainer.setFillParent(true);
         menuContainer.setBackground(skin.getDrawable("dirt"));
 
@@ -72,13 +73,15 @@ public class SceneMenu extends Scene{
         menuContainer.add(authorName).left().padBottom(80);
         menuContainer.row();
 
-        // Buttons
+        // Play button
         menuContainer.add(playButton).width(255).height(45).padBottom(20);
         menuContainer.row();
 
+        // Leaderboard button
         menuContainer.add(leadButton).width(255).height(45).padBottom(20);
         menuContainer.row();
 
+        // Exit button, don't need call dispose cuz Libgdx will do it for us
         menuContainer.add(exitButton).width(255).height(45);
     }
 
