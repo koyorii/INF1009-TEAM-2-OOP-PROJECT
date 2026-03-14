@@ -5,9 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -31,6 +29,16 @@ public class SceneMenu extends Scene{
         menuContainer.setFillParent(true);
         stage.addActor(menuContainer);
 
+        menuContainer.setFillParent(true);
+        menuContainer.setBackground(skin.getDrawable("dirt"));
+
+        // Text above the buttons
+        Label gameName = new Label("Sustenance", skin, "title");
+        Label authorName = new Label("a game by Lab P10 Team 2", skin, "default");
+        gameName.setFontScale(0.6f);
+        authorName.setFontScale(0.4f);
+
+        // All the different buttons in main menu
         TextButton playButton = new TextButton("New Game", skin, "default");
         TextButton leadButton = new TextButton("Leaderboard", skin, "default");
         TextButton exitButton = new TextButton("Exit", skin, "default");
@@ -49,8 +57,29 @@ public class SceneMenu extends Scene{
             }
         });
 
-        menuContainer.add(playButton).width(255).height(45);
-        menuContainer.add(leadButton).width(255).height(50);
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
+
+        // Title Card
+        menuContainer.add(gameName);
+        menuContainer.row();
+
+        // Author Intro
+        menuContainer.add(authorName).left().padBottom(80);
+        menuContainer.row();
+
+        // Buttons
+        menuContainer.add(playButton).width(255).height(45).padBottom(20);
+        menuContainer.row();
+
+        menuContainer.add(leadButton).width(255).height(45).padBottom(20);
+        menuContainer.row();
+
+        menuContainer.add(exitButton).width(255).height(45);
     }
 
     // Update input logic
