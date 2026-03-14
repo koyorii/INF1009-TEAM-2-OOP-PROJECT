@@ -37,7 +37,7 @@ public class SceneMenu extends Scene{
         Label gameName = new Label("Sustenance", skin, "title");
         Label authorName = new Label("a game by Lab P10 Team 2", skin, "default");
         gameName.setFontScale(0.6f);
-        authorName.setFontScale(0.4f);
+        authorName.setFontScale(0.6f);
 
         // All the different buttons in main menu
         TextButton playButton = new TextButton("New Game", skin, "default");
@@ -70,7 +70,7 @@ public class SceneMenu extends Scene{
         menuContainer.row();
 
         // Author Intro
-        menuContainer.add(authorName).left().padBottom(80);
+        menuContainer.add(authorName).left().padBottom(60);
         menuContainer.row();
 
         // Play button
