@@ -8,43 +8,55 @@ import com.badlogic.gdx.math.Polygon;
 import io.github.some_example_name.lwjgl3.entityManager.MovableEntity;
 
 public class TextureObject extends MovableEntity {
-    // Specific attribute for TextureObject
+
     private Texture tex;
     private boolean isFalling;
     private Polygon rectPolygon;
 
-    // Default Constructor
+    // Draw size — defaults to actual texture size, but can be overridden
+    // to scale the sprite down without changing the source image
+    private float drawWidth;
+    private float drawHeight;
+
     public TextureObject() {
-        super(); // Call parent constructor
+        super();
     }
 
-    // Parameterized Constructor
     public TextureObject(String path, float x, float y, float speed, boolean isFalling) {
-        super(x, y, speed, null); // Call parent constructor
-        this.tex = new Texture(Gdx.files.internal(path));
+        super(x, y, speed, null);
+        this.tex       = new Texture(Gdx.files.internal(path));
         this.isFalling = isFalling;
-        float w = tex.getWidth();
-        float h = tex.getHeight();
 
-        // Rectangular vertices: [x1,y1, x2,y2, x3,y3, x4,y4]
-        float[] vertices = new float[] {
-            0, 0, // Bottom Left
-            w, 0, // Bottom Right
-            w, h, // Top Right
-            0, h  // Top Left
-        };
+        // Default draw size = actual texture size
+        this.drawWidth  = tex.getWidth();
+        this.drawHeight = tex.getHeight();
+
+        buildPolygon();
+    }
+
+    // ── Call this right after construction to shrink the sprite ───
+    // e.g. playerNPC.setDrawSize(64, 96);
+    public void setDrawSize(float width, float height) {
+        this.drawWidth  = width;
+        this.drawHeight = height;
+        buildPolygon(); // rebuild collision box to match new size
+    }
+
+    private void buildPolygon() {
+        float[] vertices = new float[]{ 0,0, drawWidth,0, drawWidth,drawHeight, 0,drawHeight };
         this.rectPolygon = new Polygon(vertices);
     }
 
-    // Getter and Setter for texture
-    public Texture getTexture() { return tex; }
-    public void setTexture(Texture t) { this.tex = t; }
-    public boolean getIsFalling() { return isFalling; }
+    // ── Getters ───────────────────────────────────────────────────
+    public Texture getTexture()       { return tex;        }
+    public void setTexture(Texture t) { this.tex = t;      }
+    public boolean getIsFalling()     { return isFalling;  }
+    public float getDrawWidth()       { return drawWidth;  }
+    public float getDrawHeight()      { return drawHeight; }
 
     @Override
     public void update() {
-        String type = isFalling ? "Droplet" : "Bucket";
-        System.out.println("In TextureObject of " + type + " at " + super.getX() + "," + super.getY() + " position");
+        // intentionally empty — debug print removed
     }
 
     @Override
@@ -55,17 +67,15 @@ public class TextureObject extends MovableEntity {
 
     @Override
     public void draw(SpriteBatch batch) {
-        batch.draw(this.tex, super.getX(), super.getY(), this.tex.getWidth(), this.tex.getHeight());
+        // Draw at drawWidth x drawHeight instead of raw texture size
+        batch.draw(tex, x, y, drawWidth, drawHeight);
     }
 
     @Override
     public void dispose() {
-        // Check if texture exists to avoid a NullPointerException
         if (tex != null) {
             tex.dispose();
-            // Good practice: set to null so we don't accidentally try to draw it again
             tex = null;
         }
     }
-
 }

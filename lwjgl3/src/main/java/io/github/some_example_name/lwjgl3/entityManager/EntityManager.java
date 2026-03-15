@@ -7,10 +7,11 @@ import io.github.some_example_name.lwjgl3.TextureObject;
 import io.github.some_example_name.lwjgl3.movementManager.MovementCalculator;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class EntityManager implements getEntityList {
-    // List to store all entities (Movable and NonMovable)
+
     private List<Entity> entityList;
 
     public EntityManager() {
@@ -21,46 +22,57 @@ public class EntityManager implements getEntityList {
         entityList.add(entity);
     }
 
-    // Handles logic and movement for all entities
     public void update(MovementCalculator moveM) {
-        for (Entity entity : entityList) {
-            entity.update(); // Call standard update
 
-            // If it's movable, call its specific movement logic
-            if (entity instanceof MovableEntity) {
-                MovableEntity moveEntity = (MovableEntity) entity;
-                if (moveEntity instanceof TextureObject) {
-                    TextureObject tobj = (TextureObject) moveEntity;
-                    if(!tobj.getIsFalling()){ //for the bucket movement
-                    moveM.calculateMovement(tobj, tobj.getIsFalling(), tobj.getSpeed());
-                    }
-                    moveM.calculateMovement(tobj, tobj.getIsFalling(), tobj.getSpeed());
-
+        // Step 1: Remove OncomingFood that passed off-screen (missed)
+        // or was caught (deactivated by ResolveCollision)
+        Iterator<Entity> iter = entityList.iterator();
+        while (iter.hasNext()) {
+            Entity e = iter.next();
+            if (e instanceof OnComingFood) {
+                OnComingFood food = (OnComingFood) e;
+                if (food.isOffScreen() || !food.isActive()) {
+                    iter.remove();
                 }
+            }
+        }
+
+        // Step 2: Update all remaining entities
+        for (Entity entity : entityList) {
+            entity.update();
+
+            // OncomingFood moves itself in its own update() — skip MovementCalculator for it
+            // TextureObject player NPC is moved by PlayerController (A/D keys) — also skip
+            // MovementCalculator is only needed for other MovableEntities (Triangle etc.)
+            if (entity instanceof MovableEntity
+                    && !(entity instanceof OnComingFood)
+                    && !(entity instanceof TextureObject)) {
+                MovableEntity moveEntity = (MovableEntity) entity;
                 moveM.calculateMovement(moveEntity, false, moveEntity.getSpeed());
             }
         }
     }
 
-    // Handles rendering for both Shape-based and Texture-based entities
     public void draw(ShapeRenderer shape, SpriteBatch batch) {
+        // Draw all SpriteBatch-based entities in one begin/end block
         batch.begin();
-        for (Entity e : entityList){
-            if (e instanceof TextureObject){
+        for (Entity e : entityList) {
+            if (e instanceof TextureObject || e instanceof OnComingFood) {
                 e.draw(batch);
             }
         }
         batch.end();
+
+        // Draw all ShapeRenderer-based entities
         shape.begin(ShapeRenderer.ShapeType.Filled);
-        for (Entity e : entityList){
-            if (!(e instanceof TextureObject)){
+        for (Entity e : entityList) {
+            if (!(e instanceof TextureObject) && !(e instanceof OnComingFood)) {
                 e.draw(shape);
             }
         }
         shape.end();
     }
 
-    // Returns the list for collision detection outside this class if needed
     @Override
     public List<Entity> getEntities() {
         return entityList;
@@ -68,10 +80,8 @@ public class EntityManager implements getEntityList {
 
     public void dispose() {
         for (Entity e : entityList) {
-            // We tell every entity to clean up its own specific resources
             e.dispose();
         }
-        // Clear the list so we don't hold references to disposed objects
         entityList.clear();
     }
 }
