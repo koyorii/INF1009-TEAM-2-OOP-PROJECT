@@ -4,23 +4,36 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-import io.github.some_example_name.lwjgl3.GameMaster;
-import io.github.some_example_name.lwjgl3.SceneGame;
-import io.github.some_example_name.lwjgl3.SceneMenu;
-import io.github.some_example_name.lwjgl3.ScenePause;
+import io.github.some_example_name.lwjgl3.*;
+import io.github.some_example_name.lwjgl3.collisionManager.CollisionManager;
+import io.github.some_example_name.lwjgl3.entityManager.EntityManager;
+import io.github.some_example_name.lwjgl3.iomanager.IOManager;
+import io.github.some_example_name.lwjgl3.movementManager.MovementManager;
 
 // implements ISceneManager interface (abstraction)
 public class SceneManager implements ISceneManager {
 
     // all fields are private (encapsulation)
-    private final GameMaster gm;
     private Scene currentScene;
     private Scene cachedGame;
 
     public enum State {MENU, GAME, PAUSE}
 
-    public SceneManager(GameMaster gm) {
-        this.gm = gm;
+    private EntityManager em;
+    private CollisionManager cm;
+    private MovementManager mm;
+    private IOManager io;
+    private PlayerStats ps;
+
+    public SceneManager() {
+    }
+
+    public void setEngineTools(EntityManager em, CollisionManager cm, MovementManager mm, IOManager io, PlayerStats ps) {
+        this.em = em;
+        this.cm = cm;
+        this.mm = mm;
+        this.io = io;
+        this.ps = ps;
     }
 
     // Function to set scenes accordingly to conditions
@@ -31,7 +44,7 @@ public class SceneManager implements ISceneManager {
                 if (currentScene != null) {
                     currentScene.dispose();
                 }
-                currentScene = new SceneMenu(gm);
+                currentScene = new SceneMenu(this);
                 break;
             // If a cache of your progress exists, restore, else start new
             case GAME:
@@ -41,12 +54,12 @@ public class SceneManager implements ISceneManager {
                     Gdx.input.setInputProcessor(null);
                 } else {
 
-                    currentScene = new SceneGame(gm);
+                    currentScene = new SceneGame(this, em, cm, mm, io, ps);
                 }
                 break;
             case PAUSE:
                 cachedGame = currentScene;
-                currentScene = new ScenePause(gm);
+                currentScene = new ScenePause(this, io);
                 break;
         }
     }

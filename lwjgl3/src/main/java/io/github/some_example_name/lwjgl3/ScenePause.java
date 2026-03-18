@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import io.github.some_example_name.lwjgl3.iomanager.IOManager;
+import io.github.some_example_name.lwjgl3.sceneManager.ISceneManager;
 import io.github.some_example_name.lwjgl3.sceneManager.Scene;
 import io.github.some_example_name.lwjgl3.sceneManager.SceneManager;
 
@@ -21,8 +23,12 @@ public class ScenePause extends Scene{
     private Stage stage; // Handles UI drawing and input events
     private Skin skin; // Container for styling through a separate JSON file (In Assets)
 
-    public ScenePause(GameMaster gm) {
-        super(gm);
+    private final IOManager io;
+
+    public ScenePause(ISceneManager ism, IOManager io) {
+        super(ism);
+        this.io = io;
+
         // Initialize the stage to manage UI elements
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
@@ -52,7 +58,7 @@ public class ScenePause extends Scene{
         returnToMenuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                gm.getSceneManager().setScene(SceneManager.State.MENU);
+                ism.setScene(SceneManager.State.MENU);
             }
         });
 
@@ -85,8 +91,8 @@ public class ScenePause extends Scene{
         stage.act(delta); // Enables time based actions
 
         // Pause the game when the player hits escape
-        if (gm.IoM.getKeyboard().isKeyJustPressed(Input.Keys.ESCAPE)) {
-            gm.getSceneManager().setScene(SceneManager.State.GAME);
+        if (io.getKeyboard().isKeyJustPressed(Input.Keys.ESCAPE)) {
+            sceneManager.setScene(SceneManager.State.GAME);
         }
     }
 

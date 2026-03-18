@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import io.github.some_example_name.lwjgl3.sceneManager.ISceneManager;
 import io.github.some_example_name.lwjgl3.sceneManager.Scene;
 import io.github.some_example_name.lwjgl3.sceneManager.SceneManager;
 
@@ -17,8 +18,8 @@ public class SceneMenu extends Scene{
     private Stage stage; // Handles UI drawing and input events
     private Skin skin; // Container for styling through a separate JSON file (In Assets)
 
-    public SceneMenu(GameMaster gm) {
-        super(gm);
+    public SceneMenu(ISceneManager ism) {
+        super(ism);
 
         // Initialise the Stage, direct keys to UI stage, set up containers like in HTML, apply styling, and listener for button press to go to GAME scene
         stage = new Stage(new ScreenViewport());
@@ -47,14 +48,14 @@ public class SceneMenu extends Scene{
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                gm.getSceneManager().setScene(SceneManager.State.GAME);
+                ism.setScene(SceneManager.State.GAME);
             }
         });
 
         leadButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //gm.getSceneManager().setScene(SceneManager.State.Leaderboard);
+                //ism.getSceneManager().setScene(SceneManager.State.Leaderboard);
             }
         });
 
