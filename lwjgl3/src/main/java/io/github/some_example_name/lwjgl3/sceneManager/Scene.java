@@ -7,11 +7,10 @@ import io.github.some_example_name.lwjgl3.GameMaster;
 
 // Blueprint for all subsequent scenes, by forcing necessary functions through abstract
 public abstract class Scene {
-    // Reference to GameMaster
-    protected GameMaster gm;
+    protected final ISceneManager sceneManager;
 
-    public Scene(GameMaster gm) {
-        this.gm = gm;
+    public Scene(ISceneManager sceneManager) {
+        this.sceneManager = sceneManager;
     }
 
     // All necessary functions for child to operate well

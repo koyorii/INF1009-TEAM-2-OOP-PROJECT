@@ -2,6 +2,7 @@ package io.github.some_example_name.lwjgl3;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -9,16 +10,40 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import io.github.some_example_name.lwjgl3.collisionManager.CollisionManager;
+import io.github.some_example_name.lwjgl3.entityManager.EntityManager;
+import io.github.some_example_name.lwjgl3.entityManager.FoodSpawner;
+import io.github.some_example_name.lwjgl3.iomanager.IOManager;
+import io.github.some_example_name.lwjgl3.movementManager.MovementManager;
+import io.github.some_example_name.lwjgl3.sceneManager.ISceneManager;
 import io.github.some_example_name.lwjgl3.sceneManager.Scene;
 import io.github.some_example_name.lwjgl3.sceneManager.SceneManager;
 
 public class SceneGame extends Scene {
 
-    private Stage stage;
-    private Skin  skin;
+    private final EntityManager em;
+    private final CollisionManager cm;
+    private final MovementManager mm;
+    private final IOManager io;
+    private final PlayerStats ps;
 
-    public SceneGame(GameMaster gm) {
-        super(gm);
+    private Stage stage;
+    private Skin skin;
+    private TextureObject playerNPC;
+    private PlayerController playerController;
+    private FoodSpawner foodSpawner;
+
+    private Texture[] healthyTextures;
+    private Texture[] junkTextures;
+    private Texture vitaminTexture;
+
+    public SceneGame(ISceneManager ism, EntityManager em, CollisionManager cm, MovementManager mm, IOManager io, PlayerStats ps) {
+        super(ism);
+        this.em = em;
+        this.cm = cm;
+        this.mm = mm;
+        this.io = io;
+        this.ps = ps;
 
         // Background UI
         stage = new Stage(new ScreenViewport());
@@ -30,24 +55,57 @@ public class SceneGame extends Scene {
         menuContainer.setBackground(skin.getDrawable("dirt"));
         stage.addActor(menuContainer);
 
-        // All entities (playerNPC + food) live in gm.EntityM
-        // FoodSpawner adds OncomingFood every frame via gm.foodSpawner.update()
-        // No separate EntityManager needed here
+        float screenW = Gdx.graphics.getWidth();
+        float screenH = Gdx.graphics.getHeight();
+
+        // ── Player NPC ────────────────────────────────────────────
+        playerNPC = new TextureObject(
+            "npc.png",
+            screenW / 2f - 32,  // centered X
+            screenH * 0.08f,    // near bottom
+            0,
+            false
+        );
+
+        // ── Scale the NPC sprite down to 64x96 pixels ─────────────
+        // Adjust these two numbers to whatever looks right for your sprite.
+        // The collision box will automatically match this size too.
+        playerNPC.setDrawSize(64, 96);
+
+        em.addEntity(playerNPC);
+
+        // ── Food textures ─────────────────────────────────────────
+        healthyTextures = new Texture[]{
+            new Texture("good_foods/apple.png"),
+            new Texture("good_foods/ninjin_carrot.png"),
+            new Texture("good_foods/petbottle_water_full.png"),
+        };
+        junkTextures = new Texture[]{
+            new Texture("bad_foods/can_juice.png"),
+            new Texture("bad_foods/dokukinoko_benitengu_dake.png"),
+            new Texture("bad_foods/rotten_apple.png"),
+        };
+        vitaminTexture = new Texture("good_foods/Vitamin.png");
+
+        playerController = new PlayerController(220f);
+        foodSpawner      = new FoodSpawner(em, healthyTextures, junkTextures, vitaminTexture);
     }
 
     @Override
     public void update(float delta) {
-        gm.EntityM.update(gm.MoveM);
-        gm.collisionM.update();
+        playerController.handleInput(playerNPC);
+        foodSpawner.update(delta);
+        em.update(mm);
+        cm.update();
         stage.act(delta);
 
-        if (gm.IoM.getKeyboard().isKeyJustPressed(Input.Keys.ESCAPE)) {
-            gm.getSceneManager().setScene(SceneManager.State.PAUSE);
+        if (io.getKeyboard().isKeyJustPressed(Input.Keys.ESCAPE)) {
+            sceneManager.setScene(SceneManager.State.PAUSE);
         }
 
-        if (gm.playerStats.isDead()) {
-            Gdx.app.log("Game", "Player died! Score: " + gm.playerStats.getScore());
-            // TODO: gm.getSceneManager().setScene(SceneManager.State.GAMEOVER);
+        if (ps.isDead()) {
+            Gdx.app.log("Game", "Player died! Score: " + ps.getScore());
+            //TODO: sceneManager.setScene(SceneManager.State.GAMEOVER);
         }
     }
 
@@ -58,13 +116,22 @@ public class SceneGame extends Scene {
 
         // Then draw all game entities on top
         // batch.begin() / end() is handled inside EntityM.draw()
-        gm.EntityM.draw(shape, batch);
+        em.draw(shape, batch);
     }
 
     @Override
     public void dispose() {
         if (stage != null) stage.dispose();
         if (skin  != null) skin.dispose();
-        // Do NOT dispose gm.EntityM here — GameMaster.dispose() owns it
+
+        if (vitaminTexture != null) vitaminTexture.dispose();
+        for (Texture t : healthyTextures) {
+            if (t != null) t.dispose();
+        }
+        for (Texture t : junkTextures) {
+            if (t != null) t.dispose();
+        }
+
+        em.clearEntities();
     }
 }

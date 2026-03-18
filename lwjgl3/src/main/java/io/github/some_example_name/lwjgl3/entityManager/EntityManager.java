@@ -78,6 +78,10 @@ public class EntityManager implements getEntityList {
         return entityList;
     }
 
+    public void clearEntities() {
+        entityList.clear();
+    }
+
     public void dispose() {
         for (Entity e : entityList) {
             e.dispose();
