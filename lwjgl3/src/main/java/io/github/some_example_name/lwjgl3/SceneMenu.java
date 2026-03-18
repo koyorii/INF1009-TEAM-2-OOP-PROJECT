@@ -21,7 +21,7 @@ public class SceneMenu extends Scene{
     public SceneMenu(ISceneManager ism) {
         super(ism);
 
-        // Initialise the Stage, direct keys to UI stage, set up containers like in HTML, apply styling, and listener for button press to go to GAME scene
+        // Initialise the Stage, direct keys to UI stage, set up containers like in HTML, apply styling, and listener for button press to go to GAMEscene
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
