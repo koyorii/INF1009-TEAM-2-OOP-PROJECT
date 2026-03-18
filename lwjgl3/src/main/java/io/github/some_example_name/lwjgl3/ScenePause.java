@@ -51,8 +51,17 @@ public class ScenePause extends Scene{
         float buttonHeight = 55f;
 
         // Setting up button designs
+        TextButton returnToGameButton = new TextButton("Return to Game", skin, "default");
         TextButton returnToMenuButton = new TextButton("Return to Menu", skin, "default");
         TextButton exitGameButton = new TextButton("Quit Game", skin, "default");
+
+        // On click, return to game, just in case players dk how to read :D
+        returnToGameButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ism.setScene(SceneManager.State.GAME);
+            }
+        });
 
         // On click, return to menu
         returnToMenuButton.addListener(new ClickListener() {
@@ -76,6 +85,10 @@ public class ScenePause extends Scene{
 
         // Unpause instructions add to container
         menuContainer.add(unpauseLabel).padBottom(30);
+        menuContainer.row();
+
+        // Add return to game button to container
+        menuContainer.add(returnToGameButton).width(buttonWidth).height(buttonHeight).padBottom(20);
         menuContainer.row();
 
         // Add return to menu button to container
