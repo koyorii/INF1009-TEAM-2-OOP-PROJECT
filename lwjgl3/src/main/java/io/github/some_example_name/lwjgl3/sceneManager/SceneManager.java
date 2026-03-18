@@ -17,7 +17,7 @@ public class SceneManager implements ISceneManager {
     private Scene currentScene;
     private Scene cachedGame;
 
-    public enum State {MENU, GAME, PAUSE}
+    public enum State {MENU, GAME, PAUSE, DIFFICULTY}
 
     private EntityManager em;
     private CollisionManager cm;
@@ -46,6 +46,7 @@ public class SceneManager implements ISceneManager {
                 }
                 currentScene = new SceneMenu(this);
                 break;
+
             // If a cache of your progress exists, restore, else start new
             case GAME:
                 if (cachedGame != null) {
@@ -57,9 +58,14 @@ public class SceneManager implements ISceneManager {
                     currentScene = new SceneGame(this, em, cm, mm, io, ps);
                 }
                 break;
+
             case PAUSE:
                 cachedGame = currentScene;
                 currentScene = new ScenePause(this, io);
+                break;
+
+            case DIFFICULTY:
+                currentScene = new actualSceneDifficulty(this);
                 break;
         }
     }
