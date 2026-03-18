@@ -6,10 +6,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.some_example_name.lwjgl3.collisionManager.CollisionManager;
@@ -94,6 +99,18 @@ public class SceneGame extends Scene {
 
         playerController = new PlayerController(220f);
         foodSpawner      = new FoodSpawner(em, healthyTextures, junkTextures, vitaminTexture);
+
+        // Label for instructions
+        Label pauseLabel = new Label("Press Escape to Pause", skin,"default");
+        pauseLabel.setFontScale(0.5f);
+
+        // Adds label to tell player how to pause
+        menuContainer.add(pauseLabel)
+            .expand()      // Pushes the cell to take up all available space
+            .bottom()      // Align bottom
+            .left()        // Align left
+            .padLeft(20)   // Padding so look a bit nicer
+            .padBottom(20);
     }
 
     @Override
@@ -102,6 +119,7 @@ public class SceneGame extends Scene {
         foodSpawner.update(delta);
         em.update(mm);
         cm.update();
+
         stage.act(delta);
 
         if (io.getKeyboard().isKeyJustPressed(Input.Keys.ESCAPE)) {
