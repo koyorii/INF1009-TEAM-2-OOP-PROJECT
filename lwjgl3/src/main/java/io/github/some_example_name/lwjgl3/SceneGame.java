@@ -4,10 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.some_example_name.lwjgl3.collisionManager.CollisionManager;
@@ -52,7 +54,10 @@ public class SceneGame extends Scene {
         skin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
         Table menuContainer = new Table();
         menuContainer.setFillParent(true);
-        menuContainer.setBackground(skin.getDrawable("dirt"));
+
+        Texture normalBackground = new Texture(Gdx.files.internal("backgrounds/normal_mode_background.jpg"));
+        menuContainer.setBackground(new TextureRegionDrawable(new TextureRegion(normalBackground)));
+
         stage.addActor(menuContainer);
 
         float screenW = Gdx.graphics.getWidth();
