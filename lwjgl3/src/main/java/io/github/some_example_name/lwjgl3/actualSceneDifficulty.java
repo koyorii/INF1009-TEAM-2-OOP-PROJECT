@@ -42,7 +42,7 @@ public class actualSceneDifficulty extends Scene {
         TextButton fearButton = new TextButton("Fear & Hunger", skin, "default");
         TextButton normalButton = new TextButton("Normal", skin, "default");
 
-        // Setting colour to Fear button
+        // Setting colour to text of Fear button
         fearButton.getLabel().setColor(new Color(0.5f, 0.0f, 0.0f, 1.0f));
 
         // Button routes
