@@ -1,19 +1,15 @@
 package io.github.some_example_name.lwjgl3.Engine.sceneManager;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.assets.AssetManager;
 
 import io.github.some_example_name.lwjgl3.*;
 import io.github.some_example_name.lwjgl3.Engine.collisionManager.CollisionManager;
 import io.github.some_example_name.lwjgl3.Engine.entityManager.EntityManager;
 import io.github.some_example_name.lwjgl3.Engine.iomanager.IOManager;
 import io.github.some_example_name.lwjgl3.Engine.movementManager.MovementManager;
-import io.github.some_example_name.lwjgl3.Game.PlayerStats;
-import io.github.some_example_name.lwjgl3.Game.SceneGame;
-import io.github.some_example_name.lwjgl3.Game.SceneMenu;
-import io.github.some_example_name.lwjgl3.Game.ScenePause;
-import io.github.some_example_name.lwjgl3.Game.actualSceneDifficulty;
+import io.github.some_example_name.lwjgl3.Game.*;
 
 // implements ISceneManager interface (abstraction)
 public class SceneManager implements ISceneManager {
@@ -29,16 +25,18 @@ public class SceneManager implements ISceneManager {
     private MovementManager mm;
     private IOManager io;
     private PlayerStats ps;
+    private AssetManager am;
 
     public SceneManager() {
     }
 
-    public void setEngineTools(EntityManager em, CollisionManager cm, MovementManager mm, IOManager io, PlayerStats ps) {
+    public void setEngineTools(EntityManager em, CollisionManager cm, MovementManager mm, IOManager io, PlayerStats ps,  AssetManager am) {
         this.em = em;
         this.cm = cm;
         this.mm = mm;
         this.io = io;
         this.ps = ps;
+        this.am = am;
     }
 
     // Function to set scenes accordingly to conditions
@@ -48,6 +46,7 @@ public class SceneManager implements ISceneManager {
             case MENU:
                 if (currentScene != null) {
                     currentScene.dispose();
+                    cachedGame = null;
                 }
                 currentScene = new SceneMenu(this);
                 break;
@@ -57,7 +56,6 @@ public class SceneManager implements ISceneManager {
                 if (cachedGame != null) {
                     currentScene = cachedGame;
                     cachedGame = null;
-                    Gdx.input.setInputProcessor(null);
                 } else {
 
                     currentScene = new SceneGame(this, em, cm, mm, io, ps);
@@ -70,7 +68,7 @@ public class SceneManager implements ISceneManager {
                 break;
 
             case DIFFICULTY:
-                currentScene = new actualSceneDifficulty(this);
+                currentScene = new SceneDifficulty(this);
                 break;
         }
     }
@@ -94,7 +92,7 @@ public class SceneManager implements ISceneManager {
         }
     }
 
-    // This would allow top level clear of progression so as to properly clear resources
+    // This would allow top level clear of progression to properly clear resources
     @Override
     public void dispose() {
         if (currentScene != null) {
@@ -107,8 +105,8 @@ public class SceneManager implements ISceneManager {
         }
     }
 
-    // exposes current scene through interface for external access
-    public Scene getCurrentScene() {
-        return currentScene;
+    @Override
+    public AssetManager getAssets() {
+        return this.am;
     }
 }

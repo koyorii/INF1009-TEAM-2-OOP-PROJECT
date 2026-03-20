@@ -15,17 +15,18 @@ import io.github.some_example_name.lwjgl3.Engine.sceneManager.SceneManager;
 
 // Main menu screen
 public class SceneMenu extends Scene{
-    private Stage stage; // Handles UI drawing and input events
+    private final Stage stage; // Handles UI drawing and input events
     private Skin skin; // Container for styling through a separate JSON file (In Assets)
 
     public SceneMenu(ISceneManager ism) {
         super(ism);
 
-        // Initialise the Stage, direct keys to UI stage, set up containers like in HTML, apply styling, and listener for button press to go to GAME scene
-        stage = new Stage(new ScreenViewport());
+        // Initialize the Stage, direct keys to UI stage, set up containers like in HTML, apply styling, and listener for button press to go to GAME scene
+        this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        skin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
+        this.skin = am.get("skin/craftacular-ui.json", Skin.class);
+
         Table menuContainer = new Table();
         menuContainer.setFillParent(true);
         stage.addActor(menuContainer);
@@ -82,7 +83,7 @@ public class SceneMenu extends Scene{
         menuContainer.add(leadButton).width(255).height(45).padBottom(20);
         menuContainer.row();
 
-        // Exit button, don't need call dispose cuz Libgdx will do it for us
+        // Exit button, don't need call dispose cuz LibGDX will do it for us
         menuContainer.add(exitButton).width(255).height(45);
     }
 
@@ -104,8 +105,7 @@ public class SceneMenu extends Scene{
         if (stage != null) {
             stage.dispose();
         }
-        if (skin != null) {
-            skin.dispose();
-        }
+
+        this.skin = null;
     }
 }

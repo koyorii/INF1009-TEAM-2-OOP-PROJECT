@@ -2,6 +2,7 @@ package io.github.some_example_name.lwjgl3.Engine.collisionManager;
 
 import com.badlogic.gdx.Gdx;
 
+import io.github.some_example_name.lwjgl3.Game.Player;
 import io.github.some_example_name.lwjgl3.Triangle;
 import io.github.some_example_name.lwjgl3.staticCircle;
 import io.github.some_example_name.lwjgl3.Engine.entityManager.Entity;
@@ -9,13 +10,12 @@ import io.github.some_example_name.lwjgl3.Engine.iomanager.Audio;
 import io.github.some_example_name.lwjgl3.Engine.movementManager.MovementCalculator;
 import io.github.some_example_name.lwjgl3.Game.OnComingFood;
 import io.github.some_example_name.lwjgl3.Game.PlayerStats;
-import io.github.some_example_name.lwjgl3.Game.playerNPC;
 
 public class ResolveCollision {
 
-    private MovementCalculator colMove;
-    private Audio              audio;
-    private PlayerStats        playerStats; // null-safe: may be null if 3-arg constructor used
+    private final MovementCalculator colMove;
+    private final Audio              audio;
+    private final PlayerStats        playerStats; // null-safe: may be null if 3-arg constructor used
 
     public ResolveCollision(MovementCalculator colMove, Audio audio, PlayerStats playerStats) {
         this.colMove     = colMove;
@@ -28,41 +28,41 @@ public class ResolveCollision {
         // ══ Rule: OncomingFood hits the player NPC ════════════════
         // Only active when playerStats is wired in (4-arg CollisionManager path)
         if (playerStats != null) {
-            if (a instanceof OnComingFood && b instanceof playerNPC) {
-                playerNPC player = (playerNPC) b;
+            if (a instanceof OnComingFood && b instanceof Player) {
+                Player player = (Player) b;
                 if (!player.getIsFalling()) { handleFoodCatch((OnComingFood) a); return; }
             }
-            if (b instanceof OnComingFood && a instanceof playerNPC) {
-                playerNPC player = (playerNPC) a;
+            if (b instanceof OnComingFood && a instanceof Player) {
+                Player player = (Player) a;
                 if (!player.getIsFalling()) { handleFoodCatch((OnComingFood) b); return; }
             }
         }
 
         // ══ Original Rule 1: Droplet hits the Bucket ══════════════
-        if (a instanceof playerNPC && b instanceof playerNPC) {
-            playerNPC objA = (playerNPC) a;
-            playerNPC objB = (playerNPC) b;
+        if (a instanceof Player && b instanceof Player) {
+            Player objA = (Player) a;
+            Player objB = (Player) b;
             if (objA.getIsFalling() && !objB.getIsFalling())      handleCatch(objA);
             else if (objB.getIsFalling() && !objA.getIsFalling()) handleCatch(objB);
         }
 
         // ══ Original Rule 2: Droplet slides off staticCircle ══════
-        if (a instanceof playerNPC && b instanceof staticCircle) {
-            playerNPC droplet = (playerNPC) a;
+        if (a instanceof Player && b instanceof staticCircle) {
+            Player droplet = (Player) a;
             if (droplet.getIsFalling()) handleDropletCircleSlide(droplet, (staticCircle) b);
         }
-        if (b instanceof playerNPC && a instanceof staticCircle) {
-            playerNPC droplet = (playerNPC) b;
+        if (b instanceof Player && a instanceof staticCircle) {
+            Player droplet = (Player) b;
             if (droplet.getIsFalling()) handleDropletCircleSlide(droplet, (staticCircle) a);
         }
 
         // ══ Original Rule 3: Droplet slides off Triangle ══════════
-        if (a instanceof playerNPC && b instanceof Triangle) {
-            playerNPC droplet = (playerNPC) a;
+        if (a instanceof Player && b instanceof Triangle) {
+            Player droplet = (Player) a;
             if (droplet.getIsFalling()) handleDropletTriangleSlide(droplet, (Triangle) b);
         }
-        if (b instanceof playerNPC && a instanceof Triangle) {
-            playerNPC droplet = (playerNPC) b;
+        if (b instanceof Player && a instanceof Triangle) {
+            Player droplet = (Player) b;
             if (droplet.getIsFalling()) handleDropletTriangleSlide(droplet, (Triangle) a);
         }
 
@@ -88,14 +88,14 @@ public class ResolveCollision {
     }
 
     // ─── Original handlers (unchanged) ───────────────────────────
-    private void handleCatch(playerNPC droplet) {
+    private void handleCatch(Player droplet) {
         System.out.println("Score! Droplet caught.");
         audio.playSound("catch");
         float randomX = (float) Math.random() * 800;
         colMove.collisionMovement(droplet, randomX, Gdx.graphics.getHeight());
     }
 
-    private void handleDropletCircleSlide(playerNPC droplet, staticCircle circle) {
+    private void handleDropletCircleSlide(Player droplet, staticCircle circle) {
         float dx   = (droplet.getX() + droplet.getTexture().getWidth()  / 2f) - circle.getX();
         float dy   = (droplet.getY() + droplet.getTexture().getHeight() / 2f) - circle.getY();
         float dist = (float) Math.sqrt(dx * dx + dy * dy);
@@ -107,7 +107,7 @@ public class ResolveCollision {
         System.out.println("Droplet sliding off circle!");
     }
 
-    private void handleDropletTriangleSlide(playerNPC droplet, Triangle tri) {
+    private void handleDropletTriangleSlide(Player droplet, Triangle tri) {
         float slideStrength = 3.5f;
         boolean onLeft = (droplet.getX() + droplet.getTexture().getWidth() / 2f) < tri.getX();
         colMove.collisionMovement(droplet,

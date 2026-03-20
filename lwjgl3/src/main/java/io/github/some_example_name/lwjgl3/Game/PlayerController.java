@@ -12,7 +12,7 @@ public class PlayerController {
         this.speed = speed;
     }
 
-    public void handleInput(playerNPC player) {
+    public void handleInput(Player player) {
         float delta = Gdx.graphics.getDeltaTime();
         float newX  = player.getX();
 

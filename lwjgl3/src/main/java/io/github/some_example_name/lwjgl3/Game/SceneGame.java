@@ -6,15 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.some_example_name.lwjgl3.Engine.collisionManager.CollisionManager;
@@ -24,6 +20,7 @@ import io.github.some_example_name.lwjgl3.Engine.movementManager.MovementManager
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.ISceneManager;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.Scene;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.SceneManager;
+import io.github.some_example_name.lwjgl3.Game.Player;
 
 public class SceneGame extends Scene {
 
@@ -35,7 +32,7 @@ public class SceneGame extends Scene {
 
     private Stage stage;
     private Skin skin;
-    private playerNPC playerNPC;
+    private Player player;
     private PlayerController    playerController;
     private FoodSpawner foodSpawner;
 
@@ -55,11 +52,11 @@ public class SceneGame extends Scene {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        skin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
+        this.skin = am.get("skin/craftacular-ui.json", Skin.class);
         Table menuContainer = new Table();
         menuContainer.setFillParent(true);
 
-        Texture normalBackground = new Texture(Gdx.files.internal("backgrounds/normal_mode_background.jpg"));
+        Texture normalBackground = am.get("backgrounds/normal_mode_background.jpg", Texture.class);
         menuContainer.setBackground(new TextureRegionDrawable(new TextureRegion(normalBackground)));
 
         stage.addActor(menuContainer);
@@ -68,10 +65,10 @@ public class SceneGame extends Scene {
         float screenH = Gdx.graphics.getHeight();
 
         // ── Player NPC ────────────────────────────────────────────
-        playerNPC = new playerNPC(
-            "npc.png",
-            screenW / 2f - 32,  // centered X
-            screenH * 0.08f,    // near bottom
+        this.player = new Player(
+            am.get("player.png", Texture.class),
+            screenW / 2f - 32,
+            screenH * 0.08f,
             0,
             false
         );
@@ -79,22 +76,24 @@ public class SceneGame extends Scene {
         // ── Scale the NPC sprite down to 64x96 pixels ─────────────
         // Adjust these two numbers to whatever looks right for your sprite.
         // The collision box will automatically match this size too.
-        playerNPC.setDrawSize(64, 96);
+        player.setDrawSize(64, 96);
 
-        em.addEntity(playerNPC);
+        em.addEntity(player);
 
         // ── Food textures ─────────────────────────────────────────
         healthyTextures = new Texture[]{
-            new Texture("good_foods/apple.png"),
-            new Texture("good_foods/ninjin_carrot.png"),
-            new Texture("good_foods/petbottle_water_full.png"),
+            am.get("good_foods/apple.png", Texture.class),
+            am.get("good_foods/ninjin_carrot.png", Texture.class),
+            am.get("good_foods/petbottle_water_full.png", Texture.class),
         };
+
         junkTextures = new Texture[]{
-            new Texture("bad_foods/can_juice.png"),
-            new Texture("bad_foods/dokukinoko_benitengu_dake.png"),
-            new Texture("bad_foods/rotten_apple.png"),
+            am.get("bad_foods/can_juice.png", Texture.class),
+            am.get("bad_foods/dokukinoko_benitengu_dake.png", Texture.class),
+            am.get("bad_foods/rotten_apple.png", Texture.class),
         };
-        vitaminTexture = new Texture("good_foods/Vitamin.png");
+
+        vitaminTexture = am.get("good_foods/Vitamin.png", Texture.class);
 
         playerController = new PlayerController(220f);
         foodSpawner      = new FoodSpawner(em, healthyTextures, junkTextures, vitaminTexture);
@@ -114,7 +113,7 @@ public class SceneGame extends Scene {
 
     @Override
     public void update(float delta) {
-        playerController.handleInput(playerNPC);
+        playerController.handleInput(player);
         foodSpawner.update(delta);
         em.update(mm);
         cm.update();
@@ -143,16 +142,15 @@ public class SceneGame extends Scene {
 
     @Override
     public void dispose() {
-        if (stage != null) stage.dispose();
-        if (skin  != null) skin.dispose();
+        if (stage != null) {
+            stage.dispose();
+        }
 
-        if (vitaminTexture != null) vitaminTexture.dispose();
-        for (Texture t : healthyTextures) {
-            if (t != null) t.dispose();
-        }
-        for (Texture t : junkTextures) {
-            if (t != null) t.dispose();
-        }
+        // Just in case
+        this.skin = null;
+        this.vitaminTexture = null;
+        this.healthyTextures = null;
+        this.junkTextures = null;
 
         em.clearEntities();
     }

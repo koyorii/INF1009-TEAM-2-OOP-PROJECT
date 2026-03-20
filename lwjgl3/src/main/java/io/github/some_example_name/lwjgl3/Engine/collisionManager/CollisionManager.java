@@ -10,9 +10,9 @@ import java.util.List;
 
 public class CollisionManager {
 
-    private CheckCollision   checker  = new CheckCollision();
-    private ResolveCollision resolver;
-    private getEntityList    provider;
+    private final CheckCollision   checker  = new CheckCollision();
+    private final ResolveCollision resolver;
+    private final getEntityList    provider;
     private List<Entity>     entities;
 
     // ── 4-arg constructor (used by GameMaster with food mechanic) ─

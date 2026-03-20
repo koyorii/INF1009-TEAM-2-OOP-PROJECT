@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import io.github.some_example_name.lwjgl3.Engine.movementManager.MovementCalculator;
 import io.github.some_example_name.lwjgl3.Game.OnComingFood;
-import io.github.some_example_name.lwjgl3.Game.playerNPC;
+import io.github.some_example_name.lwjgl3.Game.Player;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -47,7 +47,7 @@ public class EntityManager implements getEntityList {
             // MovementCalculator is only needed for other MovableEntities (Triangle etc.)
             if (entity instanceof MovableEntity
                     && !(entity instanceof OnComingFood)
-                    && !(entity instanceof playerNPC)) {
+                    && !(entity instanceof Player)) {
                 MovableEntity moveEntity = (MovableEntity) entity;
                 moveM.calculateMovement(moveEntity, false, moveEntity.getSpeed());
             }

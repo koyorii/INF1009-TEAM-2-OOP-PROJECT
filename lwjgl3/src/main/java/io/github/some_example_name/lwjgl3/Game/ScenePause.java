@@ -33,8 +33,8 @@ public class ScenePause extends Scene{
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        // Applies design to the paused text
-        skin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
+        // Applies design to the paused text by borrowing fom assetmanager
+        this.skin = am.get("skin/craftacular-ui.json", Skin.class);
         Table menuContainer = new Table();
         menuContainer.setFillParent(true);
         stage.addActor(menuContainer);
@@ -131,8 +131,7 @@ public class ScenePause extends Scene{
         if (stage != null) {
             stage.dispose();
         }
-        if (skin != null) {
-            skin.dispose();
-        }
+
+        this.skin = null;
     }
 }
