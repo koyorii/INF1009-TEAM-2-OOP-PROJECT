@@ -20,6 +20,7 @@ import io.github.some_example_name.lwjgl3.Engine.movementManager.MovementManager
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.ISceneManager;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.Scene;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.SceneManager;
+import io.github.some_example_name.lwjgl3.Game.Player;
 
 public class SceneGame extends Scene {
 
@@ -64,7 +65,7 @@ public class SceneGame extends Scene {
         float screenH = Gdx.graphics.getHeight();
 
         // ── Player NPC ────────────────────────────────────────────
-        player = new Player(
+        this.player = new Player(
             am.get("player.png", Texture.class),
             screenW / 2f - 32,
             screenH * 0.08f,

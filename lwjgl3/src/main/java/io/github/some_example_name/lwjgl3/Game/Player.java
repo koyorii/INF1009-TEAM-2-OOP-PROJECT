@@ -75,7 +75,6 @@ public class Player extends MovableEntity implements iDrawableSprite {
     public void dispose() {
         if (tex != null) {
             tex.dispose();
-            tex = null;
         }
     }
 }

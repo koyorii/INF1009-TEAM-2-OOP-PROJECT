@@ -19,6 +19,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import io.github.some_example_name.lwjgl3.Game.FoodSpawner;
 import io.github.some_example_name.lwjgl3.Game.PlayerController;
 import io.github.some_example_name.lwjgl3.Game.PlayerStats;
+import io.github.some_example_name.lwjgl3.Game.Player;
 
 public class GameMaster extends ApplicationAdapter {
 
@@ -41,7 +42,7 @@ public class GameMaster extends ApplicationAdapter {
     private Texture[] junkTextures;
     private Texture vitaminTexture;
 
-    protected TextureObject playerNPC;  // protected so SceneGame can reference if needed
+    protected TextureObject player;  // protected so SceneGame can reference if needed
 
     public GameMaster() {
         this.IoM = new IOManager();
