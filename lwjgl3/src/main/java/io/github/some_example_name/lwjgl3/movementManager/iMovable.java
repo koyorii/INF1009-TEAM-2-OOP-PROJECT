@@ -1,5 +1,0 @@
-package io.github.some_example_name.lwjgl3.movementManager;
-
-public interface iMovable {
-    public void movement();
-}

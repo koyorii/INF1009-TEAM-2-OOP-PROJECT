@@ -7,13 +7,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import io.github.some_example_name.lwjgl3.collisionManager.CollisionManager;
-import io.github.some_example_name.lwjgl3.entityManager.EntityManager;
-import io.github.some_example_name.lwjgl3.entityManager.FoodSpawner;
-import io.github.some_example_name.lwjgl3.iomanager.IOManager;
-import io.github.some_example_name.lwjgl3.movementManager.MovementManager;
-import io.github.some_example_name.lwjgl3.sceneManager.ISceneManager;
-import io.github.some_example_name.lwjgl3.sceneManager.SceneManager;
+import io.github.some_example_name.lwjgl3.Engine.collisionManager.CollisionManager;
+import io.github.some_example_name.lwjgl3.Engine.entityManager.EntityManager;
+import io.github.some_example_name.lwjgl3.Engine.iomanager.IOManager;
+import io.github.some_example_name.lwjgl3.Engine.movementManager.MovementManager;
+import io.github.some_example_name.lwjgl3.Engine.sceneManager.ISceneManager;
+import io.github.some_example_name.lwjgl3.Engine.sceneManager.SceneManager;
+import io.github.some_example_name.lwjgl3.Game.FoodSpawner;
+import io.github.some_example_name.lwjgl3.Game.PlayerController;
+import io.github.some_example_name.lwjgl3.Game.PlayerStats;
 
 public class GameMaster extends ApplicationAdapter {
 
