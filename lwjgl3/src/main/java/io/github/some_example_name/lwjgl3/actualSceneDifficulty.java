@@ -1,6 +1,7 @@
 package io.github.some_example_name.lwjgl3;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -40,6 +41,9 @@ public class actualSceneDifficulty extends Scene {
 
         TextButton fearButton = new TextButton("Fear & Hunger", skin, "default");
         TextButton normalButton = new TextButton("Normal", skin, "default");
+
+        // Setting colour to text of Fear button
+        fearButton.getLabel().setColor(new Color(0.5f, 0.0f, 0.0f, 1.0f));
 
         // Button routes
         fearButton.addListener(new ClickListener() {
