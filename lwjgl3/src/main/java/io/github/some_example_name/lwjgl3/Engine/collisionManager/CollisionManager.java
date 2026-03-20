@@ -27,12 +27,12 @@ public class CollisionManager {
     // ── 3-arg constructor (fallback — no food mechanic, stats = null safe) ─
     // Kept so any other part of the codebase that constructs CollisionManager
     // the old way doesn't break
-    //    public CollisionManager(getEntityList provider,
-    //                            MovementCalculator colMove,
-    //                            getInputs audio) {
-    //        this.provider = provider;
-    //        this.resolver = new ResolveCollision(colMove, audio.getAudio(), null);
-    //    }
+    public CollisionManager(getEntityList provider,
+                            MovementCalculator colMove,
+                            getInputs audio) {
+        this.provider = provider;
+        this.resolver = new ResolveCollision(colMove, audio.getAudio(), null);
+    }
 
     // ── Call every frame ─────────────────────────────────────────
     public void update() {
