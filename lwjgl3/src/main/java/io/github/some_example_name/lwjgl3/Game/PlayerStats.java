@@ -51,6 +51,13 @@ public class PlayerStats {
 
     public boolean isDead()    { return hp <= 0; }
 
+    public void reset() {
+        this.hp = MAX_HP;
+        this.armor = 0;
+        this.score = 0;
+        System.out.println("[Stats] Game Reset: HP and Score restored.");
+    }
+
     // ─── Getters ─────────────────────────────────────────────────
     public int getHp()       { return hp;       }
     public int getArmor()    { return armor;    }
