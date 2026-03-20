@@ -47,7 +47,11 @@ public class SceneManager implements ISceneManager {
                 if (currentScene != null) {
                     currentScene.dispose();
                     cachedGame = null;
+                    // Reset entities and scores
+                    em.clearEntities();
+                    ps.reset();
                 }
+
                 currentScene = new SceneMenu(this);
                 break;
 
