@@ -62,9 +62,15 @@ public class GameMaster extends ApplicationAdapter {
         // This loads the JSON, the Atlas, and the Texture all at once
         assetM.load("skin/craftacular-ui.json", Skin.class);
 
-        // Background
+        // Backgrounds
         assetM.load("backgrounds/normal_mode_background.jpg", Texture.class);
-        // To-do Fear and Hunger
+        assetM.load("backgrounds/fear_and_hunger_background.jpg", Texture.class);
+        assetM.load("backgrounds/home_background.jpg", Texture.class);
+
+        // End Image
+        assetM.load("bad_starvation_ending.png", Texture.class); // Starvation
+        assetM.load("bad_health_ending.png", Texture.class); // Health
+        assetM.load("good_ending_npc.png", Texture.class); // Survived
 
         // Player
         assetM.load("player.png", Texture.class);

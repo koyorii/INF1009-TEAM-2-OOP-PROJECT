@@ -88,5 +88,6 @@ public class EntityManager implements getEntityList {
             e.dispose();
         }
         entityList.clear();
+        System.out.println("[Entity] All entity resources disposed.");
     }
 }
