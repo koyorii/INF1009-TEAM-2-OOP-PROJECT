@@ -92,6 +92,20 @@ public class GameMaster extends ApplicationAdapter {
         // Block until finish loading
         assetM.finishLoading();
 
+        // ── Audio ─────────────────────────────────────────────────
+        // Background music (place .mp3 files in assets/audio/)
+        IoM.getAudio().loadMusic("menu",        "audio/bgm_menu.mp3");
+        IoM.getAudio().loadMusic("game",        "audio/bgm_game.mp3");
+        IoM.getAudio().loadMusic("ending_good", "audio/bgm_ending_good.mp3");
+        IoM.getAudio().loadMusic("ending_bad",  "audio/bgm_ending_bad.mp3");
+
+        // Sound effects
+        IoM.getAudio().loadSound("eat_healthy",  "audio/sfx_eat_healthy.mp3");
+        IoM.getAudio().loadSound("eat_junk",     "audio/sfx_eat_junk.mp3");
+        IoM.getAudio().loadSound("eat_vitamin",  "audio/sfx_eat_vitamin.mp3");
+        IoM.getAudio().loadSound("button_click", "audio/sfx_button_click.mp3");
+        IoM.getAudio().loadSound("game_over",    "audio/sfx_game_over.mp3");
+
         // Inject into sceneManager via interface
         sceneM.setEngineTools(EntityM, collisionM, MoveM, IoM, playerStats, assetM);
 

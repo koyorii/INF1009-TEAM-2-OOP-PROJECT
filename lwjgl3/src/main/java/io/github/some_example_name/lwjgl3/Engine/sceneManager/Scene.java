@@ -8,10 +8,12 @@ import com.badlogic.gdx.assets.AssetManager;
 public abstract class Scene {
     protected final ISceneManager sceneManager;
     protected final AssetManager am;
+    protected final io.github.some_example_name.lwjgl3.Engine.iomanager.Audio audio;
 
     public Scene(ISceneManager ism) {
         this.sceneManager = ism;
         this.am = ism.getAssets();
+        this.audio = ism.getAudio();
     }
 
     // All necessary functions for child to operate well

@@ -17,5 +17,6 @@ public interface ISceneManager {
     void render(ShapeRenderer shape, SpriteBatch batch);
     void setEngineTools(EntityManager em, CollisionManager cm, MovementManager mm, IOManager io, PlayerStats ps, AssetManager am);
     AssetManager getAssets(); // All scenes will call this to borrow textures
+    io.github.some_example_name.lwjgl3.Engine.iomanager.Audio getAudio(); // All scenes can trigger audio
     void dispose();
 }

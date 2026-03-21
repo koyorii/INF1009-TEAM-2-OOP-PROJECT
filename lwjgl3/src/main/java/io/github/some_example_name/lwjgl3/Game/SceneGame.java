@@ -32,14 +32,15 @@ public class SceneGame extends Scene {
     private final Stage stage;
     private Skin skin;
     private final Player player;
-    private final PlayerController    playerController;
+    private final PlayerController playerController;
     private final FoodSpawner foodSpawner;
 
     private Texture[] healthyTextures;
     private Texture[] junkTextures;
     private Texture vitaminTexture;
 
-    public SceneGame(ISceneManager ism, EntityManager em, CollisionManager cm, MovementManager mm, IOManager io, PlayerStats ps) {
+    public SceneGame(ISceneManager ism, EntityManager em, CollisionManager cm, MovementManager mm, IOManager io,
+            PlayerStats ps) {
         super(ism);
         this.em = em;
         this.cm = cm;
@@ -63,16 +64,13 @@ public class SceneGame extends Scene {
         float screenW = Gdx.graphics.getWidth();
         float screenH = Gdx.graphics.getHeight();
 
-        io.getAudio();
-
         // ── Player NPC ────────────────────────────────────────────
         this.player = new Player(
-            am.get("player.png", Texture.class),
-            screenW / 2f - 32,
-            screenH * 0.08f,
-            0,
-            false
-        );
+                am.get("player.png", Texture.class),
+                screenW / 2f - 32,
+                screenH * 0.08f,
+                0,
+                false);
 
         // ── Scale the NPC sprite down to 64x96 pixels ─────────────
         // Adjust these two numbers to whatever looks right for your sprite.
@@ -82,34 +80,37 @@ public class SceneGame extends Scene {
         em.addEntity(player);
 
         // ── Food textures ─────────────────────────────────────────
-        healthyTextures = new Texture[]{
-            am.get("good_foods/apple.png", Texture.class),
-            am.get("good_foods/ninjin_carrot.png", Texture.class),
-            am.get("good_foods/petbottle_water_full.png", Texture.class),
+        healthyTextures = new Texture[] {
+                am.get("good_foods/apple.png", Texture.class),
+                am.get("good_foods/ninjin_carrot.png", Texture.class),
+                am.get("good_foods/petbottle_water_full.png", Texture.class),
         };
 
-        junkTextures = new Texture[]{
-            am.get("bad_foods/can_juice.png", Texture.class),
-            am.get("bad_foods/dokukinoko_benitengu_dake.png", Texture.class),
-            am.get("bad_foods/rotten_apple.png", Texture.class),
+        junkTextures = new Texture[] {
+                am.get("bad_foods/can_juice.png", Texture.class),
+                am.get("bad_foods/dokukinoko_benitengu_dake.png", Texture.class),
+                am.get("bad_foods/rotten_apple.png", Texture.class),
         };
 
         vitaminTexture = am.get("good_foods/Vitamin.png", Texture.class);
 
         playerController = new PlayerController(220f);
-        foodSpawner      = new FoodSpawner(em, healthyTextures, junkTextures, vitaminTexture);
+        foodSpawner = new FoodSpawner(em, healthyTextures, junkTextures, vitaminTexture);
+
+        // Start game background music
+        audio.playMusic("game");
 
         // Label for instructions
-        Label pauseLabel = new Label("Press Escape to Pause", skin,"default");
+        Label pauseLabel = new Label("Press Escape to Pause", skin, "default");
         pauseLabel.setFontScale(0.5f);
 
         // Adds label to tell player how to pause
         menuContainer.add(pauseLabel)
-            .expand()      // Pushes the cell to take up all available space
-            .bottom()      // Align bottom
-            .left()        // Align left
-            .padLeft(20)   // Padding so look a bit nicer
-            .padBottom(20);
+                .expand() // Pushes the cell to take up all available space
+                .bottom() // Align bottom
+                .left() // Align left
+                .padLeft(20) // Padding so look a bit nicer
+                .padBottom(20);
     }
 
     @Override
@@ -130,7 +131,8 @@ public class SceneGame extends Scene {
         if (ps.isDead()) {
             Gdx.app.log("Game", "Player died! Score: " + ps.getScore());
             ps.saveToLeaderboard();
-            // If health drops to 0 jump to health end, cuz actually dying is worse than starvation
+            // If health drops to 0 jump to health end, cuz actually dying is worse than
+            // starvation
             if (ps.getHp() == 0 && ps.getScore() <= 7999) {
                 sceneManager.setScene(SceneManager.State.HEALTH);
             }

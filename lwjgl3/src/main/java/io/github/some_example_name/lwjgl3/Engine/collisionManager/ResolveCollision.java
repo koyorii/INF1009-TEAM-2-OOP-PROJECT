@@ -80,7 +80,11 @@ public class ResolveCollision {
         if (!food.isActive()) return;
         food.deactivate();
         playerStats.applyFood(food.getFoodType());
-        audio.playSound(food.getFoodType() == OnComingFood.FoodType.UNHEALTHY ? "hit" : "catch");
+        switch (food.getFoodType()) {
+            case HEALTHY:   audio.playSound("eat_healthy"); break;
+            case VITAMIN:   audio.playSound("eat_vitamin"); break;
+            case UNHEALTHY: audio.playSound("eat_junk");    break;
+        }
         System.out.println("[Collision] Food caught: " + food.getFoodType()
             + " Name=" + playerStats.getName()
             + " | HP=" + playerStats.getHp()

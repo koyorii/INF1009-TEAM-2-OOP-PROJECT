@@ -49,6 +49,7 @@ public class SceneMenu extends Scene{
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                audio.playSound("button_click");
                 ism.setScene(SceneManager.State.NAME);
             }
         });
@@ -56,6 +57,7 @@ public class SceneMenu extends Scene{
         leadButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                audio.playSound("button_click");
                 ism.setScene(SceneManager.State.LEADERBOARD);
             }
         });
@@ -63,6 +65,7 @@ public class SceneMenu extends Scene{
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                audio.playSound("button_click");
                 Gdx.app.exit();
             }
         });
@@ -85,6 +88,9 @@ public class SceneMenu extends Scene{
 
         // Exit button, don't need call dispose cuz LibGDX will do it for us
         menuContainer.add(exitButton).width(255).height(45);
+
+        // Start menu background music
+        audio.playMusic("menu");
     }
 
     // Update input logic

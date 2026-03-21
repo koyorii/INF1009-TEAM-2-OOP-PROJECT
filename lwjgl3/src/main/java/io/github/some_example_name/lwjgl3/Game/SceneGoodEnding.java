@@ -53,6 +53,7 @@ public class SceneGoodEnding extends Scene {
         menuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                audio.playSound("button_click");
                 ism.setScene(SceneManager.State.MENU);
             }
         });
@@ -61,11 +62,13 @@ public class SceneGoodEnding extends Scene {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                audio.playSound("button_click");
                 Gdx.app.exit();
             }
         });
 
-        // Score display
+        // Play good ending music
+        audio.playMusic("ending_good");
         menuContainer.add(scoreLabel).colspan(2).padTop(25);
         menuContainer.row();
 

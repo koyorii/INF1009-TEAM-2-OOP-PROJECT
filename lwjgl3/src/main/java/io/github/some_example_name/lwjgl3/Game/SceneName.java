@@ -52,6 +52,7 @@ public class SceneName extends Scene {
                     ps.setName(finalName);
                 }
 
+                audio.playSound("button_click");
                 // Switch Scenes
                 ism.setScene(SceneManager.State.DIFFICULTY);
 
@@ -66,6 +67,9 @@ public class SceneName extends Scene {
         menuContainer.row();
 
         menuContainer.add(startButton).width(150);
+
+        // Keep menu music playing
+        audio.playMusic("menu");
     }
 
     @Override

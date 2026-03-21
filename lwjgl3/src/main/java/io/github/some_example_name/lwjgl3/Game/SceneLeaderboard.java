@@ -64,10 +64,14 @@ public class SceneLeaderboard extends Scene {
         backBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                audio.playSound("button_click");
                 ism.setScene(SceneManager.State.MENU);
             }
         });
         menuContainer.add(backBtn).padBottom(20).width(300);
+
+        // Keep menu music playing
+        audio.playMusic("menu");
     }
 
     @Override

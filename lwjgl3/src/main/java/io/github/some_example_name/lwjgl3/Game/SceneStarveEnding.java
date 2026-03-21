@@ -56,6 +56,7 @@ public class SceneStarveEnding extends Scene {
         menuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                audio.playSound("button_click");
                 ism.setScene(SceneManager.State.MENU);
             }
         });
@@ -64,9 +65,14 @@ public class SceneStarveEnding extends Scene {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                audio.playSound("button_click");
                 Gdx.app.exit();
             }
         });
+
+        // Play bad ending music and game over SFX
+        audio.playSound("game_over");
+        audio.playMusic("ending_bad");
 
         // Score display
         menuContainer.add(scoreLabel).colspan(2).padTop(25);

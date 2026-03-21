@@ -149,4 +149,9 @@ public class SceneManager implements ISceneManager {
     public AssetManager getAssets() {
         return this.am;
     }
+
+    @Override
+    public io.github.some_example_name.lwjgl3.Engine.iomanager.Audio getAudio() {
+        return this.io.getAudio();
+    }
 }

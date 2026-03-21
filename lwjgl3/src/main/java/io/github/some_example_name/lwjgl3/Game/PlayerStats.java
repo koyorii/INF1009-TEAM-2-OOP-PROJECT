@@ -8,9 +8,9 @@ import com.badlogic.gdx.Preferences;
 
 public class PlayerStats {
 
-    //private static final int MAX_HP     = 1; // Test code
-    //private static final int MAX_HUNGER = 1;
-    private static final int MAX_HP    = 10;
+    // private static final int MAX_HP = 1; // Test code
+    // private static final int MAX_HUNGER = 1;
+    private static final int MAX_HP = 10;
     private static final int MAX_HUNGER = 10;
     private static final int MAX_ARMOR = 5;
 
@@ -22,7 +22,7 @@ public class PlayerStats {
     private String name;
 
     public PlayerStats() {
-        this.hp    = MAX_HP;
+        this.hp = MAX_HP;
         this.hunger = MAX_HUNGER;
         this.armor = 0;
         this.score = 0;
@@ -57,18 +57,21 @@ public class PlayerStats {
                 if (armor > 0) {
                     armor--;
                     hunger = Math.min(MAX_HUNGER, hunger - 1);
-                    System.out.println("[Stats] Unhealthy food hit! Armor blocked. Armor=" + armor +  " Hunger=" + hunger + " Score=" + score);
+                    System.out.println("[Stats] Unhealthy food hit! Armor blocked. Armor=" + armor + " Hunger=" + hunger
+                            + " Score=" + score);
                 } else {
                     hp = Math.max(0, hp - 1);
                     hunger = Math.min(MAX_HUNGER, hunger - 1);
-                    System.out.println("[Stats] Unhealthy food hit! HP=" + hp +  " Hunger=" + hunger + " Score=" + score);
+                    System.out
+                            .println("[Stats] Unhealthy food hit! HP=" + hp + " Hunger=" + hunger + " Score=" + score);
                 }
                 score = Math.max(0, score - 50);
                 break;
         }
     }
 
-    // Save to local file within your OS, not sure about Linux, but definitely for Windows
+    // Save to local file within your OS, not sure about Linux, but definitely for
+    // Windows
     public void saveToLeaderboard() {
         // Get local file
         Preferences prefs = Gdx.app.getPreferences("MyGameLeaderboard");
@@ -119,11 +122,31 @@ public class PlayerStats {
     }
 
     // ─── Getters ─────────────────────────────────────────────────
-    public int getHp()       { return hp;       }
-    public int getHunger()   { return hunger;   }
-    public int getArmor()    { return armor;    }
-    public int getScore()    { return score;    }
-    public String getName()  { return name;     };
-    public int getMaxHp()    { return MAX_HP;   }
-    public int getMaxArmor() { return MAX_ARMOR;}
+    public int getHp() {
+        return hp;
+    }
+
+    public int getHunger() {
+        return hunger;
+    }
+
+    public int getArmor() {
+        return armor;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public String getName() {
+        return name;
+    };
+
+    public int getMaxHp() {
+        return MAX_HP;
+    }
+
+    public int getMaxArmor() {
+        return MAX_ARMOR;
+    }
 }

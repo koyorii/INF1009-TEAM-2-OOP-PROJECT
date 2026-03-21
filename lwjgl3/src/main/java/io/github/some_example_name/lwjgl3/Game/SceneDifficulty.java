@@ -48,6 +48,7 @@ public class SceneDifficulty extends Scene {
         fearButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                audio.playSound("button_click");
                 //ism.setScene(SceneManager.State.FEAR);
             }
         });
@@ -56,6 +57,7 @@ public class SceneDifficulty extends Scene {
         normalButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                audio.playSound("button_click");
                 ism.setScene(SceneManager.State.GAME);
             }
         });
@@ -70,6 +72,8 @@ public class SceneDifficulty extends Scene {
         menuContainer.add(normalButton).padTop(10);
         menuContainer.row();
 
+        // Keep menu music playing
+        audio.playMusic("menu");
     }
     @Override
     public void update(float delta) {
