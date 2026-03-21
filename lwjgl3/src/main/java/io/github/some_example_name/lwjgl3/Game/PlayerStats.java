@@ -1,9 +1,14 @@
 package io.github.some_example_name.lwjgl3.Game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
 import io.github.some_example_name.lwjgl3.Game.OnComingFood.FoodType;
+
+import com.badlogic.gdx.Preferences;
 
 public class PlayerStats {
 
+    //private static final int MAX_HP    = 2; // Test code
     private static final int MAX_HP    = 10;
     private static final int MAX_ARMOR = 10;
 
@@ -18,6 +23,10 @@ public class PlayerStats {
         this.armor = 0;
         this.score = 0;
         this.name = null;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     // ─── Called by ResolveCollision when food is caught ──────────
@@ -52,7 +61,43 @@ public class PlayerStats {
         }
     }
 
-    public boolean isDead()    { return hp <= 0; }
+    public void saveToLeaderboard() {
+        // Get local file
+        Preferences prefs = Gdx.app.getPreferences("MyGameLeaderboard");
+
+        // Insert into top 20
+        for (int i = 0; i < 20; i++) {
+            int savedScore = prefs.getInteger("score" + i, 0);
+
+            if (this.score > savedScore) {
+                // Shift lower scores down
+                for (int j = 9; j > i; j--) {
+                    prefs.putInteger("score" + j, prefs.getInteger("score" + (j - 1), 0));
+                    prefs.putString("name" + j, prefs.getString("name" + (j - 1), "---"));
+                }
+                // Insert new high score
+                prefs.putInteger("score" + i, this.score);
+                prefs.putString("name" + i, (this.name == null) ? "Guest" : this.name);
+                prefs.flush(); // Write to disk!!!!
+                break;
+            }
+        }
+    }
+
+    public Array<String> getLeaderboardList() {
+        Preferences prefs = Gdx.app.getPreferences("MyGameLeaderboard");
+        Array<String> lines = new Array<>();
+        for (int i = 0; i < 20; i++) {
+            String n = prefs.getString("name" + i, "---");
+            int s = prefs.getInteger("score" + i, 0);
+            lines.add((i + 1) + ". " + n + " : " + s);
+        }
+        return lines;
+    }
+
+    public boolean isDead() {
+        return hp <= 0;
+    }
 
     public void reset() {
         this.hp = MAX_HP;
@@ -60,10 +105,6 @@ public class PlayerStats {
         this.score = 0;
         this.name = null;
         System.out.println("[Stats] Game Reset: HP and Score restored.");
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     // ─── Getters ─────────────────────────────────────────────────

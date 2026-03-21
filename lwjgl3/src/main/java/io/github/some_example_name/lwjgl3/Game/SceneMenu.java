@@ -56,7 +56,7 @@ public class SceneMenu extends Scene{
         leadButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //ism.getSceneManager().setScene(SceneManager.State.Leaderboard);
+                ism.setScene(SceneManager.State.LEADERBOARD);
             }
         });
 

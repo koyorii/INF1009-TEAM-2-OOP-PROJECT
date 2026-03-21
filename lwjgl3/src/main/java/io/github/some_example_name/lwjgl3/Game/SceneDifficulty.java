@@ -22,7 +22,7 @@ public class SceneDifficulty extends Scene {
     public SceneDifficulty(ISceneManager ism) {
         super(ism);
 
-        // Initialise the Stage, direct keys to UI stage, set up containers like in HTML, apply styling, and listener for button press to go to GAME scene
+        // Initialize the Stage, direct keys to UI stage, set up containers like in HTML, apply styling, and listener for button press to go to GAME scene
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
