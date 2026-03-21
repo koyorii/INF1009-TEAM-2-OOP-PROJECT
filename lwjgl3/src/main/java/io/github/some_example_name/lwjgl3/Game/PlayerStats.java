@@ -11,10 +11,13 @@ public class PlayerStats {
     private int armor;
     private int score;
 
+    private String name;
+
     public PlayerStats() {
         this.hp    = MAX_HP;
         this.armor = 0;
         this.score = 0;
+        this.name = null;
     }
 
     // ─── Called by ResolveCollision when food is caught ──────────
@@ -55,13 +58,19 @@ public class PlayerStats {
         this.hp = MAX_HP;
         this.armor = 0;
         this.score = 0;
+        this.name = null;
         System.out.println("[Stats] Game Reset: HP and Score restored.");
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     // ─── Getters ─────────────────────────────────────────────────
     public int getHp()       { return hp;       }
     public int getArmor()    { return armor;    }
     public int getScore()    { return score;    }
+    public String getName()  { return name;     };
     public int getMaxHp()    { return MAX_HP;   }
     public int getMaxArmor() { return MAX_ARMOR;}
 }

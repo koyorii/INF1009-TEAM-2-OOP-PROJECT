@@ -49,7 +49,7 @@ public class SceneMenu extends Scene{
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ism.setScene(SceneManager.State.DIFFICULTY);
+                ism.setScene(SceneManager.State.NAME);
             }
         });
 

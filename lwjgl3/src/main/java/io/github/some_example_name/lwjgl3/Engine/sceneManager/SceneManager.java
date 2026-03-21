@@ -18,7 +18,7 @@ public class SceneManager implements ISceneManager {
     private Scene currentScene;
     private Scene cachedGame;
 
-    public enum State {MENU, GAME, PAUSE, DIFFICULTY}
+    public enum State {MENU, GAME, PAUSE, DIFFICULTY, NAME}
 
     private EntityManager em;
     private CollisionManager cm;
@@ -74,6 +74,8 @@ public class SceneManager implements ISceneManager {
             case DIFFICULTY:
                 currentScene = new SceneDifficulty(this);
                 break;
+            case NAME:
+                currentScene = new SceneName(this, ps);
         }
     }
 
