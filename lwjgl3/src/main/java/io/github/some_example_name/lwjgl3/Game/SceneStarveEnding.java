@@ -79,8 +79,6 @@ public class SceneStarveEnding extends Scene {
         // The buttons
         menuContainer.add(menuButton).left().pad(30).width(230).height(60);
         menuContainer.add(exitButton).right().pad(30).width(230).height(60);
-
-        stage.addActor(menuContainer);
     }
 
     public void update(float delta) {

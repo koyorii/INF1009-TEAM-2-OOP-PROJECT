@@ -140,7 +140,7 @@ public class SceneGame extends Scene {
             }
             // Survived
             else {
-                //sceneManager.setScene(SceneManager.State.SURVIVED);
+                sceneManager.setScene(SceneManager.State.GOOD);
             }
         }
     }

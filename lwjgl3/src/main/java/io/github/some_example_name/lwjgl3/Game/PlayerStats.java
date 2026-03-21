@@ -9,10 +9,10 @@ import com.badlogic.gdx.Preferences;
 public class PlayerStats {
 
     //private static final int MAX_HP     = 1; // Test code
-    private static final int MAX_HUNGER = 1;
+    //private static final int MAX_HUNGER = 1;
     private static final int MAX_HP    = 10;
-    //private static final int MAX_HUNGER = 10;
-    private static final int MAX_ARMOR = 10;
+    private static final int MAX_HUNGER = 10;
+    private static final int MAX_ARMOR = 5;
 
     private int hp;
     private int hunger;

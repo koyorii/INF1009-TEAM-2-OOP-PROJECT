@@ -18,7 +18,7 @@ public class SceneManager implements ISceneManager {
     private Scene currentScene;
     private Scene cachedGame;
 
-    public enum State {MENU, GAME, PAUSE, DIFFICULTY, NAME, LEADERBOARD, STARVED, HEALTH}
+    public enum State {MENU, GAME, PAUSE, DIFFICULTY, NAME, LEADERBOARD, STARVED, HEALTH, GOOD}
 
     private EntityManager em;
     private CollisionManager cm;
@@ -104,6 +104,10 @@ public class SceneManager implements ISceneManager {
 
             case HEALTH:
                 currentScene = new SceneHealthEnding(this, ps);
+                break;
+
+            case GOOD:
+                currentScene = new SceneGoodEnding(this, ps);
                 break;
         }
     }
