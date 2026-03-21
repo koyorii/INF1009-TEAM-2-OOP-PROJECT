@@ -29,11 +29,11 @@ public class SceneGame extends Scene {
     private final IOManager io;
     private final PlayerStats ps;
 
-    private Stage stage;
+    private final Stage stage;
     private Skin skin;
-    private Player player;
-    private PlayerController    playerController;
-    private FoodSpawner foodSpawner;
+    private final Player player;
+    private final PlayerController    playerController;
+    private final FoodSpawner foodSpawner;
 
     private Texture[] healthyTextures;
     private Texture[] junkTextures;
@@ -121,15 +121,27 @@ public class SceneGame extends Scene {
 
         stage.act(delta);
 
+        // Escape key pauses the game
         if (io.getKeyboard().isKeyJustPressed(Input.Keys.ESCAPE)) {
             sceneManager.setScene(SceneManager.State.PAUSE);
         }
 
+        // If player dies, log their score, and send to respective scenes.
         if (ps.isDead()) {
             Gdx.app.log("Game", "Player died! Score: " + ps.getScore());
             ps.saveToLeaderboard();
-            // To-do: Change to scene depending on high or low score
-            sceneManager.setScene(SceneManager.State.MENU);
+            // If health drops to 0 jump to health end, cuz actually dying is worse than starvation
+            if (ps.getHp() == 0 && ps.getScore() <= 7999) {
+                sceneManager.setScene(SceneManager.State.HEALTH);
+            }
+            // Starved end, if health is above 0 but hunger is 0
+            else if (ps.getHunger() == 0 && ps.getScore() <= 7999) {
+                sceneManager.setScene(SceneManager.State.STARVED);
+            }
+            // Survived
+            else {
+                sceneManager.setScene(SceneManager.State.GOOD);
+            }
         }
     }
 

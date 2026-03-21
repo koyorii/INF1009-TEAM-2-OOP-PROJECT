@@ -8,11 +8,14 @@ import com.badlogic.gdx.Preferences;
 
 public class PlayerStats {
 
-    //private static final int MAX_HP    = 2; // Test code
+    //private static final int MAX_HP     = 1; // Test code
+    //private static final int MAX_HUNGER = 1;
     private static final int MAX_HP    = 10;
-    private static final int MAX_ARMOR = 10;
+    private static final int MAX_HUNGER = 10;
+    private static final int MAX_ARMOR = 5;
 
     private int hp;
+    private int hunger;
     private int armor;
     private int score;
 
@@ -20,6 +23,7 @@ public class PlayerStats {
 
     public PlayerStats() {
         this.hp    = MAX_HP;
+        this.hunger = MAX_HUNGER;
         this.armor = 0;
         this.score = 0;
         this.name = null;
@@ -36,14 +40,15 @@ public class PlayerStats {
             case HEALTHY:
                 // +1 HP, capped at MAX_HP
                 hp = Math.min(MAX_HP, hp + 1);
+                hunger = Math.min(MAX_HUNGER, hunger + 1);
                 score += 150;
-                System.out.println("[Stats] Healthy food caught! HP=" + hp + " Score=" + score);
+                System.out.println("[Stats] Healthy food caught! HP=" + hp + " Hunger=" + hunger + " Score=" + score);
                 break;
 
             case VITAMIN:
                 // +1 Armor, capped at MAX_ARMOR
                 armor = Math.min(MAX_ARMOR, armor + 1);
-                score += 100;
+                score += 200;
                 System.out.println("[Stats] Vitamin caught! Armor=" + armor + " Score=" + score);
                 break;
 
@@ -51,16 +56,19 @@ public class PlayerStats {
                 // Armor absorbs the hit first; if no armor, lose HP
                 if (armor > 0) {
                     armor--;
-                    System.out.println("[Stats] Unhealthy food hit! Armor blocked. Armor=" + armor);
+                    hunger = Math.min(MAX_HUNGER, hunger - 1);
+                    System.out.println("[Stats] Unhealthy food hit! Armor blocked. Armor=" + armor +  " Hunger=" + hunger + " Score=" + score);
                 } else {
                     hp = Math.max(0, hp - 1);
-                    System.out.println("[Stats] Unhealthy food hit! HP=" + hp);
+                    hunger = Math.min(MAX_HUNGER, hunger - 1);
+                    System.out.println("[Stats] Unhealthy food hit! HP=" + hp +  " Hunger=" + hunger + " Score=" + score);
                 }
                 score = Math.max(0, score - 50);
                 break;
         }
     }
 
+    // Save to local file within your OS, not sure about Linux, but definitely for Windows
     public void saveToLeaderboard() {
         // Get local file
         Preferences prefs = Gdx.app.getPreferences("MyGameLeaderboard");
@@ -84,6 +92,7 @@ public class PlayerStats {
         }
     }
 
+    // For leaderboard to get 20 past highets scores
     public Array<String> getLeaderboardList() {
         Preferences prefs = Gdx.app.getPreferences("MyGameLeaderboard");
         Array<String> lines = new Array<>();
@@ -95,20 +104,23 @@ public class PlayerStats {
         return lines;
     }
 
+    // Check if player die
     public boolean isDead() {
-        return hp <= 0;
+        return hp <= 0 || hunger <= 0;
     }
 
+    // Reset upon new game
     public void reset() {
         this.hp = MAX_HP;
+        this.hunger = MAX_HUNGER;
         this.armor = 0;
         this.score = 0;
-        this.name = null;
         System.out.println("[Stats] Game Reset: HP and Score restored.");
     }
 
     // ─── Getters ─────────────────────────────────────────────────
     public int getHp()       { return hp;       }
+    public int getHunger()   { return hunger;   }
     public int getArmor()    { return armor;    }
     public int getScore()    { return score;    }
     public String getName()  { return name;     };

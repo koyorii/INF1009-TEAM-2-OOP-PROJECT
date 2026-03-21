@@ -18,7 +18,7 @@ public class SceneManager implements ISceneManager {
     private Scene currentScene;
     private Scene cachedGame;
 
-    public enum State {MENU, GAME, PAUSE, DIFFICULTY, NAME, LEADERBOARD}
+    public enum State {MENU, GAME, PAUSE, DIFFICULTY, NAME, LEADERBOARD, STARVED, HEALTH, GOOD}
 
     private EntityManager em;
     private CollisionManager cm;
@@ -82,7 +82,12 @@ public class SceneManager implements ISceneManager {
                     currentScene = cachedGame;
                     cachedGame = null;
                 } else {
-
+                    if (em != null) {
+                        em.clearEntities();
+                    }
+                    if (ps != null) {
+                        ps.reset();
+                    }
                     currentScene = new SceneGame(this, em, cm, mm, io, ps);
                 }
                 break;
@@ -91,6 +96,18 @@ public class SceneManager implements ISceneManager {
             case PAUSE:
                 cachedGame = currentScene;
                 currentScene = new ScenePause(this, io);
+                break;
+
+            case STARVED:
+                currentScene = new SceneStarveEnding(this, ps);
+                break;
+
+            case HEALTH:
+                currentScene = new SceneHealthEnding(this, ps);
+                break;
+
+            case GOOD:
+                currentScene = new SceneGoodEnding(this, ps);
                 break;
         }
     }
@@ -125,6 +142,7 @@ public class SceneManager implements ISceneManager {
             cachedGame.dispose();
             cachedGame = null;
         }
+        System.out.println("[Scene Manager] All scene manager resources disposed.");
     }
 
     @Override
