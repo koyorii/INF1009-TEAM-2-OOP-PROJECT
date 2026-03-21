@@ -1,7 +1,6 @@
 package io.github.some_example_name.lwjgl3.Game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -9,75 +8,74 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.ISceneManager;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.Scene;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.SceneManager;
 
-
-public class SceneDifficulty extends Scene {
-    private Stage stage;
+public class SceneName extends Scene {
+    private final Stage stage;
     private Skin skin;
 
-    public SceneDifficulty(ISceneManager ism) {
+    public SceneName(ISceneManager ism, PlayerStats ps) {
         super(ism);
-
-        // Initialize the Stage, direct keys to UI stage, set up containers like in HTML, apply styling, and listener for button press to go to GAME scene
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+        skin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
 
-        this.skin = am.get("skin/craftacular-ui.json", Skin.class);
         Table menuContainer = new Table();
         menuContainer.setFillParent(true);
         stage.addActor(menuContainer);
-
-        Label diffText = new Label("Select Difficulty", skin, "default");
 
         // Dirt background
         menuContainer.setFillParent(true);
         menuContainer.setBackground(skin.getDrawable("dirt"));
 
-        // The buttons itself
-        TextButton fearButton = new TextButton("Fear & Hunger", skin, "default");
-        TextButton normalButton = new TextButton("Normal", skin, "default");
+        // Please enter name
+        Label nameLabel = new Label("Input Name", skin, "default");
 
-        // Setting colour to text of Fear button
-        fearButton.getLabel().setColor(new Color(0.5f, 0.0f, 0.0f, 1.0f));
+        // Textfield input box
+        final TextField nameInput = new TextField("", skin, "default");
 
-        // Button routes
-        fearButton.addListener(new ClickListener() {
-            @Override
+        // Submit button
+        TextButton startButton = new TextButton("Confirm", skin, "default");
+        startButton.getLabel().setFontScale(0.8f);
+        startButton.setScale(0.8f);
+
+        // Listener to the button of submission
+        startButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                //ism.setScene(SceneManager.State.FEAR);
+                String finalName = nameInput.getText();
+
+                if (finalName.trim().isEmpty()) {
+                    ps.setName("Blank");
+                } else {
+                    ps.setName(finalName);
+                }
+
+                // Switch Scenes
+                ism.setScene(SceneManager.State.DIFFICULTY);
+
             }
         });
 
-        // Button Routes
-        normalButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                ism.setScene(SceneManager.State.GAME);
-            }
-        });
-
-        // Instruction Text
-        menuContainer.add(diffText);
+        // Add all the stuff and assets to the screen
+        menuContainer.add(nameLabel).padBottom(10);
         menuContainer.row();
 
-        // Game buttons
-        menuContainer.add(fearButton).padTop(10);
-        menuContainer.row();
-        menuContainer.add(normalButton).padTop(10);
+        menuContainer.add(nameInput).width(300).padBottom(20);
         menuContainer.row();
 
+        menuContainer.add(startButton).width(150);
     }
+
     @Override
     public void update(float delta) {
         stage.act(delta);
+
     }
 
     @Override
-    public void render(ShapeRenderer shape, SpriteBatch spriteBatch) {
+    public void render(ShapeRenderer sr, SpriteBatch sb) {
         stage.draw();
     }
 
@@ -86,7 +84,6 @@ public class SceneDifficulty extends Scene {
         if (stage != null) {
             stage.dispose();
         }
-
         this.skin = null;
     }
 }

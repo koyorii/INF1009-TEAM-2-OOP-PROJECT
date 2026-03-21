@@ -20,7 +20,6 @@ import io.github.some_example_name.lwjgl3.Engine.movementManager.MovementManager
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.ISceneManager;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.Scene;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.SceneManager;
-import io.github.some_example_name.lwjgl3.Game.Player;
 
 public class SceneGame extends Scene {
 
@@ -63,6 +62,8 @@ public class SceneGame extends Scene {
 
         float screenW = Gdx.graphics.getWidth();
         float screenH = Gdx.graphics.getHeight();
+
+        io.getAudio();
 
         // ── Player NPC ────────────────────────────────────────────
         this.player = new Player(
@@ -126,7 +127,9 @@ public class SceneGame extends Scene {
 
         if (ps.isDead()) {
             Gdx.app.log("Game", "Player died! Score: " + ps.getScore());
-            //TODO: sceneManager.setScene(SceneManager.State.GAMEOVER);
+            ps.saveToLeaderboard();
+            // To-do: Change to scene depending on high or low score
+            sceneManager.setScene(SceneManager.State.MENU);
         }
     }
 

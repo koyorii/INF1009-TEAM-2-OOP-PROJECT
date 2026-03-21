@@ -82,6 +82,7 @@ public class ResolveCollision {
         playerStats.applyFood(food.getFoodType());
         audio.playSound(food.getFoodType() == OnComingFood.FoodType.UNHEALTHY ? "hit" : "catch");
         System.out.println("[Collision] Food caught: " + food.getFoodType()
+            + " Name=" + playerStats.getName()
             + " | HP=" + playerStats.getHp()
             + " Armor=" + playerStats.getArmor()
             + " Score=" + playerStats.getScore());

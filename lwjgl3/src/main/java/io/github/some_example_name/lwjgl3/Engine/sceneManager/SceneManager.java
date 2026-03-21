@@ -18,7 +18,7 @@ public class SceneManager implements ISceneManager {
     private Scene currentScene;
     private Scene cachedGame;
 
-    public enum State {MENU, GAME, PAUSE, DIFFICULTY}
+    public enum State {MENU, GAME, PAUSE, DIFFICULTY, NAME, LEADERBOARD}
 
     private EntityManager em;
     private CollisionManager cm;
@@ -42,17 +42,38 @@ public class SceneManager implements ISceneManager {
     // Function to set scenes accordingly to conditions
     @Override
     public void setScene(State state) {
+
+        if (currentScene != null && state != State.PAUSE) {
+            // Only pause don't dispose of scene
+            currentScene.dispose();
+        }
+
         switch (state) {
+            // First scene of the game
             case MENU:
-                if (currentScene != null) {
-                    currentScene.dispose();
-                    cachedGame = null;
-                    // Reset entities and scores
+                if (em != null) {
                     em.clearEntities();
+                }
+                if (ps != null) {
                     ps.reset();
                 }
 
+                cachedGame = null;
                 currentScene = new SceneMenu(this);
+                break;
+
+            case LEADERBOARD:
+                currentScene = new SceneLeaderboard(this, ps);
+                break;
+
+            // Scene to pick name default to Blank if empty
+            case NAME:
+                currentScene = new SceneName(this, ps);
+                break;
+
+            // Select difficulty scene
+            case DIFFICULTY:
+                currentScene = new SceneDifficulty(this);
                 break;
 
             // If a cache of your progress exists, restore, else start new
@@ -66,13 +87,10 @@ public class SceneManager implements ISceneManager {
                 }
                 break;
 
+                // Pause scene
             case PAUSE:
                 cachedGame = currentScene;
                 currentScene = new ScenePause(this, io);
-                break;
-
-            case DIFFICULTY:
-                currentScene = new SceneDifficulty(this);
                 break;
         }
     }
