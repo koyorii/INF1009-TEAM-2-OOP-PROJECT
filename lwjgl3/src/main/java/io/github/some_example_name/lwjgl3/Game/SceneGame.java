@@ -132,7 +132,7 @@ public class SceneGame extends Scene {
             ps.saveToLeaderboard();
             // If health drops to 0 jump to health end, cuz actually dying is worse than starvation
             if (ps.getHp() == 0 && ps.getScore() <= 7999) {
-                //
+                sceneManager.setScene(SceneManager.State.HEALTH);
             }
             // Starved end, if health is above 0 but hunger is 0
             else if (ps.getHunger() == 0 && ps.getScore() <= 7999) {

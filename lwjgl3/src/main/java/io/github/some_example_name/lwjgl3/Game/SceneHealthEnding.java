@@ -11,16 +11,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.ISceneManager;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.Scene;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.SceneManager;
 
-public class SceneStarveEnding extends Scene {
+public class SceneHealthEnding extends Scene {
     private final Stage stage;
     private final Skin skin;
 
-    public SceneStarveEnding(ISceneManager ism, PlayerStats ps) {
+    public SceneHealthEnding(ISceneManager ism, PlayerStats ps) {
         super(ism);
         // Initialize the Stage, direct keys to UI stage, set up containers like in HTML, apply styling, and listener for button press to go to GAME scene
         stage = new Stage(new ScreenViewport());
@@ -31,17 +32,17 @@ public class SceneStarveEnding extends Scene {
         menuContainer.setFillParent(true);
         stage.addActor(menuContainer);
 
-        // Setting the background to dark night
-        Texture endBackground = am.get("backgrounds/fear_and_hunger_background.jpg", Texture.class);
+        // Setting the background to be in the abyss
+        Texture endBackground = am.get("backgrounds/paintblack.jpg", Texture.class);
         menuContainer.setBackground(new TextureRegionDrawable(new TextureRegion(endBackground)));
 
-        // Player outcome image
-        Texture playerPicTexture = am.get("bad_starvation_ending.png", Texture.class);
+        // Player outcome image (Reaper)
+        Texture playerPicTexture = am.get("bad_health_ending.png", Texture.class);
         Image playerPicImage = new Image(playerPicTexture);
         playerPicImage.setScaling(Scaling.stretch);
 
         // Make darker
-        playerPicImage.setColor(0.5f, 0.5f, 0.5f, 1f);
+        playerPicImage.setColor(0.4f, 0.4f, 0.4f, 1f);
 
         // Show final score for user reference
         Label scoreLabel = new Label("Final Score: " + ps.getScore(), skin, "default");
@@ -52,7 +53,7 @@ public class SceneStarveEnding extends Scene {
         menuButton.getLabel().setFontScale(0.8f);
         exitButton.getLabel().setFontScale(0.8f);
 
-        // Button to return to menu
+        // Go to menu
         menuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -60,7 +61,7 @@ public class SceneStarveEnding extends Scene {
             }
         });
 
-        // Button to quit game
+        // Exit the game entirely, clear all resources
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -73,14 +74,13 @@ public class SceneStarveEnding extends Scene {
         menuContainer.row();
 
         // Grim Reaper
-        menuContainer.add(playerPicImage).colspan(2).size(400, 300).expandY().center();
+        menuContainer.add(playerPicImage).colspan(2).size(200, 300).expandY().center().padLeft(250);
         menuContainer.row();
 
-        // The buttons
+        // Buttons
         menuContainer.add(menuButton).left().pad(30).width(230).height(60);
         menuContainer.add(exitButton).right().pad(30).width(230).height(60);
 
-        stage.addActor(menuContainer);
     }
 
     public void update(float delta) {

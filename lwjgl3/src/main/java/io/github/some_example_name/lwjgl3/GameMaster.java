@@ -66,6 +66,7 @@ public class GameMaster extends ApplicationAdapter {
         assetM.load("backgrounds/normal_mode_background.jpg", Texture.class);
         assetM.load("backgrounds/fear_and_hunger_background.jpg", Texture.class);
         assetM.load("backgrounds/home_background.jpg", Texture.class);
+        assetM.load("backgrounds/paintblack.jpg", Texture.class);
 
         // End Image
         assetM.load("bad_starvation_ending.png", Texture.class); // Starvation
