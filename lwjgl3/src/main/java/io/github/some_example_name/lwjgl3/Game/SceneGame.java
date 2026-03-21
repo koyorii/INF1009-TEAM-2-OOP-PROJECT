@@ -29,11 +29,11 @@ public class SceneGame extends Scene {
     private final IOManager io;
     private final PlayerStats ps;
 
-    private Stage stage;
+    private final Stage stage;
     private Skin skin;
-    private Player player;
-    private PlayerController    playerController;
-    private FoodSpawner foodSpawner;
+    private final Player player;
+    private final PlayerController    playerController;
+    private final FoodSpawner foodSpawner;
 
     private Texture[] healthyTextures;
     private Texture[] junkTextures;
