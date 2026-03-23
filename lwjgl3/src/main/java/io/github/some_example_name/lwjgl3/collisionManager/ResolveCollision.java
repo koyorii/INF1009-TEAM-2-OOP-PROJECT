@@ -1,7 +1,7 @@
 package io.github.some_example_name.lwjgl3.collisionManager;
 
 import com.badlogic.gdx.Gdx;
-
+import io.github.some_example_name.lwjgl3.FloatingTextManager;
 import io.github.some_example_name.lwjgl3.PlayerStats;
 import io.github.some_example_name.lwjgl3.TextureObject;
 import io.github.some_example_name.lwjgl3.Triangle;
@@ -14,27 +14,31 @@ import io.github.some_example_name.lwjgl3.staticCircle;
 public class ResolveCollision {
 
     private MovementCalculator colMove;
-    private Audio              audio;
-    private PlayerStats        playerStats; // null-safe: may be null if 3-arg constructor used
+    private Audio audio;
+    private PlayerStats playerStats; // null-safe: may be null if 3-arg constructor used
+    private FloatingTextManager floatingTextManager;
 
     public ResolveCollision(MovementCalculator colMove, Audio audio, PlayerStats playerStats) {
-        this.colMove     = colMove;
-        this.audio       = audio;
+        this.colMove = colMove;
+        this.audio = audio;
         this.playerStats = playerStats;
     }
 
-    public void collisionResolve(Entity a, Entity b) {
+    public void setFloatingTextManager(FloatingTextManager ftm) {
+        this.floatingTextManager = ftm;
+    }
 
+    public void collisionResolve(Entity a, Entity b) {
         // ══ Rule: OncomingFood hits the player NPC ════════════════
         // Only active when playerStats is wired in (4-arg CollisionManager path)
         if (playerStats != null) {
             if (a instanceof OnComingFood && b instanceof TextureObject) {
                 TextureObject player = (TextureObject) b;
-                if (!player.getIsFalling()) { handleFoodCatch((OnComingFood) a); return; }
+                if (!player.getIsFalling()) { handleFoodCatch((OnComingFood) a, player); return; }
             }
             if (b instanceof OnComingFood && a instanceof TextureObject) {
                 TextureObject player = (TextureObject) a;
-                if (!player.getIsFalling()) { handleFoodCatch((OnComingFood) b); return; }
+                if (!player.getIsFalling()) { handleFoodCatch((OnComingFood) b, player); return; }
             }
         }
 
@@ -42,7 +46,7 @@ public class ResolveCollision {
         if (a instanceof TextureObject && b instanceof TextureObject) {
             TextureObject objA = (TextureObject) a;
             TextureObject objB = (TextureObject) b;
-            if (objA.getIsFalling() && !objB.getIsFalling())      handleCatch(objA);
+            if (objA.getIsFalling() && !objB.getIsFalling()) handleCatch(objA);
             else if (objB.getIsFalling() && !objA.getIsFalling()) handleCatch(objB);
         }
 
@@ -69,18 +73,25 @@ public class ResolveCollision {
         // ══ Original Rule 4: Triangle hits staticCircle obstacle ══
         if ((a instanceof Triangle && b instanceof staticCircle) ||
             (b instanceof Triangle && a instanceof staticCircle)) {
-            Triangle     tri    = (a instanceof Triangle)     ? (Triangle)     a : (Triangle)     b;
+            Triangle tri = (a instanceof Triangle) ? (Triangle) a : (Triangle) b;
             staticCircle circle = (a instanceof staticCircle) ? (staticCircle) a : (staticCircle) b;
             handleTriangleCirclePushback(tri, circle);
         }
     }
 
     // ─── NEW: food caught by player NPC ───────────────────────────
-    private void handleFoodCatch(OnComingFood food) {
+    private void handleFoodCatch(OnComingFood food, TextureObject player) {
         if (!food.isActive()) return;
         food.deactivate();
         playerStats.applyFood(food.getFoodType());
         audio.playSound(food.getFoodType() == OnComingFood.FoodType.UNHEALTHY ? "hit" : "catch");
+
+        if (floatingTextManager != null) {
+            float cx = player.getX() + player.getTexture().getWidth() / 2f;
+            float cy = player.getY();
+            floatingTextManager.spawnFoodPopup(food.getFoodType(), cx, cy);
+        }
+
         System.out.println("[Collision] Food caught: " + food.getFoodType()
             + " | HP=" + playerStats.getHp()
             + " Armor=" + playerStats.getArmor()
@@ -96,8 +107,8 @@ public class ResolveCollision {
     }
 
     private void handleDropletCircleSlide(TextureObject droplet, staticCircle circle) {
-        float dx   = (droplet.getX() + droplet.getTexture().getWidth()  / 2f) - circle.getX();
-        float dy   = (droplet.getY() + droplet.getTexture().getHeight() / 2f) - circle.getY();
+        float dx = (droplet.getX() + droplet.getTexture().getWidth() / 2f) - circle.getX();
+        float dy = (droplet.getY() + droplet.getTexture().getHeight() / 2f) - circle.getY();
         float dist = (float) Math.sqrt(dx * dx + dy * dy);
         if (dist == 0) { dx = 1; dy = 0; dist = 1; }
         float slideStrength = 3.0f;
@@ -118,7 +129,7 @@ public class ResolveCollision {
     }
 
     private void handleTriangleCirclePushback(Triangle tri, staticCircle circle) {
-        float dx        = tri.getX() - circle.getX();
+        float dx = tri.getX() - circle.getX();
         float direction = dx >= 0 ? 1 : -1;
         colMove.collisionMovement(tri, tri.getX() + direction * 2.0f, tri.getY());
         System.out.println("Triangle hit an obstacle! Pushed back.");

@@ -10,24 +10,23 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.some_example_name.lwjgl3.sceneManager.ISceneManager;
 import io.github.some_example_name.lwjgl3.sceneManager.Scene;
-
-import io.github.some_example_name.lwjgl3.sceneManager.ISceneManager;
-import io.github.some_example_name.lwjgl3.sceneManager.Scene;
 import io.github.some_example_name.lwjgl3.sceneManager.SceneManager;
 
-
 public class actualSceneDifficulty extends Scene {
+
     private Stage stage;
     private Skin skin;
 
     public actualSceneDifficulty(ISceneManager ism) {
         super(ism);
-
-        // Initialise the Stage, direct keys to UI stage, set up containers like in HTML, apply styling, and listener for button press to go to GAME scene
+        // Initialise the Stage, direct keys to UI stage, set up
+        // containers like in HTML, apply styling, and listener for button press
+        // to go to GAME scene
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
+
         Table menuContainer = new Table();
         menuContainer.setFillParent(true);
         stage.addActor(menuContainer);
@@ -38,7 +37,7 @@ public class actualSceneDifficulty extends Scene {
         menuContainer.setFillParent(true);
         menuContainer.setBackground(skin.getDrawable("dirt"));
 
-        TextButton fearButton = new TextButton("Fear & Hunger", skin, "default");
+        TextButton fearButton   = new TextButton("Fear & Hunger", skin, "default");
         TextButton normalButton = new TextButton("Normal", skin, "default");
 
         // Button routes
@@ -49,25 +48,24 @@ public class actualSceneDifficulty extends Scene {
             }
         });
 
-        // Button Routes
+        // Normal mode now routes to TUTORIAL first, then TUTORIAL goes to GAME
         normalButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ism.setScene(SceneManager.State.GAME);
+                ism.setScene(SceneManager.State.TUTORIAL);
             }
         });
 
         // Instruction Text
         menuContainer.add(diffText);
         menuContainer.row();
-
         // Game buttons
         menuContainer.add(fearButton).padTop(10);
         menuContainer.row();
         menuContainer.add(normalButton).padTop(10);
         menuContainer.row();
-
     }
+
     @Override
     public void update(float delta) {
         stage.act(delta);

@@ -3,7 +3,6 @@ package io.github.some_example_name.lwjgl3.sceneManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-
 import io.github.some_example_name.lwjgl3.*;
 import io.github.some_example_name.lwjgl3.collisionManager.CollisionManager;
 import io.github.some_example_name.lwjgl3.entityManager.EntityManager;
@@ -17,7 +16,7 @@ public class SceneManager implements ISceneManager {
     private Scene currentScene;
     private Scene cachedGame;
 
-    public enum State {MENU, GAME, PAUSE, DIFFICULTY}
+    public enum State { MENU, GAME, PAUSE, DIFFICULTY, TUTORIAL }
 
     private EntityManager em;
     private CollisionManager cm;
@@ -47,6 +46,13 @@ public class SceneManager implements ISceneManager {
                 currentScene = new SceneMenu(this);
                 break;
 
+            case TUTORIAL:
+                if (currentScene != null) {
+                    currentScene.dispose();
+                }
+                currentScene = new SceneTutorial(this);
+                break;
+
             // If a cache of your progress exists, restore, else start new
             case GAME:
                 if (cachedGame != null) {
@@ -54,7 +60,6 @@ public class SceneManager implements ISceneManager {
                     cachedGame = null;
                     Gdx.input.setInputProcessor(null);
                 } else {
-
                     currentScene = new SceneGame(this, em, cm, mm, io, ps);
                 }
                 break;
@@ -69,7 +74,6 @@ public class SceneManager implements ISceneManager {
                 break;
         }
     }
-
 
     @Override
     public void update(float delta) {

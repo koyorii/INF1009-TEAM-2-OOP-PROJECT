@@ -3,18 +3,15 @@ package io.github.some_example_name.lwjgl3;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.some_example_name.lwjgl3.collisionManager.CollisionManager;
@@ -25,6 +22,7 @@ import io.github.some_example_name.lwjgl3.movementManager.MovementManager;
 import io.github.some_example_name.lwjgl3.sceneManager.ISceneManager;
 import io.github.some_example_name.lwjgl3.sceneManager.Scene;
 import io.github.some_example_name.lwjgl3.sceneManager.SceneManager;
+
 
 public class SceneGame extends Scene {
 
@@ -43,6 +41,9 @@ public class SceneGame extends Scene {
     private Texture[] healthyTextures;
     private Texture[] junkTextures;
     private Texture vitaminTexture;
+
+    private FloatingTextManager floatingTextManager;
+    private BitmapFont gameFont;
 
     public SceneGame(ISceneManager ism, EntityManager em, CollisionManager cm, MovementManager mm, IOManager io, PlayerStats ps) {
         super(ism);
@@ -100,17 +101,25 @@ public class SceneGame extends Scene {
         playerController = new PlayerController(220f);
         foodSpawner      = new FoodSpawner(em, healthyTextures, junkTextures, vitaminTexture);
 
+      
+        gameFont = new BitmapFont();
+        gameFont.getData().setScale(1.5f);
+        floatingTextManager = new FloatingTextManager(gameFont);
+
+        
+        cm.getResolver().setFloatingTextManager(floatingTextManager);
+
         // Label for instructions
-        Label pauseLabel = new Label("Press Escape to Pause", skin,"default");
+        Label pauseLabel = new Label("Press Escape to Pause", skin, "default");
         pauseLabel.setFontScale(0.5f);
 
         // Adds label to tell player how to pause
         menuContainer.add(pauseLabel)
             .expand()      // Pushes the cell to take up all available space
-            .bottom()      // Align bottom
-            .left()        // Align left
-            .padLeft(20)   // Padding so look a bit nicer
-            .padBottom(20);
+            .top()      // Align bottom
+            .right()        // Align left
+            .padRight(20)   // Padding so look a bit nicer
+            .padTop(20);
     }
 
     @Override
@@ -119,8 +128,8 @@ public class SceneGame extends Scene {
         foodSpawner.update(delta);
         em.update(mm);
         cm.update();
-
         stage.act(delta);
+        floatingTextManager.update(delta, ps);
 
         if (io.getKeyboard().isKeyJustPressed(Input.Keys.ESCAPE)) {
             sceneManager.setScene(SceneManager.State.PAUSE);
@@ -140,12 +149,18 @@ public class SceneGame extends Scene {
         // Then draw all game entities on top
         // batch.begin() / end() is handled inside EntityM.draw()
         em.draw(shape, batch);
+
+        // Draw floating popups 
+        batch.begin();
+     floatingTextManager.drawOnly(batch, ps);
+        batch.end();
     }
 
     @Override
     public void dispose() {
         if (stage != null) stage.dispose();
         if (skin  != null) skin.dispose();
+        if (gameFont != null) gameFont.dispose();
 
         if (vitaminTexture != null) vitaminTexture.dispose();
         for (Texture t : healthyTextures) {
