@@ -1,0 +1,182 @@
+package io.github.some_example_name.lwjgl3.Engine.collisionManager;
+
+import com.badlogic.gdx.Gdx;
+<<<<<<< HEAD:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/collisionManager/ResolveCollision.java
+import io.github.some_example_name.lwjgl3.FloatingTextManager;
+import io.github.some_example_name.lwjgl3.PlayerStats;
+import io.github.some_example_name.lwjgl3.TextureObject;
+=======
+
+import io.github.some_example_name.lwjgl3.Game.Player;
+>>>>>>> 7e0e8bb8e6842a268786805e27d8310018f4c018:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/Engine/collisionManager/ResolveCollision.java
+import io.github.some_example_name.lwjgl3.Triangle;
+import io.github.some_example_name.lwjgl3.staticCircle;
+import io.github.some_example_name.lwjgl3.Engine.entityManager.Entity;
+import io.github.some_example_name.lwjgl3.Engine.iomanager.Audio;
+import io.github.some_example_name.lwjgl3.Engine.movementManager.MovementCalculator;
+import io.github.some_example_name.lwjgl3.Game.OnComingFood;
+import io.github.some_example_name.lwjgl3.Game.PlayerStats;
+
+public class ResolveCollision {
+
+<<<<<<< HEAD:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/collisionManager/ResolveCollision.java
+    private MovementCalculator colMove;
+    private Audio audio;
+    private PlayerStats playerStats; // null-safe: may be null if 3-arg constructor used
+    private FloatingTextManager floatingTextManager;
+=======
+    private final MovementCalculator colMove;
+    private final Audio              audio;
+    private final PlayerStats        playerStats; // null-safe: may be null if 3-arg constructor used
+>>>>>>> 7e0e8bb8e6842a268786805e27d8310018f4c018:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/Engine/collisionManager/ResolveCollision.java
+
+    public ResolveCollision(MovementCalculator colMove, Audio audio, PlayerStats playerStats) {
+        this.colMove = colMove;
+        this.audio = audio;
+        this.playerStats = playerStats;
+    }
+
+    public void setFloatingTextManager(FloatingTextManager ftm) {
+        this.floatingTextManager = ftm;
+    }
+
+    public void collisionResolve(Entity a, Entity b) {
+        // ══ Rule: OncomingFood hits the player NPC ════════════════
+        // Only active when playerStats is wired in (4-arg CollisionManager path)
+        if (playerStats != null) {
+<<<<<<< HEAD:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/collisionManager/ResolveCollision.java
+            if (a instanceof OnComingFood && b instanceof TextureObject) {
+                TextureObject player = (TextureObject) b;
+                if (!player.getIsFalling()) { handleFoodCatch((OnComingFood) a, player); return; }
+            }
+            if (b instanceof OnComingFood && a instanceof TextureObject) {
+                TextureObject player = (TextureObject) a;
+                if (!player.getIsFalling()) { handleFoodCatch((OnComingFood) b, player); return; }
+=======
+            if (a instanceof OnComingFood && b instanceof Player) {
+                Player player = (Player) b;
+                if (!player.getIsFalling()) { handleFoodCatch((OnComingFood) a); return; }
+            }
+            if (b instanceof OnComingFood && a instanceof Player) {
+                Player player = (Player) a;
+                if (!player.getIsFalling()) { handleFoodCatch((OnComingFood) b); return; }
+>>>>>>> 7e0e8bb8e6842a268786805e27d8310018f4c018:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/Engine/collisionManager/ResolveCollision.java
+            }
+        }
+
+        // ══ Original Rule 1: Droplet hits the Bucket ══════════════
+<<<<<<< HEAD:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/collisionManager/ResolveCollision.java
+        if (a instanceof TextureObject && b instanceof TextureObject) {
+            TextureObject objA = (TextureObject) a;
+            TextureObject objB = (TextureObject) b;
+            if (objA.getIsFalling() && !objB.getIsFalling()) handleCatch(objA);
+=======
+        if (a instanceof Player && b instanceof Player) {
+            Player objA = (Player) a;
+            Player objB = (Player) b;
+            if (objA.getIsFalling() && !objB.getIsFalling())      handleCatch(objA);
+>>>>>>> 7e0e8bb8e6842a268786805e27d8310018f4c018:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/Engine/collisionManager/ResolveCollision.java
+            else if (objB.getIsFalling() && !objA.getIsFalling()) handleCatch(objB);
+        }
+
+        // ══ Original Rule 2: Droplet slides off staticCircle ══════
+        if (a instanceof Player && b instanceof staticCircle) {
+            Player droplet = (Player) a;
+            if (droplet.getIsFalling()) handleDropletCircleSlide(droplet, (staticCircle) b);
+        }
+        if (b instanceof Player && a instanceof staticCircle) {
+            Player droplet = (Player) b;
+            if (droplet.getIsFalling()) handleDropletCircleSlide(droplet, (staticCircle) a);
+        }
+
+        // ══ Original Rule 3: Droplet slides off Triangle ══════════
+        if (a instanceof Player && b instanceof Triangle) {
+            Player droplet = (Player) a;
+            if (droplet.getIsFalling()) handleDropletTriangleSlide(droplet, (Triangle) b);
+        }
+        if (b instanceof Player && a instanceof Triangle) {
+            Player droplet = (Player) b;
+            if (droplet.getIsFalling()) handleDropletTriangleSlide(droplet, (Triangle) a);
+        }
+
+        // ══ Original Rule 4: Triangle hits staticCircle obstacle ══
+        if ((a instanceof Triangle && b instanceof staticCircle) ||
+            (b instanceof Triangle && a instanceof staticCircle)) {
+            Triangle tri = (a instanceof Triangle) ? (Triangle) a : (Triangle) b;
+            staticCircle circle = (a instanceof staticCircle) ? (staticCircle) a : (staticCircle) b;
+            handleTriangleCirclePushback(tri, circle);
+        }
+    }
+
+    // ─── NEW: food caught by player NPC ───────────────────────────
+    private void handleFoodCatch(OnComingFood food, TextureObject player) {
+        if (!food.isActive()) return;
+        food.deactivate();
+        playerStats.applyFood(food.getFoodType());
+<<<<<<< HEAD:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/collisionManager/ResolveCollision.java
+        audio.playSound(food.getFoodType() == OnComingFood.FoodType.UNHEALTHY ? "hit" : "catch");
+
+        if (floatingTextManager != null) {
+            float cx = player.getX() + player.getTexture().getWidth() / 2f;
+            float cy = player.getY();
+            floatingTextManager.spawnFoodPopup(food.getFoodType(), cx, cy);
+        }
+
+=======
+        switch (food.getFoodType()) {
+            case HEALTHY:   audio.playSound("eat_healthy"); break;
+            case VITAMIN:   audio.playSound("eat_vitamin"); break;
+            case UNHEALTHY: audio.playSound("eat_junk");    break;
+        }
+>>>>>>> 7e0e8bb8e6842a268786805e27d8310018f4c018:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/Engine/collisionManager/ResolveCollision.java
+        System.out.println("[Collision] Food caught: " + food.getFoodType()
+            + " Name=" + playerStats.getName()
+            + " | HP=" + playerStats.getHp()
+            + " Armor=" + playerStats.getArmor()
+            + " Score=" + playerStats.getScore());
+    }
+
+    // ─── Original handlers (unchanged) ───────────────────────────
+    private void handleCatch(Player droplet) {
+        System.out.println("Score! Droplet caught.");
+        audio.playSound("catch");
+        float randomX = (float) Math.random() * 800;
+        colMove.collisionMovement(droplet, randomX, Gdx.graphics.getHeight());
+    }
+
+<<<<<<< HEAD:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/collisionManager/ResolveCollision.java
+    private void handleDropletCircleSlide(TextureObject droplet, staticCircle circle) {
+        float dx = (droplet.getX() + droplet.getTexture().getWidth() / 2f) - circle.getX();
+        float dy = (droplet.getY() + droplet.getTexture().getHeight() / 2f) - circle.getY();
+=======
+    private void handleDropletCircleSlide(Player droplet, staticCircle circle) {
+        float dx   = (droplet.getX() + droplet.getTexture().getWidth()  / 2f) - circle.getX();
+        float dy   = (droplet.getY() + droplet.getTexture().getHeight() / 2f) - circle.getY();
+>>>>>>> 7e0e8bb8e6842a268786805e27d8310018f4c018:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/Engine/collisionManager/ResolveCollision.java
+        float dist = (float) Math.sqrt(dx * dx + dy * dy);
+        if (dist == 0) { dx = 1; dy = 0; dist = 1; }
+        float slideStrength = 3.0f;
+        colMove.collisionMovement(droplet,
+            droplet.getX() + (dx / dist) * slideStrength,
+            droplet.getY() + (dy / dist) * slideStrength);
+        System.out.println("Droplet sliding off circle!");
+    }
+
+    private void handleDropletTriangleSlide(Player droplet, Triangle tri) {
+        float slideStrength = 3.5f;
+        boolean onLeft = (droplet.getX() + droplet.getTexture().getWidth() / 2f) < tri.getX();
+        colMove.collisionMovement(droplet,
+            droplet.getX() + (onLeft ? -slideStrength : slideStrength),
+            droplet.getY() - slideStrength * 0.5f);
+        System.out.println("Droplet sliding off triangle!");
+        audio.playSound("hit");
+    }
+
+    private void handleTriangleCirclePushback(Triangle tri, staticCircle circle) {
+        float dx = tri.getX() - circle.getX();
+        float direction = dx >= 0 ? 1 : -1;
+        colMove.collisionMovement(tri, tri.getX() + direction * 2.0f, tri.getY());
+        System.out.println("Triangle hit an obstacle! Pushed back.");
+        audio.playSound("hit");
+    }
+}
