@@ -1,21 +1,22 @@
 package io.github.some_example_name.lwjgl3.Game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Array;
-import io.github.some_example_name.lwjgl3.Game.OnComingFood.FoodType;
-
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.utils.Array;
+
+import io.github.some_example_name.lwjgl3.Game.OnComingFood.FoodType;
 
 public class PlayerStats {
 
     public enum GameMode { NORMAL, FEARLESS_HUNGER }
 
     private static final int MAX_HUNGER_NORMAL = 5;
-    private static final int MAX_HUNGER_FEARLESS = 5;
+    private static final int MAX_HUNGER_FEARLESS = 3;
 
     // Per-mode values (set by setMode before each game)
     private int maxHp;      // growth cap  (Integer.MAX_VALUE = unlimited)
     private int maxArmor;   // growth cap
+    private int maxHunger;  // hunger cap
     private int startHp;    // HP the player starts with on reset
     private GameMode mode;
 
@@ -28,28 +29,31 @@ public class PlayerStats {
 
     public PlayerStats() {
         this.mode     = GameMode.NORMAL;
-        this.maxHp    = 5;
-        this.maxArmor = 5;
-        this.startHp  = 5;
-        this.hp       = startHp;
-        this.hunger   = MAX_HUNGER_NORMAL;
-        this.armor    = 0;
-        this.score    = 0;
-        this.name     = null;
+        this.maxHp     = 5;
+        this.maxArmor  = 5;
+        this.maxHunger = MAX_HUNGER_NORMAL;
+        this.startHp   = 5;
+        this.hp        = startHp;
+        this.hunger    = maxHunger;
+        this.armor     = 0;
+        this.score     = 0;
+        this.name      = null;
     }
 
     public void setMode(GameMode mode) {
         this.mode = mode;
         if (mode == GameMode.NORMAL) {
-            this.maxHp    = 5;
-            this.maxArmor = 5;
-            this.startHp  = 5;   // start full
-            this.hunger   = MAX_HUNGER_NORMAL;
+            this.maxHp     = 5;
+            this.maxArmor  = 5;
+            this.maxHunger = MAX_HUNGER_NORMAL;
+            this.startHp   = 5;   // start full
+            this.hunger    = maxHunger;
         } else { // FEARLESS_HUNGER — capped at 3 HP / 3 armor
-            this.maxHp    = 3;
-            this.maxArmor = 3;
-            this.startHp  = 3;
-            this.hunger   = MAX_HUNGER_FEARLESS;
+            this.maxHp     = 3;
+            this.maxArmor  = 3;
+            this.maxHunger = MAX_HUNGER_FEARLESS;
+            this.startHp   = 3;
+            this.hunger    = maxHunger;
         }
     }
 
@@ -69,7 +73,7 @@ public class PlayerStats {
             case HEALTHY:
                 // +1 HP, capped at maxHp
                 hp = Math.min(maxHp, hp + 1);
-                hunger = Math.min(this.getHunger(), hunger + 1);
+                hunger = Math.min(maxHunger, hunger + 1);
                 score += 150;
                 System.out.println("[Stats] Healthy food caught! HP=" + hp + " Hunger=" + hunger + " Score=" + score);
                 break;
@@ -158,5 +162,6 @@ public class PlayerStats {
     public String getName() { return name; }
     public int getMaxHp() { return maxHp; }
     public int getMaxArmor() { return maxArmor; }
+    public int getMaxHunger() { return maxHunger; }
     public GameMode getMode() { return mode; }
 }

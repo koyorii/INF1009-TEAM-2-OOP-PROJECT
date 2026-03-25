@@ -32,6 +32,8 @@ public class HudOverlay {
     private final Texture heartEmpty;
     private final Texture armorFull;
     private final Texture armorEmpty;
+    private final Texture foodFull;
+    private final Texture foodEmpty;
 
     private final PlayerStats ps;
     private final BitmapFont  font;
@@ -42,6 +44,8 @@ public class HudOverlay {
         this.heartEmpty = am.get("hud/heart-bg.png",  Texture.class);
         this.armorFull  = am.get("hud/armor.png",    Texture.class);
         this.armorEmpty = am.get("hud/armor-bg.png",  Texture.class);
+        this.foodFull   = am.get("hud/meat.png",     Texture.class);
+        this.foodEmpty  = am.get("hud/meat-bg.png",  Texture.class);
         this.ps     = ps;
         this.font   = new BitmapFont();
         this.font.getData().setScale(1.5f);
@@ -57,7 +61,8 @@ public class HudOverlay {
         float screenH = Gdx.graphics.getHeight();
 
         float healthY = screenH - MARGIN_TOP - ICON_SIZE;
-        float armorY  = healthY - ROW_GAP - ICON_SIZE;
+        float foodY   = healthY - ROW_GAP - ICON_SIZE;
+        float armorY  = foodY   - ROW_GAP - ICON_SIZE;
 
         batch.begin();
 
@@ -72,16 +77,28 @@ public class HudOverlay {
         // ── Armor row ─────────────────────────────────────────────
         int maxArmor     = ps.getMaxArmor();
         int currentArmor = ps.getArmor();
+
+        // ── Hunger row (Normal mode only) ─────────────────────────
+        if (ps.getMode() == PlayerStats.GameMode.NORMAL) {
+            int maxHunger     = ps.getMaxHunger();
+            int currentHunger = ps.getHunger();
+            for (int i = 0; i < maxHunger; i++) {
+                Texture icon = (i < currentHunger) ? foodFull : foodEmpty;
+                batch.draw(icon, MARGIN_X + i * (ICON_SIZE + ICON_GAP), foodY, ICON_SIZE, ICON_SIZE);
+            }
+        }
+
         for (int i = 0; i < maxArmor; i++) {
             Texture icon = (i < currentArmor) ? armorFull : armorEmpty;
             batch.draw(icon, MARGIN_X + i * (ICON_SIZE + ICON_GAP), armorY, ICON_SIZE, ICON_SIZE);
         }
 
-        // ── Score (both modes, top-right) ─────────────────────────
+        // ── Score (both modes, just below Pause label top-right) ─────
         String scoreText = "Score: " + ps.getScore();
         layout.setText(font, scoreText);
         font.setColor(Color.WHITE);
-        font.draw(batch, scoreText, screenW - layout.width - MARGIN_X, screenH - MARGIN_TOP);
+        float scoreY = screenH - MARGIN_TOP - 32f; // leaves room for "Press Escape" label above
+        font.draw(batch, scoreText, screenW - layout.width - MARGIN_X, scoreY);
 
         // ── Countdown timer (Normal mode only, below score) ───────
         if (ps.getMode() == PlayerStats.GameMode.NORMAL) {
@@ -91,7 +108,7 @@ public class HudOverlay {
             font.setColor(secs <= 30 ? Color.RED : Color.WHITE);
             font.draw(batch, timerText,
                     screenW - layout.width - MARGIN_X,
-                    screenH - MARGIN_TOP - font.getLineHeight() - 4f);
+                    scoreY - font.getLineHeight() - 8f);
             font.setColor(Color.WHITE);
         }
 
