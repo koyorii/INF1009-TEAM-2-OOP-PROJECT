@@ -9,29 +9,18 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-<<<<<<< HEAD:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/actualSceneDifficulty.java
-import io.github.some_example_name.lwjgl3.sceneManager.ISceneManager;
-import io.github.some_example_name.lwjgl3.sceneManager.Scene;
-import io.github.some_example_name.lwjgl3.sceneManager.SceneManager;
-
-public class actualSceneDifficulty extends Scene {
-
-=======
-
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.ISceneManager;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.Scene;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.SceneManager;
 
 
 public class SceneDifficulty extends Scene {
->>>>>>> 7e0e8bb8e6842a268786805e27d8310018f4c018:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/Game/SceneDifficulty.java
     private Stage stage;
     private Skin skin;
 
     public SceneDifficulty(ISceneManager ism) {
         super(ism);
-<<<<<<< HEAD:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/actualSceneDifficulty.java
-        // Initialise the Stage, direct keys to UI stage, set up
+        // Initialize the Stage, direct keys to UI stage, set up
         // containers like in HTML, apply styling, and listener for button press
         // to go to GAME scene
         stage = new Stage(new ScreenViewport());
@@ -39,14 +28,11 @@ public class SceneDifficulty extends Scene {
 
         skin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
 
-=======
-
         // Initialize the Stage, direct keys to UI stage, set up containers like in HTML, apply styling, and listener for button press to go to GAME scene
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
         this.skin = am.get("skin/craftacular-ui.json", Skin.class);
->>>>>>> 7e0e8bb8e6842a268786805e27d8310018f4c018:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/Game/SceneDifficulty.java
         Table menuContainer = new Table();
         menuContainer.setFillParent(true);
         stage.addActor(menuContainer);
@@ -57,15 +43,11 @@ public class SceneDifficulty extends Scene {
         menuContainer.setFillParent(true);
         menuContainer.setBackground(skin.getDrawable("dirt"));
 
-<<<<<<< HEAD:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/actualSceneDifficulty.java
-        TextButton fearButton   = new TextButton("Fear & Hunger", skin, "default");
-=======
         // The buttons itself
         TextButton fearButton = new TextButton("Fear & Hunger", skin, "default");
->>>>>>> 7e0e8bb8e6842a268786805e27d8310018f4c018:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/Game/SceneDifficulty.java
         TextButton normalButton = new TextButton("Normal", skin, "default");
 
-        // Setting colour to text of Fear button
+        // Setting color to text of Fear button
         fearButton.getLabel().setColor(new Color(0.5f, 0.0f, 0.0f, 1.0f));
 
         // Button routes
@@ -73,7 +55,8 @@ public class SceneDifficulty extends Scene {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 audio.playSound("button_click");
-                //ism.setScene(SceneManager.State.FEAR);
+                ism.getPlayerStats().setMode(PlayerStats.GameMode.FEARLESS_HUNGER);
+                ism.setScene(SceneManager.State.GAME);
             }
         });
 
@@ -81,12 +64,9 @@ public class SceneDifficulty extends Scene {
         normalButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-<<<<<<< HEAD:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/actualSceneDifficulty.java
-                ism.setScene(SceneManager.State.TUTORIAL);
-=======
                 audio.playSound("button_click");
+                //ism.setScene(SceneManager.State.TUTORIAL); // Key yun's tutorial had to remove for issues
                 ism.setScene(SceneManager.State.GAME);
->>>>>>> 7e0e8bb8e6842a268786805e27d8310018f4c018:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/Game/SceneDifficulty.java
             }
         });
 
@@ -98,12 +78,9 @@ public class SceneDifficulty extends Scene {
         menuContainer.row();
         menuContainer.add(normalButton).padTop(10);
         menuContainer.row();
-<<<<<<< HEAD:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/actualSceneDifficulty.java
-=======
 
         // Keep menu music playing
         audio.playMusic("menu");
->>>>>>> 7e0e8bb8e6842a268786805e27d8310018f4c018:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/Game/SceneDifficulty.java
     }
 
     @Override

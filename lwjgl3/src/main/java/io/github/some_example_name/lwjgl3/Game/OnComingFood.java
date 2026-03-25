@@ -8,8 +8,12 @@ import com.badlogic.gdx.math.Polygon;
 
 import io.github.some_example_name.lwjgl3.Engine.entityManager.MovableEntity;
 import io.github.some_example_name.lwjgl3.Engine.entityManager.iDrawableSprite;
+import io.github.some_example_name.lwjgl3.Engine.iomanager.Keyboard;
+import io.github.some_example_name.lwjgl3.Engine.movementManager.AImovement;
+import io.github.some_example_name.lwjgl3.Engine.movementManager.UserMovement;
+import io.github.some_example_name.lwjgl3.Engine.movementManager.iMovable;
 
-public class OnComingFood extends MovableEntity implements iDrawableSprite {
+public class OnComingFood extends MovableEntity implements iDrawableSprite,iMovable {
 
     public enum FoodType {
         HEALTHY,    // +1 HP
@@ -17,8 +21,8 @@ public class OnComingFood extends MovableEntity implements iDrawableSprite {
         UNHEALTHY   // -1 Armor or -1 HP
     }
 
-    private FoodType foodType;
-    private Texture  texture;
+    private final FoodType foodType;
+    private final Texture  texture;
     private boolean  active = true;
 
     // ── Perspective scaling ───────────────────────────────────────
@@ -35,7 +39,7 @@ public class OnComingFood extends MovableEntity implements iDrawableSprite {
     private float currentSize = MIN_SIZE;
 
     // The Y position where this food was spawned (top of screen)
-    private float spawnY;
+    private final float spawnY;
 
     // ── Constructor ───────────────────────────────────────────────
     public OnComingFood(float x, float y, float speed, FoodType foodType, Texture texture) {
@@ -50,11 +54,6 @@ public class OnComingFood extends MovableEntity implements iDrawableSprite {
     public void update() {
         if (!active) return;
 
-        float delta     = Gdx.graphics.getDeltaTime();
-        float screenH   = Gdx.graphics.getHeight();
-
-        // Move downward
-        y -= speed * delta;
 
         // How far has the food traveled as a 0..1 ratio?
         // 0 = just spawned at top (tiny), 1 = reached bottom (full size)
@@ -91,19 +90,19 @@ public class OnComingFood extends MovableEntity implements iDrawableSprite {
         return p;
     }
 
-    // ── Off-screen: despawn when past the bottom ──────────────────
-    public boolean isOffScreen() {
-        return y < -MAX_SIZE;
-    }
-
     // ── Getters ───────────────────────────────────────────────────
     public FoodType getFoodType()  { return foodType;     }
     public Texture  getTexture()   { return texture;      }
     public boolean  isActive()     { return active;       }
-    public float    getCurrentSize() { return currentSize; }
 
     public void deactivate() { active = false; }
 
+    public void performMovement(float speed, boolean isAI, Keyboard kb, UserMovement userMove, AImovement aiMove){
+        if (!active) return;
+        float delta     = Gdx.graphics.getDeltaTime();
+        // Food knows it acts as an AI, so it uses the Engine's AI tool to fall!
+        aiMove.moveDown(this, speed, delta);
+    }
     @Override
     public void dispose() {
         // Textures are shared — disposal handled by GameMaster, not here

@@ -21,9 +21,12 @@ import io.github.some_example_name.lwjgl3.Engine.movementManager.MovementManager
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.ISceneManager;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.Scene;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.SceneManager;
+//import io.github.some_example_name.lwjgl3.FloatingTextManager;
 
 
 public class SceneGame extends Scene {
+
+    private static final float GAME_DURATION = 120f; // 2 minutes for Normal mode
 
     private final EntityManager em;
     private final CollisionManager cm;
@@ -36,20 +39,15 @@ public class SceneGame extends Scene {
     private final Player player;
     private final PlayerController playerController;
     private final FoodSpawner foodSpawner;
+    private final HudOverlay hud;
 
-    private Texture[] healthyTextures;
-    private Texture[] junkTextures;
-    private Texture vitaminTexture;
+    // Normal mode countdown; -1 means no timer (Fearless Hunger)
+    private float timeLeft;
 
-<<<<<<< HEAD:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/SceneGame.java
-    private FloatingTextManager floatingTextManager;
-    private BitmapFont gameFont;
+    //private final FloatingTextManager floatingTextManager;
+    private final BitmapFont gameFont;
 
     public SceneGame(ISceneManager ism, EntityManager em, CollisionManager cm, MovementManager mm, IOManager io, PlayerStats ps) {
-=======
-    public SceneGame(ISceneManager ism, EntityManager em, CollisionManager cm, MovementManager mm, IOManager io,
-            PlayerStats ps) {
->>>>>>> 7e0e8bb8e6842a268786805e27d8310018f4c018:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/Game/SceneGame.java
         super(ism);
         this.em = em;
         this.cm = cm;
@@ -57,7 +55,10 @@ public class SceneGame extends Scene {
         this.io = io;
         this.ps = ps;
 
-        // Background UI
+        // ── Timer ─────────────────────────────────────────────────
+        timeLeft = ps.hasTimeLimit() ? GAME_DURATION : -1f;
+
+        // ── Background — pick based on difficulty ─────────────────
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
@@ -65,8 +66,11 @@ public class SceneGame extends Scene {
         Table menuContainer = new Table();
         menuContainer.setFillParent(true);
 
-        Texture normalBackground = am.get("backgrounds/normal_mode_background.jpg", Texture.class);
-        menuContainer.setBackground(new TextureRegionDrawable(new TextureRegion(normalBackground)));
+        String bgKey = (ps.getMode() == PlayerStats.GameMode.FEARLESS_HUNGER)
+                ? "backgrounds/fear_and_hunger_background.jpg"
+                : "backgrounds/normal_mode_background.jpg";
+        Texture background = am.get(bgKey, Texture.class);
+        menuContainer.setBackground(new TextureRegionDrawable(new TextureRegion(background)));
 
         stage.addActor(menuContainer);
 
@@ -88,34 +92,41 @@ public class SceneGame extends Scene {
 
         em.addEntity(player);
 
-        // ── Food textures ─────────────────────────────────────────
-        healthyTextures = new Texture[] {
+        // ── Food textures (local — only needed to build the spawner) ─
+        Texture[] healthyTextures = {
                 am.get("good_foods/apple.png", Texture.class),
                 am.get("good_foods/ninjin_carrot.png", Texture.class),
                 am.get("good_foods/petbottle_water_full.png", Texture.class),
         };
-
-        junkTextures = new Texture[] {
+        Texture[] junkTextures = {
                 am.get("bad_foods/can_juice.png", Texture.class),
                 am.get("bad_foods/dokukinoko_benitengu_dake.png", Texture.class),
                 am.get("bad_foods/rotten_apple.png", Texture.class),
         };
-
-        vitaminTexture = am.get("good_foods/Vitamin.png", Texture.class);
+        Texture vitaminTexture = am.get("good_foods/Vitamin.png", Texture.class);
 
         playerController = new PlayerController(220f);
         foodSpawner = new FoodSpawner(em, healthyTextures, junkTextures, vitaminTexture);
+        hud = new HudOverlay(am, ps);
 
-        // Start game background music
+        if (ps.getMode() == PlayerStats.GameMode.FEARLESS_HUNGER) {
+            // Fearless Hunger: ramp up speed/frequency over time
+            foodSpawner.enableEscalation();
+        } else {
+            // Normal mode: skew spawns toward bad food (20% healthy, 60% unhealthy, 20% vitamin)
+            foodSpawner.enableHeavyJunk();
+        }
+
+        // ── Audio ─────────────────────────────────────────────────
         audio.playMusic("game");
 
-      
+
         gameFont = new BitmapFont();
         gameFont.getData().setScale(1.5f);
-        floatingTextManager = new FloatingTextManager(gameFont);
+        //floatingTextManager = new FloatingTextManager(gameFont);
 
-        
-        cm.getResolver().setFloatingTextManager(floatingTextManager);
+
+        //cm.getResolver().setFloatingTextManager(floatingTextManager);
 
         // Label for instructions
         Label pauseLabel = new Label("Press Escape to Pause", skin, "default");
@@ -123,19 +134,11 @@ public class SceneGame extends Scene {
 
         // Adds label to tell player how to pause
         menuContainer.add(pauseLabel)
-<<<<<<< HEAD:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/SceneGame.java
             .expand()      // Pushes the cell to take up all available space
-            .top()      // Align bottom
-            .right()        // Align left
+            .top()      // Alignment
+            .right()
             .padRight(20)   // Padding so look a bit nicer
             .padTop(20);
-=======
-                .expand() // Pushes the cell to take up all available space
-                .bottom() // Align bottom
-                .left() // Align left
-                .padLeft(20) // Padding so look a bit nicer
-                .padBottom(20);
->>>>>>> 7e0e8bb8e6842a268786805e27d8310018f4c018:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/Game/SceneGame.java
     }
 
     @Override
@@ -145,65 +148,63 @@ public class SceneGame extends Scene {
         em.update(mm);
         cm.update();
         stage.act(delta);
-        floatingTextManager.update(delta, ps);
+        //floatingTextManager.update(delta, ps);
 
-        // Escape key pauses the game
+        // Escape → pause
         if (io.getKeyboard().isKeyJustPressed(Input.Keys.ESCAPE)) {
             sceneManager.setScene(SceneManager.State.PAUSE);
         }
 
-        // If player dies, log their score, and send to respective scenes.
+        // ── Normal mode countdown ─────────────────────────────────
+        if (ps.hasTimeLimit()) {
+            timeLeft -= delta;
+            if (timeLeft <= 0) {
+                // Survived the full 2 minutes → good ending
+                Gdx.app.log("Game", "Time's up! Player survived. Score: " + ps.getScore());
+                ps.saveToLeaderboard();
+                sceneManager.setScene(SceneManager.State.GOOD);
+                return;
+            }
+        }
+
+        // ── Death check ───────────────────────────────────────────
         if (ps.isDead()) {
             Gdx.app.log("Game", "Player died! Score: " + ps.getScore());
             ps.saveToLeaderboard();
-            // If health drops to 0 jump to health end, cuz actually dying is worse than
-            // starvation
-            if (ps.getHp() == 0 && ps.getScore() <= 7999) {
+            if (ps.getHp() == 0) {
+                // Died from damage
                 sceneManager.setScene(SceneManager.State.HEALTH);
-            }
-            // Starved end, if health is above 0 but hunger is 0
-            else if (ps.getHunger() == 0 && ps.getScore() <= 7999) {
+            } else if (ps.getHunger() == 0 && ps.getScore() <= 1000) {
+                // Starved AND score was too low to survive
                 sceneManager.setScene(SceneManager.State.STARVED);
-            }
-            // Survived
-            else {
-                sceneManager.setScene(SceneManager.State.GOOD);
+            } else {
+                // Starved but with a decent score — still a bad health ending
+                sceneManager.setScene(SceneManager.State.HEALTH);
             }
         }
     }
 
     @Override
     public void render(ShapeRenderer shape, SpriteBatch batch) {
-        // Draw background FIRST using stage (has its own internal batch)
         stage.draw();
-
-        // Then draw all game entities on top
-        // batch.begin() / end() is handled inside EntityM.draw()
         em.draw(shape, batch);
+        hud.render(batch, timeLeft);
 
-        // Draw floating popups 
+        // Draw floating popups
         batch.begin();
-     floatingTextManager.drawOnly(batch, ps);
+        //floatingTextManager.drawOnly(batch, ps);
         batch.end();
     }
 
     @Override
     public void dispose() {
-<<<<<<< HEAD:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/SceneGame.java
         if (stage != null) stage.dispose();
-        if (skin  != null) skin.dispose();
+        if (skin != null) skin.dispose();
+        if (hud   != null) hud.dispose();
         if (gameFont != null) gameFont.dispose();
-=======
-        if (stage != null) {
-            stage.dispose();
-        }
->>>>>>> 7e0e8bb8e6842a268786805e27d8310018f4c018:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/Game/SceneGame.java
 
         // Just in case
         this.skin = null;
-        this.vitaminTexture = null;
-        this.healthyTextures = null;
-        this.junkTextures = null;
 
         em.clearEntities();
     }

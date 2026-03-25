@@ -18,7 +18,7 @@ public class SceneManager implements ISceneManager {
     private Scene currentScene;
     private Scene cachedGame;
 
-    public enum State {MENU, GAME, PAUSE, DIFFICULTY, NAME, LEADERBOARD, STARVED, HEALTH, GOOD}
+    public enum State {MENU, GAME, PAUSE, DIFFICULTY, NAME, LEADERBOARD, STARVED, HEALTH, GOOD, TUTORIAL}
 
     private EntityManager em;
     private CollisionManager cm;
@@ -92,6 +92,13 @@ public class SceneManager implements ISceneManager {
                 }
                 break;
 
+//            case TUTORIAL:
+//                if (currentScene != null) {
+//                    currentScene.dispose();
+//                }
+//                currentScene = new SceneTutorial(this, ps);
+//                break;
+
                 // Pause scene
             case PAUSE:
                 cachedGame = currentScene;
@@ -148,6 +155,11 @@ public class SceneManager implements ISceneManager {
     @Override
     public AssetManager getAssets() {
         return this.am;
+    }
+
+    @Override
+    public PlayerStats getPlayerStats() {
+        return this.ps;
     }
 
     @Override

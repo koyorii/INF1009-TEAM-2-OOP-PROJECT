@@ -4,16 +4,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import io.github.some_example_name.lwjgl3.Engine.movementManager.MovementCalculator;
-import io.github.some_example_name.lwjgl3.Game.OnComingFood;
-import io.github.some_example_name.lwjgl3.Game.Player;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+
 import java.util.List;
 
 public class EntityManager implements getEntityList {
 
-    private List<Entity> entityList;
+    private final List<Entity> entityList;
 
     public EntityManager() {
         entityList = new ArrayList<>();
@@ -25,29 +23,13 @@ public class EntityManager implements getEntityList {
 
     public void update(MovementCalculator moveM) {
 
-        // Step 1: Remove OncomingFood that passed off-screen (missed)
-        // or was caught (deactivated by ResolveCollision)
-        Iterator<Entity> iter = entityList.iterator();
-        while (iter.hasNext()) {
-            Entity e = iter.next();
-            if (e instanceof OnComingFood) {
-                OnComingFood food = (OnComingFood) e;
-                if (food.isOffScreen() || !food.isActive()) {
-                    iter.remove();
-                }
-            }
-        }
 
         // Step 2: Update all remaining entities
         for (Entity entity : entityList) {
             entity.update();
 
-            // OncomingFood moves itself in its own update() — skip MovementCalculator for it
-            // TextureObject player NPC is moved by PlayerController (A/D keys) — also skip
-            // MovementCalculator is only needed for other MovableEntities (Triangle etc.)
-            if (entity instanceof MovableEntity
-                    && !(entity instanceof OnComingFood)
-                    && !(entity instanceof Player)) {
+            // MovementCalculator is only for other MovableEntities that implement iMovable.
+            if (entity instanceof MovableEntity) {
                 MovableEntity moveEntity = (MovableEntity) entity;
                 moveM.calculateMovement(moveEntity, false, moveEntity.getSpeed());
             }

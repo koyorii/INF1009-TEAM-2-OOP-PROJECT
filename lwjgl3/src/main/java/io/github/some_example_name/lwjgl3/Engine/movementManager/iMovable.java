@@ -1,5 +1,8 @@
 package io.github.some_example_name.lwjgl3.Engine.movementManager;
 
+import io.github.some_example_name.lwjgl3.Engine.iomanager.Keyboard;
+
 public interface iMovable {
-    public void movement();
+    // Pass the tools the entity might need to move itself
+    void performMovement(float speed, boolean isAI, Keyboard kb, UserMovement userMove, AImovement aiMove);
 }
