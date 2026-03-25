@@ -1,18 +1,23 @@
 package io.github.some_example_name.lwjgl3.Game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Polygon;
 
 import io.github.some_example_name.lwjgl3.Engine.entityManager.MovableEntity;
 import io.github.some_example_name.lwjgl3.Engine.entityManager.iDrawableSprite;
+import io.github.some_example_name.lwjgl3.Engine.iomanager.Keyboard;
+import io.github.some_example_name.lwjgl3.Engine.movementManager.AImovement;
+import io.github.some_example_name.lwjgl3.Engine.movementManager.UserMovement;
+import io.github.some_example_name.lwjgl3.Engine.movementManager.iMovable;
 
 /**
  * The player-controlled NPC character.
  * Movement is handled externally by PlayerController (A/D keys),
  * so this class does NOT implement iMovable — there is no engine-driven movement here.
  */
-public class Player extends MovableEntity implements iDrawableSprite {
+public class Player extends MovableEntity implements iDrawableSprite,iMovable {
 
     private Texture tex;
     private final boolean isFalling;
@@ -54,6 +59,15 @@ public class Player extends MovableEntity implements iDrawableSprite {
     public void update() {
         // Movement is driven by PlayerController — nothing to do here
     }
+    
+    //for movement
+    @Override
+    public void performMovement(float speed, boolean isAI, Keyboard kb, UserMovement userMove, AImovement aiMove){
+        float minX = 0;
+        float maxX = Gdx.graphics.getWidth() - this.drawWidth;
+        userMove.moveHorizontal(this, this.getSpeed(), kb, com.badlogic.gdx.Input.Keys.A, com.badlogic.gdx.Input.Keys.D, minX, maxX);
+    }
+
 
     @Override
     public Polygon getBounds() {

@@ -37,7 +37,6 @@ public class SceneGame extends Scene {
     private final Stage stage;
     private Skin skin;
     private final Player player;
-    private final PlayerController playerController;
     private final FoodSpawner foodSpawner;
     private final HudOverlay hud;
 
@@ -82,7 +81,7 @@ public class SceneGame extends Scene {
                 am.get("player.png", Texture.class),
                 screenW / 2f - 32,
                 screenH * 0.08f,
-                0,
+                220f,
                 false);
 
         // ── Scale the NPC sprite down to 64x96 pixels ─────────────
@@ -105,7 +104,6 @@ public class SceneGame extends Scene {
         };
         Texture vitaminTexture = am.get("good_foods/Vitamin.png", Texture.class);
 
-        playerController = new PlayerController(220f);
         foodSpawner = new FoodSpawner(em, healthyTextures, junkTextures, vitaminTexture);
         hud = new HudOverlay(am, ps);
 
@@ -143,7 +141,7 @@ public class SceneGame extends Scene {
 
     @Override
     public void update(float delta) {
-        playerController.handleInput(player);
+        
         foodSpawner.update(delta);
         em.update(mm);
         cm.update();
