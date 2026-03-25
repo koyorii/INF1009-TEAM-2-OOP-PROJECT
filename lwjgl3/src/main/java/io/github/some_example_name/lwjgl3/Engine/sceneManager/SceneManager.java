@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.assets.AssetManager;
 
-import io.github.some_example_name.lwjgl3.*;
 import io.github.some_example_name.lwjgl3.Engine.collisionManager.CollisionManager;
 import io.github.some_example_name.lwjgl3.Engine.entityManager.EntityManager;
 import io.github.some_example_name.lwjgl3.Engine.iomanager.IOManager;

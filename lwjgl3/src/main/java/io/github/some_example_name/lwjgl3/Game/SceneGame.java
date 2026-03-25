@@ -28,6 +28,8 @@ public class SceneGame extends Scene {
 
     private static final float GAME_DURATION = 120f; // 2 minutes for Normal mode
 
+    private boolean isGameOver = false;
+
     private final EntityManager em;
     private final CollisionManager cm;
     private final MovementManager mm;
@@ -166,7 +168,8 @@ public class SceneGame extends Scene {
         }
 
         // ── Death check ───────────────────────────────────────────
-        if (ps.isDead()) {
+        if (ps.isDead() && !isGameOver) {
+            isGameOver = true;
             Gdx.app.log("Game", "Player died! Score: " + ps.getScore());
             ps.saveToLeaderboard();
             if (ps.getHp() == 0) {
@@ -189,17 +192,14 @@ public class SceneGame extends Scene {
         hud.render(batch, timeLeft);
 
         // Draw floating popups
-        batch.begin();
-        //floatingTextManager.drawOnly(batch, ps);
-        batch.end();
+        
     }
 
     @Override
     public void dispose() {
         if (stage != null) stage.dispose();
-        if (skin != null) skin.dispose();
         if (hud   != null) hud.dispose();
-        if (gameFont != null) gameFont.dispose();
+
 
         // Just in case
         this.skin = null;

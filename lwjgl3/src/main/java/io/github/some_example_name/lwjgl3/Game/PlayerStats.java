@@ -10,7 +10,8 @@ public class PlayerStats {
 
     public enum GameMode { NORMAL, FEARLESS_HUNGER }
 
-    private static final int MAX_HUNGER = 10;
+    private static final int MAX_HUNGER_NORMAL = 5;
+    private static final int MAX_HUNGER_FEARLESS = 5;
 
     // Per-mode values (set by setMode before each game)
     private int maxHp;      // growth cap  (Integer.MAX_VALUE = unlimited)
@@ -31,7 +32,7 @@ public class PlayerStats {
         this.maxArmor = 5;
         this.startHp  = 5;
         this.hp       = startHp;
-        this.hunger   = MAX_HUNGER;
+        this.hunger   = MAX_HUNGER_NORMAL;
         this.armor    = 0;
         this.score    = 0;
         this.name     = null;
@@ -43,10 +44,12 @@ public class PlayerStats {
             this.maxHp    = 5;
             this.maxArmor = 5;
             this.startHp  = 5;   // start full
+            this.hunger   = MAX_HUNGER_NORMAL;
         } else { // FEARLESS_HUNGER — capped at 3 HP / 3 armor
             this.maxHp    = 3;
             this.maxArmor = 3;
             this.startHp  = 3;
+            this.hunger   = MAX_HUNGER_FEARLESS;
         }
     }
 
@@ -66,7 +69,7 @@ public class PlayerStats {
             case HEALTHY:
                 // +1 HP, capped at maxHp
                 hp = Math.min(maxHp, hp + 1);
-                hunger = Math.min(MAX_HUNGER, hunger + 1);
+                hunger = Math.min(this.getHunger(), hunger + 1);
                 score += 150;
                 System.out.println("[Stats] Healthy food caught! HP=" + hp + " Hunger=" + hunger + " Score=" + score);
                 break;
@@ -82,12 +85,12 @@ public class PlayerStats {
                 // Armor absorbs the hit first; if no armor, lose HP
                 if (armor > 0) {
                     armor--;
-                    hunger = Math.min(MAX_HUNGER, hunger - 1);
+                    hunger = Math.min(this.getHunger(), hunger - 1);
                     System.out.println("[Stats] Unhealthy food hit! Armor blocked. Armor=" + armor + " Hunger=" + hunger
                             + " Score=" + score);
                 } else {
                     hp = Math.max(0, hp - 1);
-                    hunger = Math.min(MAX_HUNGER, hunger - 1);
+                    hunger = Math.min(this.getHunger(), hunger - 1);
                     System.out
                             .println("[Stats] Unhealthy food hit! HP=" + hp + " Hunger=" + hunger + " Score=" + score);
                 }
@@ -141,7 +144,7 @@ public class PlayerStats {
     // Reset upon new game
     public void reset() {
         this.hp     = startHp;
-        this.hunger = MAX_HUNGER;
+        this.hunger = MAX_HUNGER_NORMAL;
         this.armor  = 0;
         this.score  = 0;
         System.out.println("[Stats] Game Reset: HP=" + hp + " Mode=" + mode);
