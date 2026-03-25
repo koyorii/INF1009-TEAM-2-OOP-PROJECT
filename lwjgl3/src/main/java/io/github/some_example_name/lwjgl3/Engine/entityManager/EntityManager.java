@@ -4,11 +4,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import io.github.some_example_name.lwjgl3.Engine.movementManager.MovementCalculator;
-import io.github.some_example_name.lwjgl3.Game.OnComingFood;
-import io.github.some_example_name.lwjgl3.Game.Player;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+
 import java.util.List;
 
 public class EntityManager implements getEntityList {
@@ -25,18 +23,6 @@ public class EntityManager implements getEntityList {
 
     public void update(MovementCalculator moveM) {
 
-        // Step 1: Remove OncomingFood that passed off-screen (missed)
-        // or was caught (deactivated by ResolveCollision)
-        // Iterator<Entity> iter = entityList.iterator();
-        // while (iter.hasNext()) {
-        //     Entity e = iter.next();
-        //     if (e instanceof OnComingFood) {
-        //         OnComingFood food = (OnComingFood) e;
-        //         if (food.isOffScreen() || !food.isActive()) {
-        //             iter.remove();
-        //         }
-        //     }
-        // }
 
         // Step 2: Update all remaining entities
         for (Entity entity : entityList) {
