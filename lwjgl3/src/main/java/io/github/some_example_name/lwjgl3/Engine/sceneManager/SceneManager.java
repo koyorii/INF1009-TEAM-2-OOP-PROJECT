@@ -1,6 +1,5 @@
 package io.github.some_example_name.lwjgl3.Engine.sceneManager;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.assets.AssetManager;
@@ -44,8 +43,7 @@ public class SceneManager implements ISceneManager {
     public void setScene(State state) {
 
         if (currentScene != null && state != State.PAUSE) {
-            // Detach input from old scene before disposal to avoid stale processor state
-            Gdx.input.setInputProcessor(null);
+            // Only pause don't dispose of scene
             currentScene.dispose();
         }
 

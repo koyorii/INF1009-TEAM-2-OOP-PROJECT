@@ -32,8 +32,6 @@ public class HudOverlay {
     private final Texture heartEmpty;
     private final Texture armorFull;
     private final Texture armorEmpty;
-    private final Texture foodFull;
-    private final Texture foodEmpty;
 
     private final PlayerStats ps;
     private final BitmapFont  font;
@@ -44,8 +42,6 @@ public class HudOverlay {
         this.heartEmpty = am.get("hud/heart-bg.png",  Texture.class);
         this.armorFull  = am.get("hud/armor.png",    Texture.class);
         this.armorEmpty = am.get("hud/armor-bg.png",  Texture.class);
-        this.foodFull  = am.get("hud/meat.png",    Texture.class);
-        this.foodEmpty = am.get("hud/meat-bg.png",  Texture.class);
         this.ps     = ps;
         this.font   = new BitmapFont();
         this.font.getData().setScale(1.5f);
@@ -61,8 +57,7 @@ public class HudOverlay {
         float screenH = Gdx.graphics.getHeight();
 
         float healthY = screenH - MARGIN_TOP - ICON_SIZE;
-        float foodY  = healthY - ROW_GAP - ICON_SIZE;
-        float armorY  = foodY - ROW_GAP - ICON_SIZE;
+        float armorY  = healthY - ROW_GAP - ICON_SIZE;
 
         batch.begin();
 
@@ -72,16 +67,6 @@ public class HudOverlay {
         for (int i = 0; i < maxHp; i++) {
             Texture icon = (i < currentHp) ? heartFull : heartEmpty;
             batch.draw(icon, MARGIN_X + i * (ICON_SIZE + ICON_GAP), healthY, ICON_SIZE, ICON_SIZE);
-        }
-
-        // ── Food row (Normal mode only) ───────────────────────────
-        if (ps.getMode() == PlayerStats.GameMode.NORMAL) {
-            int maxFood     = ps.getMaxHunger();
-            int currentFood = ps.getHunger();
-            for (int i = 0; i < maxFood; i++) {
-                Texture icon = (i < currentFood) ? foodFull : foodEmpty;
-                batch.draw(icon, MARGIN_X + i * (ICON_SIZE + ICON_GAP), foodY, ICON_SIZE, ICON_SIZE);
-            }
         }
 
         // ── Armor row ─────────────────────────────────────────────

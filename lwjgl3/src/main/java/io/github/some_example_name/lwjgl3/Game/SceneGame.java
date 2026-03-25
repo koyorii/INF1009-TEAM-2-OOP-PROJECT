@@ -187,7 +187,6 @@ public class SceneGame extends Scene {
 
     @Override
     public void render(ShapeRenderer shape, SpriteBatch batch) {
-        stage.getViewport().apply(true);
         stage.draw();
         em.draw(shape, batch);
         hud.render(batch, timeLeft);

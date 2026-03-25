@@ -7,16 +7,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.ISceneManager;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.Scene;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.SceneManager;
@@ -50,15 +45,12 @@ public class SceneHealthEnding extends Scene {
 
         // Show final score for user reference
         Label scoreLabel = new Label("Final Score: " + ps.getScore(), skin, "default");
-        scoreLabel.setColor(com.badlogic.gdx.graphics.Color.WHITE);
 
         // Route buttons
         TextButton menuButton = new TextButton("Return to Menu", skin, "default");
         TextButton exitButton = new TextButton("Quit Game", skin, "default");
         menuButton.getLabel().setFontScale(0.8f);
         exitButton.getLabel().setFontScale(0.8f);
-        menuButton.getLabel().setColor(com.badlogic.gdx.graphics.Color.WHITE);
-        exitButton.getLabel().setColor(com.badlogic.gdx.graphics.Color.WHITE);
 
         // Go to menu
         menuButton.addListener(new ClickListener() {
@@ -101,8 +93,6 @@ public class SceneHealthEnding extends Scene {
     }
 
     public void render(ShapeRenderer sr, SpriteBatch sb) {
-        stage.getViewport().apply(true);
-        Gdx.input.setInputProcessor(stage);
         stage.draw();
     }
 

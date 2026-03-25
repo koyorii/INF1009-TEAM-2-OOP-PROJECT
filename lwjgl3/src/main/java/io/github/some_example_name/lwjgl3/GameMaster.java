@@ -81,8 +81,6 @@ public class GameMaster extends ApplicationAdapter {
         assetM.load("hud/heart-bg.png", Texture.class);
         assetM.load("hud/armor.png",    Texture.class);
         assetM.load("hud/armor-bg.png", Texture.class);
-        assetM.load("hud/meat.png",     Texture.class);
-        assetM.load("hud/meat-bg.png",  Texture.class);
 
         // Block until all assets finish loading
         assetM.finishLoading();
