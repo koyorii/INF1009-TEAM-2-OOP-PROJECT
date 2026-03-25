@@ -148,7 +148,7 @@ public class PlayerStats {
     // Reset upon new game
     public void reset() {
         this.hp     = startHp;
-        this.hunger = MAX_HUNGER_NORMAL;
+        this.hunger = maxHunger;   // use mode-specific hunger cap
         this.armor  = 0;
         this.score  = 0;
         System.out.println("[Stats] Game Reset: HP=" + hp + " Mode=" + mode);

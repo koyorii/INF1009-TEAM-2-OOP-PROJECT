@@ -17,8 +17,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  *   armor.png   — active armor slot
  *   armor-bg.png — lost/empty armor slot
  *
- * Normal mode (max 5/5) also shows score + countdown timer top-right.
- * Fearless Hunger (max 3/3) shows score only top-right.
+ * Normal mode (max 5/5) shows score + countdown timer top-right.
+ * Fearless Hunger (max 3/3) shows score + hunger/health/armor icons.
  */
 public class HudOverlay {
 
@@ -78,14 +78,12 @@ public class HudOverlay {
         int maxArmor     = ps.getMaxArmor();
         int currentArmor = ps.getArmor();
 
-        // ── Hunger row (Normal mode only) ─────────────────────────
-        if (ps.getMode() == PlayerStats.GameMode.NORMAL) {
-            int maxHunger     = ps.getMaxHunger();
-            int currentHunger = ps.getHunger();
-            for (int i = 0; i < maxHunger; i++) {
-                Texture icon = (i < currentHunger) ? foodFull : foodEmpty;
-                batch.draw(icon, MARGIN_X + i * (ICON_SIZE + ICON_GAP), foodY, ICON_SIZE, ICON_SIZE);
-            }
+        // ── Hunger row (all modes) ───────────────────────────────
+        int maxHunger     = ps.getMaxHunger();
+        int currentHunger = ps.getHunger();
+        for (int i = 0; i < maxHunger; i++) {
+            Texture icon = (i < currentHunger) ? foodFull : foodEmpty;
+            batch.draw(icon, MARGIN_X + i * (ICON_SIZE + ICON_GAP), foodY, ICON_SIZE, ICON_SIZE);
         }
 
         for (int i = 0; i < maxArmor; i++) {
