@@ -11,7 +11,7 @@ public class PlayerStats {
     public enum GameMode { NORMAL, FEARLESS_HUNGER }
 
     private static final int MAX_HUNGER_NORMAL = 5;
-    private static final int MAX_HUNGER_FEARLESS = 3;
+    private static final int MAX_HUNGER_FEARLESS = 2;
 
     // Per-mode values (set by setMode before each game)
     private int maxHp;      // growth cap  (Integer.MAX_VALUE = unlimited)
@@ -49,10 +49,10 @@ public class PlayerStats {
             this.startHp   = 5;   // start full
             this.hunger    = maxHunger;
         } else { // FEARLESS_HUNGER — capped at 3 HP / 3 armor
-            this.maxHp     = 3;
-            this.maxArmor  = 3;
+            this.maxHp     = 2;
+            this.maxArmor  = 0;
             this.maxHunger = MAX_HUNGER_FEARLESS;
-            this.startHp   = 3;
+            this.startHp   = 2;
             this.hunger    = maxHunger;
         }
     }
