@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.ISceneManager;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.Scene;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.SceneManager;
@@ -21,6 +20,13 @@ public class SceneDifficulty extends Scene {
 
     public SceneDifficulty(ISceneManager ism) {
         super(ism);
+        // Initialize the Stage, direct keys to UI stage, set up
+        // containers like in HTML, apply styling, and listener for button press
+        // to go to GAME scene
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
+
+        skin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
 
         // Initialize the Stage, direct keys to UI stage, set up containers like in HTML, apply styling, and listener for button press to go to GAME scene
         stage = new Stage(new ScreenViewport());
@@ -41,7 +47,7 @@ public class SceneDifficulty extends Scene {
         TextButton fearButton = new TextButton("Fear & Hunger", skin, "default");
         TextButton normalButton = new TextButton("Normal", skin, "default");
 
-        // Setting colour to text of Fear button
+        // Setting color to text of Fear button
         fearButton.getLabel().setColor(new Color(0.5f, 0.0f, 0.0f, 1.0f));
 
         // Button routes
@@ -54,12 +60,12 @@ public class SceneDifficulty extends Scene {
             }
         });
 
-        // Button Routes
+        // Normal mode now routes to TUTORIAL first, then TUTORIAL goes to GAME
         normalButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 audio.playSound("button_click");
-                ism.getPlayerStats().setMode(PlayerStats.GameMode.NORMAL);
+                //ism.setScene(SceneManager.State.TUTORIAL); // Key yun's tutorial had to remove for issues
                 ism.setScene(SceneManager.State.GAME);
             }
         });
@@ -67,7 +73,6 @@ public class SceneDifficulty extends Scene {
         // Instruction Text
         menuContainer.add(diffText);
         menuContainer.row();
-
         // Game buttons
         menuContainer.add(fearButton).padTop(10);
         menuContainer.row();
@@ -77,6 +82,7 @@ public class SceneDifficulty extends Scene {
         // Keep menu music playing
         audio.playMusic("menu");
     }
+
     @Override
     public void update(float delta) {
         stage.act(delta);

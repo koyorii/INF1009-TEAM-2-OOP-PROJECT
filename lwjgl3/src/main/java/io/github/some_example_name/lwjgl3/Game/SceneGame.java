@@ -3,6 +3,7 @@ package io.github.some_example_name.lwjgl3.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -20,6 +21,8 @@ import io.github.some_example_name.lwjgl3.Engine.movementManager.MovementManager
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.ISceneManager;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.Scene;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.SceneManager;
+//import io.github.some_example_name.lwjgl3.FloatingTextManager;
+
 
 public class SceneGame extends Scene {
 
@@ -32,6 +35,7 @@ public class SceneGame extends Scene {
     private final PlayerStats ps;
 
     private final Stage stage;
+    private Skin skin;
     private final Player player;
     private final PlayerController playerController;
     private final FoodSpawner foodSpawner;
@@ -40,8 +44,10 @@ public class SceneGame extends Scene {
     // Normal mode countdown; -1 means no timer (Fearless Hunger)
     private float timeLeft;
 
-    public SceneGame(ISceneManager ism, EntityManager em, CollisionManager cm, MovementManager mm, IOManager io,
-            PlayerStats ps) {
+    //private final FloatingTextManager floatingTextManager;
+    private final BitmapFont gameFont;
+
+    public SceneGame(ISceneManager ism, EntityManager em, CollisionManager cm, MovementManager mm, IOManager io, PlayerStats ps) {
         super(ism);
         this.em = em;
         this.cm = cm;
@@ -56,7 +62,7 @@ public class SceneGame extends Scene {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        Skin skin = am.get("skin/craftacular-ui.json", Skin.class);
+        this.skin = am.get("skin/craftacular-ui.json", Skin.class);
         Table menuContainer = new Table();
         menuContainer.setFillParent(true);
 
@@ -78,7 +84,12 @@ public class SceneGame extends Scene {
                 screenH * 0.08f,
                 0,
                 false);
+
+        // ── Scale the NPC sprite down to 64x96 pixels ─────────────
+        // Adjust these two numbers to whatever looks right for your sprite.
+        // The collision box will automatically match this size too.
         player.setDrawSize(64, 96);
+
         em.addEntity(player);
 
         // ── Food textures (local — only needed to build the spawner) ─
@@ -109,15 +120,25 @@ public class SceneGame extends Scene {
         // ── Audio ─────────────────────────────────────────────────
         audio.playMusic("game");
 
-        // ── Pause hint label ──────────────────────────────────────
+
+        gameFont = new BitmapFont();
+        gameFont.getData().setScale(1.5f);
+        //floatingTextManager = new FloatingTextManager(gameFont);
+
+
+        //cm.getResolver().setFloatingTextManager(floatingTextManager);
+
+        // Label for instructions
         Label pauseLabel = new Label("Press Escape to Pause", skin, "default");
         pauseLabel.setFontScale(0.5f);
+
+        // Adds label to tell player how to pause
         menuContainer.add(pauseLabel)
-                .expand()
-                .bottom()
-                .left()
-                .padLeft(20)
-                .padBottom(20);
+            .expand()      // Pushes the cell to take up all available space
+            .top()      // Alignment
+            .right()
+            .padRight(20)   // Padding so look a bit nicer
+            .padTop(20);
     }
 
     @Override
@@ -127,6 +148,7 @@ public class SceneGame extends Scene {
         em.update(mm);
         cm.update();
         stage.act(delta);
+        //floatingTextManager.update(delta, ps);
 
         // Escape → pause
         if (io.getKeyboard().isKeyJustPressed(Input.Keys.ESCAPE)) {
@@ -167,12 +189,23 @@ public class SceneGame extends Scene {
         stage.draw();
         em.draw(shape, batch);
         hud.render(batch, timeLeft);
+
+        // Draw floating popups
+        batch.begin();
+        //floatingTextManager.drawOnly(batch, ps);
+        batch.end();
     }
 
     @Override
     public void dispose() {
         if (stage != null) stage.dispose();
+        if (skin != null) skin.dispose();
         if (hud   != null) hud.dispose();
+        if (gameFont != null) gameFont.dispose();
+
+        // Just in case
+        this.skin = null;
+
         em.clearEntities();
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class EntityManager implements getEntityList {
 
-    private List<Entity> entityList;
+    private final List<Entity> entityList;
 
     public EntityManager() {
         entityList = new ArrayList<>();

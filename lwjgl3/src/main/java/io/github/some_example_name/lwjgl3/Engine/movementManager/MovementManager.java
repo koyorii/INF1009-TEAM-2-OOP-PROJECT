@@ -6,9 +6,9 @@ import io.github.some_example_name.lwjgl3.Engine.iomanager.Keyboard;
 import io.github.some_example_name.lwjgl3.Engine.iomanager.getInputs;
 
 public class MovementManager implements MovementCalculator{
-    private AImovement AImove = new AImovement();
-    private UserMovement Usermove = new UserMovement();
-    private getInputs inputs;
+    private final AImovement AImove = new AImovement();
+    private final UserMovement Usermove = new UserMovement();
+    private final getInputs inputs;
 
     public MovementManager (getInputs inputs){
         this.inputs = inputs;

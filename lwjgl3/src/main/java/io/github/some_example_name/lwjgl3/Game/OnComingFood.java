@@ -21,8 +21,8 @@ public class OnComingFood extends MovableEntity implements iDrawableSprite,iMova
         UNHEALTHY   // -1 Armor or -1 HP
     }
 
-    private FoodType foodType;
-    private Texture  texture;
+    private final FoodType foodType;
+    private final Texture  texture;
     private boolean  active = true;
 
     // ── Perspective scaling ───────────────────────────────────────
@@ -39,7 +39,7 @@ public class OnComingFood extends MovableEntity implements iDrawableSprite,iMova
     private float currentSize = MIN_SIZE;
 
     // The Y position where this food was spawned (top of screen)
-    private float spawnY;
+    private final float spawnY;
 
     // ── Constructor ───────────────────────────────────────────────
     public OnComingFood(float x, float y, float speed, FoodType foodType, Texture texture) {
@@ -90,16 +90,10 @@ public class OnComingFood extends MovableEntity implements iDrawableSprite,iMova
         return p;
     }
 
-    // ── Off-screen: despawn when past the bottom ──────────────────
-    public boolean isOffScreen() {
-        return y < -MAX_SIZE;
-    }
-
     // ── Getters ───────────────────────────────────────────────────
     public FoodType getFoodType()  { return foodType;     }
     public Texture  getTexture()   { return texture;      }
     public boolean  isActive()     { return active;       }
-    public float    getCurrentSize() { return currentSize; }
 
     public void deactivate() { active = false; }
 

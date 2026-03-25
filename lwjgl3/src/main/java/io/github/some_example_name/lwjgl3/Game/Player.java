@@ -1,6 +1,5 @@
 package io.github.some_example_name.lwjgl3.Game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Polygon;
@@ -16,16 +15,12 @@ import io.github.some_example_name.lwjgl3.Engine.entityManager.iDrawableSprite;
 public class Player extends MovableEntity implements iDrawableSprite {
 
     private Texture tex;
-    private boolean isFalling;
+    private final boolean isFalling;
     private Polygon rectPolygon;
 
     // Draw size — defaults to actual texture size, overridden via setDrawSize()
     private float drawWidth;
     private float drawHeight;
-
-    public Player() {
-        super();
-    }
 
     public Player(Texture tex, float x, float y, float speed, boolean isFalling) {
         super(x, y, speed, null);
@@ -54,7 +49,6 @@ public class Player extends MovableEntity implements iDrawableSprite {
     public void setTexture(Texture t) { this.tex = t; }
     public boolean getIsFalling()     { return isFalling; }
     public float getDrawWidth()       { return drawWidth; }
-    public float getDrawHeight()      { return drawHeight; }
 
     @Override
     public void update() {

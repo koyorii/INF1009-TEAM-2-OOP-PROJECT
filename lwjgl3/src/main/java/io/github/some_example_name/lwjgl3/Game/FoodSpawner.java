@@ -10,7 +10,7 @@ import io.github.some_example_name.lwjgl3.Game.OnComingFood.FoodType;
 
 public class FoodSpawner {
 
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     private float timer    = 0f;
     private float interval = 1.8f;  // seconds between spawns
@@ -28,14 +28,14 @@ public class FoodSpawner {
 
     // Lane X positions — the CENTER x of each lane
     // Food draw() offsets by currentSize/2 so it stays centered in the lane
-    private float[] laneXPositions;
+    private final float[] laneXPositions;
 
-    private Texture[] healthyTextures;
-    private Texture[] junkTextures;
-    private Texture   vitaminTexture;
-    private iFoodFactory healthyFactory = new HealthyFoodFactory();
-    private iFoodFactory unhealthFoodFactory = new UnhealthyFoodFactory();
-    private iFoodFactory vitaminFactory = new VitaminFactory();
+    private final Texture[] healthyTextures;
+    private final Texture[] junkTextures;
+    private final Texture   vitaminTexture;
+    private final iFoodFactory healthyFactory = new HealthyFoodFactory();
+    private final iFoodFactory unhealthFoodFactory = new UnhealthyFoodFactory();
+    private final iFoodFactory vitaminFactory = new VitaminFactory();
 
     // Controls spawn distribution: true = more bad food (Normal mode)
     private boolean heavyJunk = false;
@@ -126,7 +126,4 @@ public class FoodSpawner {
             default:        return healthyTextures[0];
         }
     }
-
-    public void setInterval(float interval) { this.interval = interval; }
-    public void setBaseSpeed(float speed)   { this.baseSpeed = speed;   }
 }

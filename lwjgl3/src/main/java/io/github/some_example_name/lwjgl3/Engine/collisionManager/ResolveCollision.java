@@ -1,23 +1,18 @@
 package io.github.some_example_name.lwjgl3.Engine.collisionManager;
 
-
 import io.github.some_example_name.lwjgl3.Game.Player;
-
 import io.github.some_example_name.lwjgl3.Engine.entityManager.Entity;
 import io.github.some_example_name.lwjgl3.Engine.iomanager.Audio;
-import io.github.some_example_name.lwjgl3.Engine.movementManager.MovementCalculator;
 import io.github.some_example_name.lwjgl3.Game.OnComingFood;
 import io.github.some_example_name.lwjgl3.Game.PlayerStats;
 
 public class ResolveCollision {
 
-    private final MovementCalculator colMove;
     private final Audio              audio;
     private final PlayerStats        playerStats; // null-safe: may be null if 3-arg constructor used
 
-    public ResolveCollision(MovementCalculator colMove, Audio audio, PlayerStats playerStats) {
-        this.colMove     = colMove;
-        this.audio       = audio;
+    public ResolveCollision(Audio audio, PlayerStats playerStats) {
+        this.audio = audio;
         this.playerStats = playerStats;
     }
 
@@ -32,7 +27,7 @@ public class ResolveCollision {
             }
             if (b instanceof OnComingFood && a instanceof Player) {
                 Player player = (Player) a;
-                if (!player.getIsFalling()) { handleFoodCatch((OnComingFood) b); return; }
+                if (!player.getIsFalling()) { handleFoodCatch((OnComingFood) b);}
             }
         }
     }
