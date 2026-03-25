@@ -8,8 +8,12 @@ import com.badlogic.gdx.math.Polygon;
 
 import io.github.some_example_name.lwjgl3.Engine.entityManager.MovableEntity;
 import io.github.some_example_name.lwjgl3.Engine.entityManager.iDrawableSprite;
+import io.github.some_example_name.lwjgl3.Engine.iomanager.Keyboard;
+import io.github.some_example_name.lwjgl3.Engine.movementManager.AImovement;
+import io.github.some_example_name.lwjgl3.Engine.movementManager.UserMovement;
+import io.github.some_example_name.lwjgl3.Engine.movementManager.iMovable;
 
-public class OnComingFood extends MovableEntity implements iDrawableSprite {
+public class OnComingFood extends MovableEntity implements iDrawableSprite,iMovable {
 
     public enum FoodType {
         HEALTHY,    // +1 HP
@@ -50,11 +54,6 @@ public class OnComingFood extends MovableEntity implements iDrawableSprite {
     public void update() {
         if (!active) return;
 
-        float delta     = Gdx.graphics.getDeltaTime();
-        float screenH   = Gdx.graphics.getHeight();
-
-        // Move downward
-        y -= speed * delta;
 
         // How far has the food traveled as a 0..1 ratio?
         // 0 = just spawned at top (tiny), 1 = reached bottom (full size)
@@ -104,6 +103,12 @@ public class OnComingFood extends MovableEntity implements iDrawableSprite {
 
     public void deactivate() { active = false; }
 
+    public void performMovement(float speed, boolean isAI, Keyboard kb, UserMovement userMove, AImovement aiMove){
+        if (!active) return;
+        float delta     = Gdx.graphics.getDeltaTime();
+        // Food knows it acts as an AI, so it uses the Engine's AI tool to fall!
+        aiMove.moveDown(this, speed, delta);
+    }
     @Override
     public void dispose() {
         // Textures are shared — disposal handled by GameMaster, not here

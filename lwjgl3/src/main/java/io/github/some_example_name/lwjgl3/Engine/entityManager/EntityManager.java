@@ -27,26 +27,23 @@ public class EntityManager implements getEntityList {
 
         // Step 1: Remove OncomingFood that passed off-screen (missed)
         // or was caught (deactivated by ResolveCollision)
-        Iterator<Entity> iter = entityList.iterator();
-        while (iter.hasNext()) {
-            Entity e = iter.next();
-            if (e instanceof OnComingFood) {
-                OnComingFood food = (OnComingFood) e;
-                if (food.isOffScreen() || !food.isActive()) {
-                    iter.remove();
-                }
-            }
-        }
+        // Iterator<Entity> iter = entityList.iterator();
+        // while (iter.hasNext()) {
+        //     Entity e = iter.next();
+        //     if (e instanceof OnComingFood) {
+        //         OnComingFood food = (OnComingFood) e;
+        //         if (food.isOffScreen() || !food.isActive()) {
+        //             iter.remove();
+        //         }
+        //     }
+        // }
 
         // Step 2: Update all remaining entities
         for (Entity entity : entityList) {
             entity.update();
 
-            // OnComingFood moves itself in update(). Player is moved by PlayerController.
             // MovementCalculator is only for other MovableEntities that implement iMovable.
-            if (entity instanceof MovableEntity
-                    && !(entity instanceof OnComingFood)
-                    && !(entity instanceof Player)) {
+            if (entity instanceof MovableEntity) {
                 MovableEntity moveEntity = (MovableEntity) entity;
                 moveM.calculateMovement(moveEntity, false, moveEntity.getSpeed());
             }

@@ -14,18 +14,6 @@ public class MovementManager implements MovementCalculator{
         this.inputs = inputs;
     }
     public void calculateMovement(Entity e, boolean isAI, float speed){
-        // if(isAI){
-        //     AImove.move(e,speed);
-        // } else {
-        //     Keyboard kb = inputs.getKeyboard();
-        //     if (e instanceof Triangle){
-        //     } else if (e instanceof TextureObject) {
-        //         // Only move if it's the bucket (not a falling droplet)
-        //         if (!((TextureObject) e).getIsFalling()) {
-        //             Usermove.moveArrows(e, speed, kb);
-        //         }
-        //     }
-        // }
         if (e instanceof iMovable) {
             Keyboard kb = inputs.getKeyboard();
 
