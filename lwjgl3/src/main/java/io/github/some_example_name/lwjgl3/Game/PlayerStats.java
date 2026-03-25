@@ -89,12 +89,12 @@ public class PlayerStats {
                 // Armor absorbs the hit first; if no armor, lose HP
                 if (armor > 0) {
                     armor--;
-                    hunger = Math.min(this.getHunger(), hunger - 1);
+                    hunger = Math.min(maxHunger, hunger - 1);
                     System.out.println("[Stats] Unhealthy food hit! Armor blocked. Armor=" + armor + " Hunger=" + hunger
                             + " Score=" + score);
                 } else {
                     hp = Math.max(0, hp - 1);
-                    hunger = Math.min(this.getHunger(), hunger - 1);
+                    hunger = Math.min(maxHunger, hunger - 1);
                     System.out
                             .println("[Stats] Unhealthy food hit! HP=" + hp + " Hunger=" + hunger + " Score=" + score);
                 }
