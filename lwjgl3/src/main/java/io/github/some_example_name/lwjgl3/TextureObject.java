@@ -10,7 +10,7 @@
 //
 //public class TextureObject extends MovableEntity implements iDrawableSprite {
 //
-//    private Texture tex;
+//    private Texture tex; // Test
 //    private boolean isFalling;
 //    private Polygon rectPolygon;
 //
