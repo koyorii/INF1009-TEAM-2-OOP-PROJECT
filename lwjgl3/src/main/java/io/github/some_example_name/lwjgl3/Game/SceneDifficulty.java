@@ -65,6 +65,7 @@ public class SceneDifficulty extends Scene {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 audio.playSound("button_click");
+                ism.getPlayerStats().setMode(PlayerStats.GameMode.NORMAL);
                 //ism.setScene(SceneManager.State.TUTORIAL); // Key yun's tutorial had to remove for issues
                 ism.setScene(SceneManager.State.GAME);
             }
