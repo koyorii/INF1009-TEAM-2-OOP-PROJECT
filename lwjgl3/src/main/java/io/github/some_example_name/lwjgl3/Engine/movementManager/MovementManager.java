@@ -25,10 +25,10 @@ public class MovementManager implements MovementCalculator{
         //             Usermove.moveArrows(e, speed, kb);
         //         }
         //     }
-        // }   
+        // }
         if (e instanceof iMovable) {
             Keyboard kb = inputs.getKeyboard();
-            
+
             // 2. Tell the entity to move itself using the engine's tools!
             ((iMovable) e).performMovement(speed, isAI, kb, Usermove, AImove);
         }

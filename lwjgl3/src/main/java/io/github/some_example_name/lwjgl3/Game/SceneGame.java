@@ -23,6 +23,8 @@ import io.github.some_example_name.lwjgl3.Engine.sceneManager.SceneManager;
 
 public class SceneGame extends Scene {
 
+    private static final float GAME_DURATION = 120f; // 2 minutes for Normal mode
+
     private final EntityManager em;
     private final CollisionManager cm;
     private final MovementManager mm;
@@ -30,14 +32,13 @@ public class SceneGame extends Scene {
     private final PlayerStats ps;
 
     private final Stage stage;
-    private Skin skin;
     private final Player player;
-    // private final PlayerController playerController;
+    private final PlayerController playerController;
     private final FoodSpawner foodSpawner;
+    private final HudOverlay hud;
 
-    private Texture[] healthyTextures;
-    private Texture[] junkTextures;
-    private Texture vitaminTexture;
+    // Normal mode countdown; -1 means no timer (Fearless Hunger)
+    private float timeLeft;
 
     public SceneGame(ISceneManager ism, EntityManager em, CollisionManager cm, MovementManager mm, IOManager io,
             PlayerStats ps) {
@@ -48,16 +49,22 @@ public class SceneGame extends Scene {
         this.io = io;
         this.ps = ps;
 
-        // Background UI
+        // ── Timer ─────────────────────────────────────────────────
+        timeLeft = ps.hasTimeLimit() ? GAME_DURATION : -1f;
+
+        // ── Background — pick based on difficulty ─────────────────
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        this.skin = am.get("skin/craftacular-ui.json", Skin.class);
+        Skin skin = am.get("skin/craftacular-ui.json", Skin.class);
         Table menuContainer = new Table();
         menuContainer.setFillParent(true);
 
-        Texture normalBackground = am.get("backgrounds/normal_mode_background.jpg", Texture.class);
-        menuContainer.setBackground(new TextureRegionDrawable(new TextureRegion(normalBackground)));
+        String bgKey = (ps.getMode() == PlayerStats.GameMode.FEARLESS_HUNGER)
+                ? "backgrounds/fear_and_hunger_background.jpg"
+                : "backgrounds/normal_mode_background.jpg";
+        Texture background = am.get(bgKey, Texture.class);
+        menuContainer.setBackground(new TextureRegionDrawable(new TextureRegion(background)));
 
         stage.addActor(menuContainer);
 
@@ -69,106 +76,103 @@ public class SceneGame extends Scene {
                 am.get("player.png", Texture.class),
                 screenW / 2f - 32,
                 screenH * 0.08f,
-                220f,
+                0,
                 false);
-
-        // ── Scale the NPC sprite down to 64x96 pixels ─────────────
-        // Adjust these two numbers to whatever looks right for your sprite.
-        // The collision box will automatically match this size too.
         player.setDrawSize(64, 96);
-
         em.addEntity(player);
 
-        // ── Food textures ─────────────────────────────────────────
-        healthyTextures = new Texture[] {
+        // ── Food textures (local — only needed to build the spawner) ─
+        Texture[] healthyTextures = {
                 am.get("good_foods/apple.png", Texture.class),
                 am.get("good_foods/ninjin_carrot.png", Texture.class),
                 am.get("good_foods/petbottle_water_full.png", Texture.class),
         };
-
-        junkTextures = new Texture[] {
+        Texture[] junkTextures = {
                 am.get("bad_foods/can_juice.png", Texture.class),
                 am.get("bad_foods/dokukinoko_benitengu_dake.png", Texture.class),
                 am.get("bad_foods/rotten_apple.png", Texture.class),
         };
+        Texture vitaminTexture = am.get("good_foods/Vitamin.png", Texture.class);
 
-        vitaminTexture = am.get("good_foods/Vitamin.png", Texture.class);
-
-        // playerController = new PlayerController(220f);
+        playerController = new PlayerController(220f);
         foodSpawner = new FoodSpawner(em, healthyTextures, junkTextures, vitaminTexture);
+        hud = new HudOverlay(am, ps);
 
-        // Start game background music
+        if (ps.getMode() == PlayerStats.GameMode.FEARLESS_HUNGER) {
+            // Fearless Hunger: ramp up speed/frequency over time
+            foodSpawner.enableEscalation();
+        } else {
+            // Normal mode: skew spawns toward bad food (20% healthy, 60% unhealthy, 20% vitamin)
+            foodSpawner.enableHeavyJunk();
+        }
+
+        // ── Audio ─────────────────────────────────────────────────
         audio.playMusic("game");
 
-        // Label for instructions
+        // ── Pause hint label ──────────────────────────────────────
         Label pauseLabel = new Label("Press Escape to Pause", skin, "default");
         pauseLabel.setFontScale(0.5f);
-
-        // Adds label to tell player how to pause
         menuContainer.add(pauseLabel)
-                .expand() // Pushes the cell to take up all available space
-                .bottom() // Align bottom
-                .left() // Align left
-                .padLeft(20) // Padding so look a bit nicer
+                .expand()
+                .bottom()
+                .left()
+                .padLeft(20)
                 .padBottom(20);
     }
 
     @Override
     public void update(float delta) {
-        // playerController.handleInput(player);
+        playerController.handleInput(player);
         foodSpawner.update(delta);
         em.update(mm);
         cm.update();
-
         stage.act(delta);
 
-        // Escape key pauses the game
+        // Escape → pause
         if (io.getKeyboard().isKeyJustPressed(Input.Keys.ESCAPE)) {
             sceneManager.setScene(SceneManager.State.PAUSE);
         }
 
-        // If player dies, log their score, and send to respective scenes.
+        // ── Normal mode countdown ─────────────────────────────────
+        if (ps.hasTimeLimit()) {
+            timeLeft -= delta;
+            if (timeLeft <= 0) {
+                // Survived the full 2 minutes → good ending
+                Gdx.app.log("Game", "Time's up! Player survived. Score: " + ps.getScore());
+                ps.saveToLeaderboard();
+                sceneManager.setScene(SceneManager.State.GOOD);
+                return;
+            }
+        }
+
+        // ── Death check ───────────────────────────────────────────
         if (ps.isDead()) {
             Gdx.app.log("Game", "Player died! Score: " + ps.getScore());
             ps.saveToLeaderboard();
-            // If health drops to 0 jump to health end, cuz actually dying is worse than
-            // starvation
-            if (ps.getHp() == 0 && ps.getScore() <= 7999) {
+            if (ps.getHp() == 0) {
+                // Died from damage
                 sceneManager.setScene(SceneManager.State.HEALTH);
-            }
-            // Starved end, if health is above 0 but hunger is 0
-            else if (ps.getHunger() == 0 && ps.getScore() <= 7999) {
+            } else if (ps.getHunger() == 0 && ps.getScore() <= 1000) {
+                // Starved AND score was too low to survive
                 sceneManager.setScene(SceneManager.State.STARVED);
-            }
-            // Survived
-            else {
-                sceneManager.setScene(SceneManager.State.GOOD);
+            } else {
+                // Starved but with a decent score — still a bad health ending
+                sceneManager.setScene(SceneManager.State.HEALTH);
             }
         }
     }
 
     @Override
     public void render(ShapeRenderer shape, SpriteBatch batch) {
-        // Draw background FIRST using stage (has its own internal batch)
         stage.draw();
-
-        // Then draw all game entities on top
-        // batch.begin() / end() is handled inside EntityM.draw()
         em.draw(shape, batch);
+        hud.render(batch, timeLeft);
     }
 
     @Override
     public void dispose() {
-        if (stage != null) {
-            stage.dispose();
-        }
-
-        // Just in case
-        this.skin = null;
-        this.vitaminTexture = null;
-        this.healthyTextures = null;
-        this.junkTextures = null;
-
+        if (stage != null) stage.dispose();
+        if (hud   != null) hud.dispose();
         em.clearEntities();
     }
 }

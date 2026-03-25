@@ -16,6 +16,16 @@ public class FoodSpawner {
     private float interval = 1.8f;  // seconds between spawns
     private float baseSpeed = 160f; // pixels per second downward
 
+    // Fearless Hunger escalation
+    private boolean escalate    = false;
+    private float   elapsedTime = 0f;
+    // Every 15 s: interval drops by 0.15 s (floor 0.4 s), speed rises by 25 px/s (cap 500)
+    private static final float ESCALATE_STEP     = 15f;
+    private static final float INTERVAL_STEP     = 0.15f;
+    private static final float MIN_INTERVAL      = 0.4f;
+    private static final float SPEED_STEP        = 25f;
+    private static final float MAX_SPEED         = 500f;
+
     // Lane X positions — the CENTER x of each lane
     // Food draw() offsets by currentSize/2 so it stays centered in the lane
     private float[] laneXPositions;
@@ -26,7 +36,10 @@ public class FoodSpawner {
     private iFoodFactory healthyFactory = new HealthyFoodFactory();
     private iFoodFactory unhealthFoodFactory = new UnhealthyFoodFactory();
     private iFoodFactory vitaminFactory = new VitaminFactory();
-    
+
+    // Controls spawn distribution: true = more bad food (Normal mode)
+    private boolean heavyJunk = false;
+
     public FoodSpawner(EntityManager entityManager,
                        Texture[] healthyTextures,
                        Texture[] junkTextures,
@@ -47,12 +60,26 @@ public class FoodSpawner {
     }
 
     public void update(float delta) {
+        if (escalate) {
+            elapsedTime += delta;
+            // Recalculate interval and speed based on how many 15-second stages have passed
+            int stage = (int) (elapsedTime / ESCALATE_STEP);
+            interval  = Math.max(MIN_INTERVAL, 1.8f - stage * INTERVAL_STEP);
+            baseSpeed = Math.min(MAX_SPEED,    160f  + stage * SPEED_STEP);
+        }
+
         timer += delta;
         if (timer >= interval) {
             timer = 0;
             spawnFood();
         }
     }
+
+    /** Call once to enable the Fearless Hunger difficulty escalation. */
+    public void enableEscalation() { this.escalate = true; }
+
+    /** Call once to switch to the Normal-mode spawn distribution (more bad food). */
+    public void enableHeavyJunk() { this.heavyJunk = true; }
 
     private void spawnFood() {
         float screenH = Gdx.graphics.getHeight();
@@ -76,12 +103,19 @@ public class FoodSpawner {
         entityManager.addEntity(newFood);
     }
 
-    // 50% healthy, 30% unhealthy, 20% vitamin
     private FoodType randomFoodType() {
         int r = MathUtils.random(9);
-        if (r < 5) return FoodType.HEALTHY;
-        if (r < 8) return FoodType.UNHEALTHY;
-        return FoodType.VITAMIN;
+        if (heavyJunk) {
+            // Normal mode: 20% healthy, 60% unhealthy, 20% vitamin
+            if (r < 2) return FoodType.HEALTHY;
+            if (r < 8) return FoodType.UNHEALTHY;
+            return FoodType.VITAMIN;
+        } else {
+            // Fearless Hunger (default): 50% healthy, 30% unhealthy, 20% vitamin
+            if (r < 5) return FoodType.HEALTHY;
+            if (r < 8) return FoodType.UNHEALTHY;
+            return FoodType.VITAMIN;
+        }
     }
 
     private Texture textureFor(FoodType type) {

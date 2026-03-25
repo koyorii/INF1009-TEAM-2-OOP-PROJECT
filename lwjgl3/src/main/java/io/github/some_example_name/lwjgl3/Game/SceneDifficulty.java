@@ -49,7 +49,8 @@ public class SceneDifficulty extends Scene {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 audio.playSound("button_click");
-                //ism.setScene(SceneManager.State.FEAR);
+                ism.getPlayerStats().setMode(PlayerStats.GameMode.FEARLESS_HUNGER);
+                ism.setScene(SceneManager.State.GAME);
             }
         });
 
@@ -58,6 +59,7 @@ public class SceneDifficulty extends Scene {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 audio.playSound("button_click");
+                ism.getPlayerStats().setMode(PlayerStats.GameMode.NORMAL);
                 ism.setScene(SceneManager.State.GAME);
             }
         });

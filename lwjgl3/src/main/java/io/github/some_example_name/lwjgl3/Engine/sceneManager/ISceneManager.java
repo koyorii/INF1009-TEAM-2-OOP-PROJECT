@@ -18,5 +18,6 @@ public interface ISceneManager {
     void setEngineTools(EntityManager em, CollisionManager cm, MovementManager mm, IOManager io, PlayerStats ps, AssetManager am);
     AssetManager getAssets(); // All scenes will call this to borrow textures
     io.github.some_example_name.lwjgl3.Engine.iomanager.Audio getAudio(); // All scenes can trigger audio
+    PlayerStats getPlayerStats(); // Scenes can read/set mode before game starts
     void dispose();
 }

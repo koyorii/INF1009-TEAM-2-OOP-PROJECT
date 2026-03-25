@@ -151,6 +151,11 @@ public class SceneManager implements ISceneManager {
     }
 
     @Override
+    public PlayerStats getPlayerStats() {
+        return this.ps;
+    }
+
+    @Override
     public io.github.some_example_name.lwjgl3.Engine.iomanager.Audio getAudio() {
         return this.io.getAudio();
     }

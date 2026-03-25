@@ -16,8 +16,11 @@ public class PlayerController {
         float delta = Gdx.graphics.getDeltaTime();
         float newX  = player.getX();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) newX -= speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) newX += speed * delta;
+        // Support both A/D and arrow keys for horizontal movement
+        if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            newX -= speed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            newX += speed * delta;
 
         // Clamp using drawWidth so player never goes off either edge
         float maxX = Gdx.graphics.getWidth() - player.getDrawWidth();
