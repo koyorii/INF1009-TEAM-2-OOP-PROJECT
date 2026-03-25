@@ -45,6 +45,7 @@ public class ResolveCollision {
         System.out.println("[Collision] Food caught: " + food.getFoodType()
             + " Name=" + playerStats.getName()
             + " | HP=" + playerStats.getHp()
+            + " Hunger=" + playerStats.getHunger()
             + " Armor=" + playerStats.getArmor()
             + " Score=" + playerStats.getScore());
     }
