@@ -45,9 +45,7 @@ public class EntityManager implements getEntityList {
             // OncomingFood moves itself in its own update() — skip MovementCalculator for it
             // TextureObject player NPC is moved by PlayerController (A/D keys) — also skip
             // MovementCalculator is only needed for other MovableEntities (Triangle etc.)
-            if (entity instanceof MovableEntity
-                    && !(entity instanceof OnComingFood)
-                    && !(entity instanceof Player)) {
+            if (entity instanceof MovableEntity && !(entity instanceof OnComingFood)) {
                 MovableEntity moveEntity = (MovableEntity) entity;
                 moveM.calculateMovement(moveEntity, false, moveEntity.getSpeed());
             }

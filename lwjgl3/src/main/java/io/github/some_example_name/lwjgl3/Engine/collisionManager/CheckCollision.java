@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 
-import io.github.some_example_name.lwjgl3.staticCircle;
+
 import io.github.some_example_name.lwjgl3.Engine.entityManager.Entity;
 import io.github.some_example_name.lwjgl3.Engine.entityManager.MovableEntity;
 import io.github.some_example_name.lwjgl3.Game.OnComingFood;
@@ -31,41 +31,41 @@ public class CheckCollision {
             );
         }
 
-        // ── Polygon vs Circle (MovableEntity vs staticCircle) ────
-        if (a instanceof MovableEntity && b instanceof staticCircle) {
-            return checkPolygonCircle(
-                ((MovableEntity) a).getBounds(),
-                ((staticCircle) b).getCircleBounds()
-            );
-        }
+        // // ── Polygon vs Circle (MovableEntity vs staticCircle) ────
+        // if (a instanceof MovableEntity && b instanceof staticCircle) {
+        //     return checkPolygonCircle(
+        //         ((MovableEntity) a).getBounds(),
+        //         ((staticCircle) b).getCircleBounds()
+        //     );
+        // }
 
-        // ── Circle vs Polygon (reverse order) ────────────────────
-        if (a instanceof staticCircle && b instanceof MovableEntity) {
-            return checkPolygonCircle(
-                ((MovableEntity) b).getBounds(),
-                ((staticCircle) a).getCircleBounds()
-            );
-        }
+        // // ── Circle vs Polygon (reverse order) ────────────────────
+        // if (a instanceof staticCircle && b instanceof MovableEntity) {
+        //     return checkPolygonCircle(
+        //         ((MovableEntity) b).getBounds(),
+        //         ((staticCircle) a).getCircleBounds()
+        //     );
+        // }
 
         return false;
     }
 
-    // ─── Helper: polygon edge intersection with circle ────────────
-    private boolean checkPolygonCircle(Polygon polygon, Circle circle) {
-        float[] vertices     = polygon.getTransformedVertices();
-        center.set(circle.x, circle.y);
-        float squareRadius   = circle.radius * circle.radius;
+    // // ─── Helper: polygon edge intersection with circle ────────────
+    // private boolean checkPolygonCircle(Polygon polygon, Circle circle) {
+    //     float[] vertices     = polygon.getTransformedVertices();
+    //     center.set(circle.x, circle.y);
+    //     float squareRadius   = circle.radius * circle.radius;
 
-        for (int i = 0; i < vertices.length; i += 2) {
-            v1.set(vertices[i], vertices[i + 1]);
-            int next = (i + 2) % vertices.length;
-            v2.set(vertices[next], vertices[next + 1]);
+    //     for (int i = 0; i < vertices.length; i += 2) {
+    //         v1.set(vertices[i], vertices[i + 1]);
+    //         int next = (i + 2) % vertices.length;
+    //         v2.set(vertices[next], vertices[next + 1]);
 
-            if (Intersector.intersectSegmentCircle(v1, v2, center, squareRadius)) {
-                return true;
-            }
-        }
+    //         if (Intersector.intersectSegmentCircle(v1, v2, center, squareRadius)) {
+    //             return true;
+    //         }
+    //     }
 
-        return Intersector.isPointInPolygon(vertices, 0, vertices.length, circle.x, circle.y);
-    }
+    //     return Intersector.isPointInPolygon(vertices, 0, vertices.length, circle.x, circle.y);
+    // }
 }

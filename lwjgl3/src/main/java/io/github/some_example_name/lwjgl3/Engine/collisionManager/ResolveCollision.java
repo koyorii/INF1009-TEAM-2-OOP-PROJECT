@@ -1,10 +1,8 @@
 package io.github.some_example_name.lwjgl3.Engine.collisionManager;
 
-import com.badlogic.gdx.Gdx;
 
 import io.github.some_example_name.lwjgl3.Game.Player;
-import io.github.some_example_name.lwjgl3.Triangle;
-import io.github.some_example_name.lwjgl3.staticCircle;
+
 import io.github.some_example_name.lwjgl3.Engine.entityManager.Entity;
 import io.github.some_example_name.lwjgl3.Engine.iomanager.Audio;
 import io.github.some_example_name.lwjgl3.Engine.movementManager.MovementCalculator;
@@ -37,42 +35,6 @@ public class ResolveCollision {
                 if (!player.getIsFalling()) { handleFoodCatch((OnComingFood) b); return; }
             }
         }
-
-        // ══ Original Rule 1: Droplet hits the Bucket ══════════════
-        if (a instanceof Player && b instanceof Player) {
-            Player objA = (Player) a;
-            Player objB = (Player) b;
-            if (objA.getIsFalling() && !objB.getIsFalling())      handleCatch(objA);
-            else if (objB.getIsFalling() && !objA.getIsFalling()) handleCatch(objB);
-        }
-
-        // ══ Original Rule 2: Droplet slides off staticCircle ══════
-        if (a instanceof Player && b instanceof staticCircle) {
-            Player droplet = (Player) a;
-            if (droplet.getIsFalling()) handleDropletCircleSlide(droplet, (staticCircle) b);
-        }
-        if (b instanceof Player && a instanceof staticCircle) {
-            Player droplet = (Player) b;
-            if (droplet.getIsFalling()) handleDropletCircleSlide(droplet, (staticCircle) a);
-        }
-
-        // ══ Original Rule 3: Droplet slides off Triangle ══════════
-        if (a instanceof Player && b instanceof Triangle) {
-            Player droplet = (Player) a;
-            if (droplet.getIsFalling()) handleDropletTriangleSlide(droplet, (Triangle) b);
-        }
-        if (b instanceof Player && a instanceof Triangle) {
-            Player droplet = (Player) b;
-            if (droplet.getIsFalling()) handleDropletTriangleSlide(droplet, (Triangle) a);
-        }
-
-        // ══ Original Rule 4: Triangle hits staticCircle obstacle ══
-        if ((a instanceof Triangle && b instanceof staticCircle) ||
-            (b instanceof Triangle && a instanceof staticCircle)) {
-            Triangle     tri    = (a instanceof Triangle)     ? (Triangle)     a : (Triangle)     b;
-            staticCircle circle = (a instanceof staticCircle) ? (staticCircle) a : (staticCircle) b;
-            handleTriangleCirclePushback(tri, circle);
-        }
     }
 
     // ─── NEW: food caught by player NPC ───────────────────────────
@@ -92,41 +54,4 @@ public class ResolveCollision {
             + " Score=" + playerStats.getScore());
     }
 
-    // ─── Original handlers (unchanged) ───────────────────────────
-    private void handleCatch(Player droplet) {
-        System.out.println("Score! Droplet caught.");
-        audio.playSound("catch");
-        float randomX = (float) Math.random() * 800;
-        colMove.collisionMovement(droplet, randomX, Gdx.graphics.getHeight());
-    }
-
-    private void handleDropletCircleSlide(Player droplet, staticCircle circle) {
-        float dx   = (droplet.getX() + droplet.getTexture().getWidth()  / 2f) - circle.getX();
-        float dy   = (droplet.getY() + droplet.getTexture().getHeight() / 2f) - circle.getY();
-        float dist = (float) Math.sqrt(dx * dx + dy * dy);
-        if (dist == 0) { dx = 1; dy = 0; dist = 1; }
-        float slideStrength = 3.0f;
-        colMove.collisionMovement(droplet,
-            droplet.getX() + (dx / dist) * slideStrength,
-            droplet.getY() + (dy / dist) * slideStrength);
-        System.out.println("Droplet sliding off circle!");
-    }
-
-    private void handleDropletTriangleSlide(Player droplet, Triangle tri) {
-        float slideStrength = 3.5f;
-        boolean onLeft = (droplet.getX() + droplet.getTexture().getWidth() / 2f) < tri.getX();
-        colMove.collisionMovement(droplet,
-            droplet.getX() + (onLeft ? -slideStrength : slideStrength),
-            droplet.getY() - slideStrength * 0.5f);
-        System.out.println("Droplet sliding off triangle!");
-        audio.playSound("hit");
-    }
-
-    private void handleTriangleCirclePushback(Triangle tri, staticCircle circle) {
-        float dx        = tri.getX() - circle.getX();
-        float direction = dx >= 0 ? 1 : -1;
-        colMove.collisionMovement(tri, tri.getX() + direction * 2.0f, tri.getY());
-        System.out.println("Triangle hit an obstacle! Pushed back.");
-        audio.playSound("hit");
-    }
 }

@@ -42,7 +42,7 @@ public class GameMaster extends ApplicationAdapter {
     private Texture[] junkTextures;
     private Texture vitaminTexture;
 
-    protected TextureObject player;  // protected so SceneGame can reference if needed
+    protected Player player;  // protected so SceneGame can reference if needed
 
     public GameMaster() {
         this.IoM = new IOManager();
