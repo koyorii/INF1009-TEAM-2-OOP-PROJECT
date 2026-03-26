@@ -23,7 +23,6 @@ import io.github.some_example_name.lwjgl3.Engine.sceneManager.Scene;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.SceneManager;
 //import io.github.some_example_name.lwjgl3.FloatingTextManager;
 
-
 public class SceneGame extends Scene {
 
     private static final float GAME_DURATION = 120f; // 2 minutes for Normal mode
@@ -42,14 +41,14 @@ public class SceneGame extends Scene {
     private final FoodSpawner foodSpawner;
     private final HudOverlay hud;
 
-
     // Normal mode countdown; -1 means no timer (Fearless Hunger)
     private float timeLeft;
 
-    //private final FloatingTextManager floatingTextManager;
+    // private final FloatingTextManager floatingTextManager;
     private final BitmapFont gameFont;
 
-    public SceneGame(ISceneManager ism, EntityManager em, CollisionManager cm, MovementManager mm, IOManager io, PlayerStats ps) {
+    public SceneGame(ISceneManager ism, EntityManager em, CollisionManager cm, MovementManager mm, IOManager io,
+            PlayerStats ps) {
         super(ism);
         this.em = em;
         this.cm = cm;
@@ -106,53 +105,61 @@ public class SceneGame extends Scene {
                 am.get("bad_foods/rotten_apple.png", Texture.class),
         };
         Texture vitaminTexture = am.get("good_foods/Vitamin.png", Texture.class);
-        
-
 
         foodSpawner = new FoodSpawner(em);
         hud = new HudOverlay(am, ps);
 
         iFoodFactory healthyFactory = new HealthyFoodFactory(healthyTextures);
-        iFoodFactory unhealthFoodFactory = new UnhealthyFoodFactory(junkTextures); 
+        iFoodFactory unhealthFoodFactory = new UnhealthyFoodFactory(junkTextures);
         iFoodFactory vitaminFactory = new VitaminFactory(vitaminTexture);
 
         if (ps.getMode() == PlayerStats.GameMode.FEARLESS_HUNGER) {
-        
+
             // Fill the Spawner's pool to create your percentages (10 items total)
             // 50% chance (5 out of 10)
-            for (int i = 0; i < 5; i++) foodSpawner.addFactoryToPool(healthyFactory);
-            
+            for (int i = 0; i < 5; i++)
+                foodSpawner.addFactoryToPool(healthyFactory);
+
             // 30% chance (3 out of 10)
-            for (int i = 0; i < 3; i++) foodSpawner.addFactoryToPool(unhealthFoodFactory);
-            
+            for (int i = 0; i < 3; i++)
+                foodSpawner.addFactoryToPool(unhealthFoodFactory);
+
             // 20% chance (2 out of 10)
-            for (int i = 0; i < 2; i++) foodSpawner.addFactoryToPool(vitaminFactory);
+            for (int i = 0; i < 2; i++)
+                foodSpawner.addFactoryToPool(vitaminFactory);
 
             // Fearless Hunger: ramp up speed/frequency over time
             foodSpawner.enableEscalation();
         } else {
-            // Normal mode: skew spawns toward bad food (20% healthy, 60% unhealthy, 20% vitamin)
+            // Normal mode: skew spawns toward bad food (20% healthy, 60% unhealthy, 20%
+            // vitamin)
             // Fill the Spawner's pool to create your percentages (10 items total)
             // 50% chance (5 out of 10)
-            for (int i = 0; i < 2; i++) foodSpawner.addFactoryToPool(healthyFactory);
-            
+            for (int i = 0; i < 2; i++)
+                foodSpawner.addFactoryToPool(healthyFactory);
+
             // 30% chance (3 out of 10)
-            for (int i = 0; i < 6; i++) foodSpawner.addFactoryToPool(unhealthFoodFactory);
-            
+            for (int i = 0; i < 6; i++)
+                foodSpawner.addFactoryToPool(unhealthFoodFactory);
+
             // 20% chance (2 out of 10)
-            for (int i = 0; i < 2; i++) foodSpawner.addFactoryToPool(vitaminFactory);
+            for (int i = 0; i < 2; i++)
+                foodSpawner.addFactoryToPool(vitaminFactory);
         }
 
         // ── Audio ─────────────────────────────────────────────────
-        audio.playMusic("game");
-
+        // Play different BGM depending on difficulty
+        if (ps.getMode() == PlayerStats.GameMode.FEARLESS_HUNGER) {
+            audio.playMusic("game_hard");
+        } else {
+            audio.playMusic("game");
+        }
 
         gameFont = new BitmapFont();
         gameFont.getData().setScale(1.5f);
-        //floatingTextManager = new FloatingTextManager(gameFont);
+        // floatingTextManager = new FloatingTextManager(gameFont);
 
-
-        //cm.getResolver().setFloatingTextManager(floatingTextManager);
+        // cm.getResolver().setFloatingTextManager(floatingTextManager);
 
         // Label for instructions
         Label pauseLabel = new Label("Press Escape to Pause", skin, "default");
@@ -160,21 +167,21 @@ public class SceneGame extends Scene {
 
         // Adds label to tell player how to pause
         menuContainer.add(pauseLabel)
-            .expand()      // Pushes the cell to take up all available space
-            .top()      // Alignment
-            .right()
-            .padRight(20)   // Padding so look a bit nicer
-            .padTop(20);
+                .expand() // Pushes the cell to take up all available space
+                .top() // Alignment
+                .right()
+                .padRight(20) // Padding so look a bit nicer
+                .padTop(20);
     }
 
     @Override
     public void update(float delta) {
-        
+
         foodSpawner.update(delta);
         em.update(mm);
         cm.update();
         stage.act(delta);
-        //floatingTextManager.update(delta, ps);
+        // floatingTextManager.update(delta, ps);
 
         // Escape → pause
         if (io.getKeyboard().isKeyJustPressed(Input.Keys.ESCAPE)) {
@@ -218,14 +225,15 @@ public class SceneGame extends Scene {
         hud.render(batch, timeLeft);
 
         // Draw floating popups
-        
+
     }
 
     @Override
     public void dispose() {
-        if (stage != null) stage.dispose();
-        if (hud   != null) hud.dispose();
-
+        if (stage != null)
+            stage.dispose();
+        if (hud != null)
+            hud.dispose();
 
         // Just in case
         this.skin = null;

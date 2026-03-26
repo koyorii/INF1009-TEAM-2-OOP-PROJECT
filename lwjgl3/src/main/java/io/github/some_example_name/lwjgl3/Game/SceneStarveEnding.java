@@ -22,7 +22,8 @@ public class SceneStarveEnding extends Scene {
 
     public SceneStarveEnding(ISceneManager ism, PlayerStats ps) {
         super(ism);
-        // Initialize the Stage, direct keys to UI stage, set up containers like in HTML, apply styling, and listener for button press to go to GAME scene
+        // Initialize the Stage, direct keys to UI stage, set up containers like in
+        // HTML, apply styling, and listener for button press to go to GAME scene
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
@@ -72,7 +73,7 @@ public class SceneStarveEnding extends Scene {
 
         // Play bad ending music and game over SFX
         audio.playSound("game_over");
-        audio.playMusic("ending_bad");
+        audio.playMusic("ending_bad", false, 1.0f);
 
         // Score display
         menuContainer.add(scoreLabel).colspan(2).padTop(25);
