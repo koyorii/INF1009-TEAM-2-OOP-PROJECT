@@ -21,7 +21,6 @@ import io.github.some_example_name.lwjgl3.Engine.movementManager.MovementManager
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.ISceneManager;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.Scene;
 import io.github.some_example_name.lwjgl3.Engine.sceneManager.SceneManager;
-//import io.github.some_example_name.lwjgl3.FloatingTextManager;
 
 public class SceneGame extends Scene {
 
