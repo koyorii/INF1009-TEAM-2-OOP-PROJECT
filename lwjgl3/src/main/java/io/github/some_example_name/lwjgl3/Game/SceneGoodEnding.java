@@ -22,7 +22,8 @@ public class SceneGoodEnding extends Scene {
 
     public SceneGoodEnding(ISceneManager ism, PlayerStats ps) {
         super(ism);
-        // Initialize the Stage, direct keys to UI stage, set up containers like in HTML, apply styling, and listener for button press to go to GAME scene
+        // Initialize the Stage, direct keys to UI stage, set up containers like in
+        // HTML, apply styling, and listener for button press to go to GAME scene
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
@@ -68,7 +69,7 @@ public class SceneGoodEnding extends Scene {
         });
 
         // Play good ending music
-        audio.playMusic("ending_good");
+        audio.playMusic("ending_good", false, 1.0f);
         menuContainer.add(scoreLabel).colspan(2).padTop(25);
         menuContainer.row();
 

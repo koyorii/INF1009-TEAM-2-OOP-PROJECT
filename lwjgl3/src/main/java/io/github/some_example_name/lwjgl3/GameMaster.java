@@ -32,13 +32,13 @@ public class GameMaster extends ApplicationAdapter {
     private PlayerStats playerStats;
 
     public GameMaster() {
-        this.ioM       = new IOManager();
-        this.moveM     = new MovementManager(ioM);
-        this.entityM   = new EntityManager();
+        this.ioM = new IOManager();
+        this.moveM = new MovementManager(ioM);
+        this.entityM = new EntityManager();
         this.playerStats = new PlayerStats();
-        this.collisionM  = new CollisionManager(entityM, moveM, ioM, playerStats);
-        this.sceneM    = new SceneManager();
-        this.assetM    = new AssetManager();
+        this.collisionM = new CollisionManager(entityM, moveM, ioM, playerStats);
+        this.sceneM = new SceneManager();
+        this.assetM = new AssetManager();
     }
 
     @Override
@@ -77,27 +77,28 @@ public class GameMaster extends ApplicationAdapter {
         assetM.load("good_foods/Vitamin.png", Texture.class);
 
         // HUD icons
-        assetM.load("hud/heart.png",    Texture.class);
+        assetM.load("hud/heart.png", Texture.class);
         assetM.load("hud/heart-bg.png", Texture.class);
-        assetM.load("hud/armor.png",    Texture.class);
+        assetM.load("hud/armor.png", Texture.class);
         assetM.load("hud/armor-bg.png", Texture.class);
-        assetM.load("hud/meat.png",     Texture.class);
-        assetM.load("hud/meat-bg.png",  Texture.class);
+        assetM.load("hud/meat.png", Texture.class);
+        assetM.load("hud/meat-bg.png", Texture.class);
 
         // Block until all assets finish loading
         assetM.finishLoading();
 
         // ── Audio ─────────────────────────────────────────────────
-        ioM.getAudio().loadMusic("menu",        "audio/bgm_menu.mp3");
-        ioM.getAudio().loadMusic("game",        "audio/bgm_game.mp3");
+        ioM.getAudio().loadMusic("menu", "audio/bgm_menu.mp3");
+        ioM.getAudio().loadMusic("game", "audio/bgm_game.mp3");
+        ioM.getAudio().loadMusic("game_hard", "audio/bgm_game_hard.mp3");
         ioM.getAudio().loadMusic("ending_good", "audio/bgm_ending_good.mp3");
-        ioM.getAudio().loadMusic("ending_bad",  "audio/bgm_ending_bad.mp3");
+        ioM.getAudio().loadMusic("ending_bad", "audio/bgm_ending_bad.mp3");
 
-        ioM.getAudio().loadSound("eat_healthy",  "audio/sfx_eat_healthy.mp3");
-        ioM.getAudio().loadSound("eat_junk",     "audio/sfx_eat_junk.mp3");
-        ioM.getAudio().loadSound("eat_vitamin",  "audio/sfx_eat_vitamin.mp3");
+        ioM.getAudio().loadSound("eat_healthy", "audio/sfx_eat_healthy.mp3");
+        ioM.getAudio().loadSound("eat_junk", "audio/sfx_eat_junk.mp3");
+        ioM.getAudio().loadSound("eat_vitamin", "audio/sfx_eat_vitamin.mp3");
         ioM.getAudio().loadSound("button_click", "audio/sfx_button_click.mp3");
-        ioM.getAudio().loadSound("game_over",    "audio/sfx_game_over.mp3");
+        ioM.getAudio().loadSound("game_over", "audio/sfx_game_over.mp3");
 
         // Inject engine tools into SceneManager via interface
         sceneM.setEngineTools(entityM, collisionM, moveM, ioM, playerStats, assetM);
@@ -115,14 +116,25 @@ public class GameMaster extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        if (assetM   != null) assetM.dispose();
-        if (batch    != null) batch.dispose();
-        if (shape    != null) shape.dispose();
-        if (sceneM   != null) sceneM.dispose();
-        if (entityM  != null) entityM.dispose();
-        if (ioM != null && ioM.getAudio() != null) ioM.getAudio().dispose();
+        if (assetM != null)
+            assetM.dispose();
+        if (batch != null)
+            batch.dispose();
+        if (shape != null)
+            shape.dispose();
+        if (sceneM != null)
+            sceneM.dispose();
+        if (entityM != null)
+            entityM.dispose();
+        if (ioM != null && ioM.getAudio() != null)
+            ioM.getAudio().dispose();
     }
 
-    public ISceneManager getSceneManager() { return sceneM; }
-    public PlayerStats   getPlayerStats()  { return playerStats; }
+    public ISceneManager getSceneManager() {
+        return sceneM;
+    }
+
+    public PlayerStats getPlayerStats() {
+        return playerStats;
+    }
 }
