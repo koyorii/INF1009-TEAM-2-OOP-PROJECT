@@ -1,12 +1,12 @@
 package io.github.some_example_name.lwjgl3.Game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 
 import io.github.some_example_name.lwjgl3.Engine.entityManager.EntityManager;
-import io.github.some_example_name.lwjgl3.Engine.entityManager.iFoodFactory;
-import io.github.some_example_name.lwjgl3.Game.OnComingFood.FoodType;
 
 public class FoodSpawner {
 
@@ -30,24 +30,14 @@ public class FoodSpawner {
     // Food draw() offsets by currentSize/2 so it stays centered in the lane
     private final float[] laneXPositions;
 
-    private final Texture[] healthyTextures;
-    private final Texture[] junkTextures;
-    private final Texture   vitaminTexture;
-    private final iFoodFactory healthyFactory = new HealthyFoodFactory();
-    private final iFoodFactory unhealthFoodFactory = new UnhealthyFoodFactory();
-    private final iFoodFactory vitaminFactory = new VitaminFactory();
+    //A blind list of abstract factories
+    private List<iFoodFactory> factoryPool = new ArrayList<>();
 
-    // Controls spawn distribution: true = more bad food (Normal mode)
-    private boolean heavyJunk = false;
 
-    public FoodSpawner(EntityManager entityManager,
-                       Texture[] healthyTextures,
-                       Texture[] junkTextures,
-                       Texture vitaminTexture) {
+
+    public FoodSpawner(EntityManager entityManager) {
         this.entityManager   = entityManager;
-        this.healthyTextures = healthyTextures;
-        this.junkTextures    = junkTextures;
-        this.vitaminTexture  = vitaminTexture;
+
 
         // 4 centered lane positions across the screen width
         float screenW = Gdx.graphics.getWidth();
@@ -75,11 +65,15 @@ public class FoodSpawner {
         }
     }
 
+    // Method to add factories to the pool
+    public void addFactoryToPool(iFoodFactory factory) {
+        factoryPool.add(factory);
+    }
+
+
     /** Call once to enable the Fearless Hunger difficulty escalation. */
     public void enableEscalation() { this.escalate = true; }
 
-    /** Call once to switch to the Normal-mode spawn distribution (more bad food). */
-    public void enableHeavyJunk() { this.heavyJunk = true; }
 
     private void spawnFood() {
         float screenH = Gdx.graphics.getHeight();
@@ -88,42 +82,12 @@ public class FoodSpawner {
         // OncomingFood, so the full screen height = full perspective travel
         float spawnY = screenH - 10f;
         float spawnX = laneXPositions[MathUtils.random(laneXPositions.length - 1)];
+        // 1. Pick a completely random factory from the pool
+        iFoodFactory selectedFactory = factoryPool.get(MathUtils.random(factoryPool.size() - 1));
+        
+        // 2. Ask it to build food. The Spawner doesn't know if it's healthy, junk, or vegan!
+        OnComingFood newFood = selectedFactory.createFood(spawnX, spawnY, baseSpeed);
 
-        FoodType type    = randomFoodType();
-        Texture  texture = textureFor(type);
-
-        OnComingFood newFood;
-        if (type == FoodType.HEALTHY) {
-            newFood = healthyFactory.createFood(spawnX, spawnY, baseSpeed, texture);
-        } else if (type == FoodType.UNHEALTHY) {
-            newFood = unhealthFoodFactory.createFood(spawnX, spawnY, baseSpeed, texture);
-        } else {
-            newFood = vitaminFactory.createFood(spawnX, spawnY, baseSpeed, texture);
-        }
         entityManager.addEntity(newFood);
-    }
-
-    private FoodType randomFoodType() {
-        int r = MathUtils.random(9);
-        if (heavyJunk) {
-            // Normal mode: 20% healthy, 60% unhealthy, 20% vitamin
-            if (r < 2) return FoodType.HEALTHY;
-            if (r < 8) return FoodType.UNHEALTHY;
-            return FoodType.VITAMIN;
-        } else {
-            // Fearless Hunger (default): 50% healthy, 30% unhealthy, 20% vitamin
-            if (r < 5) return FoodType.HEALTHY;
-            if (r < 8) return FoodType.UNHEALTHY;
-            return FoodType.VITAMIN;
-        }
-    }
-
-    private Texture textureFor(FoodType type) {
-        switch (type) {
-            case HEALTHY:   return healthyTextures[MathUtils.random(healthyTextures.length - 1)];
-            case UNHEALTHY: return junkTextures[MathUtils.random(junkTextures.length - 1)];
-            case VITAMIN:   return vitaminTexture;
-            default:        return healthyTextures[0];
-        }
     }
 }

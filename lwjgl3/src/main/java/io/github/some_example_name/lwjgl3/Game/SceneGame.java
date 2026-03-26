@@ -42,6 +42,7 @@ public class SceneGame extends Scene {
     private final FoodSpawner foodSpawner;
     private final HudOverlay hud;
 
+
     // Normal mode countdown; -1 means no timer (Fearless Hunger)
     private float timeLeft;
 
@@ -105,16 +106,41 @@ public class SceneGame extends Scene {
                 am.get("bad_foods/rotten_apple.png", Texture.class),
         };
         Texture vitaminTexture = am.get("good_foods/Vitamin.png", Texture.class);
+        
 
-        foodSpawner = new FoodSpawner(em, healthyTextures, junkTextures, vitaminTexture);
+
+        foodSpawner = new FoodSpawner(em);
         hud = new HudOverlay(am, ps);
 
+        iFoodFactory healthyFactory = new HealthyFoodFactory(healthyTextures);
+        iFoodFactory unhealthFoodFactory = new UnhealthyFoodFactory(junkTextures); 
+        iFoodFactory vitaminFactory = new VitaminFactory(vitaminTexture);
+
         if (ps.getMode() == PlayerStats.GameMode.FEARLESS_HUNGER) {
+        
+            // Fill the Spawner's pool to create your percentages (10 items total)
+            // 50% chance (5 out of 10)
+            for (int i = 0; i < 5; i++) foodSpawner.addFactoryToPool(healthyFactory);
+            
+            // 30% chance (3 out of 10)
+            for (int i = 0; i < 3; i++) foodSpawner.addFactoryToPool(unhealthFoodFactory);
+            
+            // 20% chance (2 out of 10)
+            for (int i = 0; i < 2; i++) foodSpawner.addFactoryToPool(vitaminFactory);
+
             // Fearless Hunger: ramp up speed/frequency over time
             foodSpawner.enableEscalation();
         } else {
             // Normal mode: skew spawns toward bad food (20% healthy, 60% unhealthy, 20% vitamin)
-            foodSpawner.enableHeavyJunk();
+            // Fill the Spawner's pool to create your percentages (10 items total)
+            // 50% chance (5 out of 10)
+            for (int i = 0; i < 2; i++) foodSpawner.addFactoryToPool(healthyFactory);
+            
+            // 30% chance (3 out of 10)
+            for (int i = 0; i < 6; i++) foodSpawner.addFactoryToPool(unhealthFoodFactory);
+            
+            // 20% chance (2 out of 10)
+            for (int i = 0; i < 2; i++) foodSpawner.addFactoryToPool(vitaminFactory);
         }
 
         // ── Audio ─────────────────────────────────────────────────
