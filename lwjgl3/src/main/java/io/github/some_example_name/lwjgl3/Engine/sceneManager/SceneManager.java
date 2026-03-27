@@ -142,7 +142,7 @@ public class SceneManager implements ISceneManager {
         Preferences prefs = Gdx.app.getPreferences(PREFS_NAME);
 
         // Always show tutorial for guest player, they can skip if they want
-        boolean isBlankName = ps.getName() == "Blank" || ps.getName().trim().isEmpty();
+        boolean isBlankName = ps.getName().equals("Blank") || ps.getName().trim().isEmpty();
 
         boolean hasSeen;
         if (isBlankName) {
