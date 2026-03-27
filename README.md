@@ -37,41 +37,37 @@ For example, `core:clean` removes `build` folder only from the `core` project.
 This project uses externally sourced audio files. We would like to thank the original creators:
 
 * **`bgm_ending_bad.mp3`**
-  * **Source:** [https://freesound.org/people/gkillhour/sounds/267221/]
-  * **Creator:** [gkillhour]
+  * **Source:** [https://freesound.org/people/SunixMuz/sounds/267221/]
+  * **Creator:** [SunixMuz]
 
 * **`bgm_ending_good.mp3`**
-  * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
-  * **Creator:** [Anthousai]
-
- * **`bgm_game.mp3`**
-  * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
-  * **Creator:** [Anthousai]
+  * **Source:** [https://freesound.org/people/FunWithSound/sounds/406260/]
+  * **Creator:** [FunWithSound]
    
 * **`bgm_menu.mp3`**
-  * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
-  * **Creator:** [Anthousai]
+  * **Source:** [https://freesound.org/people/Link-Boy/sounds/406260/]
+  * **Creator:** [Link-Boy]
   
 * **`sfx_button_click.mp3`**
-  * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
-  * **Creator:** [Anthousai]
+  * **Source:** [https://freesound.org/people/MT4000/sounds/406260/]
+  * **Creator:** [MT4000]
  
 * **`sfx_eat_healthy.mp3`**
-  * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
-  * **Creator:** [Anthousai]
+  * **Source:** [https://freesound.org/people/jivatma07/sounds/406260/]
+  * **Creator:** [jivatma07]
 
 * **`sfx_eat_junk.mp3`**
-  * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
-  * **Creator:** [Anthousai]
-
- * **`sfx_eat_vitamin.mp3`**
-  * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
-  * **Creator:** [Anthousai]
+  * **Source:** [https://freesound.org/people/dersuperanton/sounds/406260/]
+  * **Creator:** [dersuperanton]
 
 * **`sfx_game_over.mp3`**
-  * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
-  * **Creator:** [Anthousai]
-   
+  * **Source:** [https://freesound.org/people/Scrampunk/sounds/406260/]
+  * **Creator:** [Scrampunk]
+
+* **`sfx_game_over.mp3`**
+  * **Source:** [https://freesound.org/people/Raclure/sounds/406260/]
+  * **Creator:** [Raclure]
+ 
 * **`craftacular-ui gdx-skins`**
   * **Source:** [https://github.com/czyzby/gdx-skins]
   * **Creator:** [yuripourre, czyzby. crykn]
