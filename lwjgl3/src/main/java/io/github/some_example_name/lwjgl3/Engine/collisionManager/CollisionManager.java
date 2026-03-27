@@ -10,17 +10,10 @@ import java.util.List;
 
 public class CollisionManager {
 
-<<<<<<< HEAD:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/collisionManager/CollisionManager.java
     private CheckCollision checker = new CheckCollision();
     private ResolveCollision resolver;
     private getEntityList provider;
     private List<Entity> entities;
-=======
-    private final CheckCollision   checker  = new CheckCollision();
-    private final ResolveCollision resolver;
-    private final getEntityList    provider;
-    private List<Entity>     entities;
->>>>>>> 7e0e8bb8e6842a268786805e27d8310018f4c018:lwjgl3/src/main/java/io/github/some_example_name/lwjgl3/Engine/collisionManager/CollisionManager.java
 
     // ── 4-arg constructor (used by GameMaster with food mechanic) ─
     public CollisionManager(getEntityList provider,
@@ -28,7 +21,7 @@ public class CollisionManager {
                             getInputs audio,
                             PlayerStats playerStats) {
         this.provider = provider;
-        this.resolver = new ResolveCollision(colMove, audio.getAudio(), playerStats);
+        this.resolver = new ResolveCollision(audio.getAudio(), playerStats);
     }
 
     // ── 3-arg constructor (fallback — no food mechanic, stats = null safe) ─
@@ -38,10 +31,10 @@ public class CollisionManager {
                             MovementCalculator colMove,
                             getInputs audio) {
         this.provider = provider;
-        this.resolver = new ResolveCollision(colMove, audio.getAudio(), null);
+        this.resolver = new ResolveCollision(audio.getAudio(), null);
     }
 
-  
+
     public ResolveCollision getResolver() {
         return resolver;
     }

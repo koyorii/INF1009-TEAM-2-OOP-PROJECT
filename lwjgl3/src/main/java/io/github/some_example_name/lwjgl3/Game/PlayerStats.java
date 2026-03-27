@@ -8,11 +8,15 @@ import com.badlogic.gdx.Preferences;
 
 public class PlayerStats {
 
-    // private static final int MAX_HP = 1; // Test code
-    // private static final int MAX_HUNGER = 1;
-    private static final int MAX_HP = 10;
+    public enum GameMode { NORMAL, FEARLESS_HUNGER }
+
     private static final int MAX_HUNGER = 10;
-    private static final int MAX_ARMOR = 5;
+
+    // Per-mode values (set by setMode before each game)
+    private int maxHp;      // growth cap  (Integer.MAX_VALUE = unlimited)
+    private int maxArmor;   // growth cap
+    private int startHp;    // HP the player starts with on reset
+    private GameMode mode;
 
     private int hp;
     private int hunger;
@@ -22,11 +26,33 @@ public class PlayerStats {
     private String name;
 
     public PlayerStats() {
-        this.hp = MAX_HP;
-        this.hunger = MAX_HUNGER;
-        this.armor = 0;
-        this.score = 0;
-        this.name = null;
+        this.mode     = GameMode.NORMAL;
+        this.maxHp    = 5;
+        this.maxArmor = 5;
+        this.startHp  = 5;
+        this.hp       = startHp;
+        this.hunger   = MAX_HUNGER;
+        this.armor    = 0;
+        this.score    = 0;
+        this.name     = null;
+    }
+
+    public void setMode(GameMode mode) {
+        this.mode = mode;
+        if (mode == GameMode.NORMAL) {
+            this.maxHp    = 5;
+            this.maxArmor = 5;
+            this.startHp  = 5;   // start full
+        } else { // FEARLESS_HUNGER — capped at 3 HP / 3 armor
+            this.maxHp    = 3;
+            this.maxArmor = 3;
+            this.startHp  = 3;
+        }
+    }
+
+    /** Normal mode has a 2-minute countdown; Fearless Hunger is endless. */
+    public boolean hasTimeLimit() {
+        return mode == GameMode.NORMAL;
     }
 
     public void setName(String name) {
@@ -38,16 +64,16 @@ public class PlayerStats {
         switch (type) {
 
             case HEALTHY:
-                // +1 HP, capped at MAX_HP
-                hp = Math.min(MAX_HP, hp + 1);
+                // +1 HP, capped at maxHp
+                hp = Math.min(maxHp, hp + 1);
                 hunger = Math.min(MAX_HUNGER, hunger + 1);
                 score += 150;
                 System.out.println("[Stats] Healthy food caught! HP=" + hp + " Hunger=" + hunger + " Score=" + score);
                 break;
 
             case VITAMIN:
-                // +1 Armor, capped at MAX_ARMOR
-                armor = Math.min(MAX_ARMOR, armor + 1);
+                // +1 Armor, capped at maxArmor
+                armor = Math.min(maxArmor, armor + 1);
                 score += 200;
                 System.out.println("[Stats] Vitamin caught! Armor=" + armor + " Score=" + score);
                 break;
@@ -114,39 +140,20 @@ public class PlayerStats {
 
     // Reset upon new game
     public void reset() {
-        this.hp = MAX_HP;
+        this.hp     = startHp;
         this.hunger = MAX_HUNGER;
-        this.armor = 0;
-        this.score = 0;
-        System.out.println("[Stats] Game Reset: HP and Score restored.");
+        this.armor  = 0;
+        this.score  = 0;
+        System.out.println("[Stats] Game Reset: HP=" + hp + " Mode=" + mode);
     }
 
     // ─── Getters ─────────────────────────────────────────────────
-    public int getHp() {
-        return hp;
-    }
-
-    public int getHunger() {
-        return hunger;
-    }
-
-    public int getArmor() {
-        return armor;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public String getName() {
-        return name;
-    };
-
-    public int getMaxHp() {
-        return MAX_HP;
-    }
-
-    public int getMaxArmor() {
-        return MAX_ARMOR;
-    }
+    public int getHp() { return hp; }
+    public int getHunger() { return hunger; }
+    public int getArmor() { return armor; }
+    public int getScore() { return score; }
+    public String getName() { return name; }
+    public int getMaxHp() { return maxHp; }
+    public int getMaxArmor() { return maxArmor; }
+    public GameMode getMode() { return mode; }
 }
