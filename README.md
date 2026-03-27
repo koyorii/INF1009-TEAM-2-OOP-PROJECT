@@ -47,3 +47,31 @@ This project uses externally sourced audio files. We would like to thank the ori
 * **`craftacular-ui gdx-skins`**
   * **Source:** [https://github.com/czyzby/gdx-skins]
   * **Creator:** [yuripourre, czyzby. crykn]
+    
+* **`fear_and_hunger_background.jpg, home_background.jpg, normal_mode_background.jpg, home_background.jpg`**
+  * **Source (Forest):** [https://gakaisozai.seesaa.net/article/200806article_10.html#comment]
+  * **Source (Home):** [https://gakaisozai.seesaa.net/article/200812article_2.html]
+  * **Creator:** [彩 雅介(Saiga Kai)]
+ 
+* **`Character (npc.png, player.png)`**
+  * **Source (npc & player):** [https://www.irasutoya.com/2013/09/blog-post_2106.html]
+  * **Creator:** [いらすとや(irasutoya)]
+ 
+* **`Bad Foods (can_juice.png, dokukinoko_benitengu_dake.png, rotten_apple.png)`**
+  * **Source (can_juice):** [https://www.irasutoya.com/2013/08/blog-post_540.html]
+  * **Source (dokukinoko):** [https://www.irasutoya.com/2015/02/blog-post_148.html]
+  * **Source (rotten_apple):** [https://www.irasutoya.com/2012/11/blog-post.html]
+  * **Creator:** [いらすとや(irasutoya)]
+    
+* **`Good Foods (apple.png, ninjin_carrot.png, petbottle_water_full.png, Vitamin.png)`**
+  * **Source (apple):** [https://www.irasutoya.com/2014/10/blog-post_718.html]
+  * **Source (carrot):** [https://www.irasutoya.com/2012/12/blog-post_8749.html]
+  * **Source (bottle):** [https://www.irasutoya.com/2018/06/blog-post_652.html]
+  * **Source (vitamin):** [https://www.irasutoya.com/2014/05/blog-post_6224.html]
+  * **Creator:** [いらすとや(irasutoya)]
+ 
+* **`Endings (bad_health_ending.png, bad_starvation_ending.png, good_ending.png)`**
+  * **Source (health):** [https://www.irasutoya.com/2017/01/blog-post_808.html]
+  * **Source (starvation):** [https://www.irasutoya.com/2019/02/blog-post_76.html]
+  * **Source (good):** [https://www.irasutoya.com/2021/03/blog-post_12.html]
+  * **Creator:** [いらすとや(irasutoya)]
