@@ -13,70 +13,48 @@ import io.github.some_example_name.lwjgl3.Engine.movementManager.AImovement;
 import io.github.some_example_name.lwjgl3.Engine.movementManager.UserMovement;
 import io.github.some_example_name.lwjgl3.Engine.movementManager.iMovable;
 
-public class OnComingFood extends MovableEntity implements iDrawableSprite,iMovable {
+public class OnComingFood extends MovableEntity implements iDrawableSprite, iMovable {
 
     public enum FoodType {
-        HEALTHY,    // +1 HP
-        VITAMIN,    // +1 Armor
-        UNHEALTHY   // -1 Armor or -1 HP
+        HEALTHY,
+        VITAMIN,
+        UNHEALTHY
     }
 
     private final FoodType foodType;
     private final Texture  texture;
-    private boolean  active = true;
+    private boolean active = true;
 
-    // ── Perspective scaling ───────────────────────────────────────
-    // Food starts tiny at the top (far away) and grows as it moves
-    // down toward the player (close up), faking a 3D oncoming effect.
+    // new: scene tutorial
+    private boolean countedByTutorial = false;
 
-    // Minimum draw size when first spawned at the top of the screen
     private static final float MIN_SIZE = 20f;
-
-    // Maximum draw size when the food reaches the bottom (player level)
     private static final float MAX_SIZE = 72f;
-
-    // Current draw size — recalculated every frame based on Y position
     private float currentSize = MIN_SIZE;
-
-    // The Y position where this food was spawned (top of screen)
     private final float spawnY;
 
-    // ── Constructor ───────────────────────────────────────────────
     public OnComingFood(float x, float y, float speed, FoodType foodType, Texture texture) {
         super(x, y, speed, Color.WHITE);
         this.foodType = foodType;
         this.texture  = texture;
-        this.spawnY   = y;  // remember where it started for scale calculation
+        this.spawnY   = y;
     }
 
-    // ── Update — moves down and grows in size ─────────────────────
     @Override
     public void update() {
         if (!active) return;
-
-
-        // How far has the food traveled as a 0..1 ratio?
-        // 0 = just spawned at top (tiny), 1 = reached bottom (full size)
         float traveled = 1f - (y / spawnY);
-        traveled = Math.max(0f, Math.min(1f, traveled)); // clamp 0..1
-
-        // Linearly interpolate between MIN_SIZE and MAX_SIZE
+        traveled = Math.max(0f, Math.min(1f, traveled));
         currentSize = MIN_SIZE + (MAX_SIZE - MIN_SIZE) * traveled;
     }
 
-    // ── Draw — centered on x, scaled by currentSize ───────────────
     @Override
     public void draw(SpriteBatch batch) {
         if (!active) return;
-
-        // Keep the food horizontally centered on its lane as it grows
         float drawX = x - currentSize / 2f;
-        float drawY = y;
-
-        batch.draw(texture, drawX, drawY, currentSize, currentSize);
+        batch.draw(texture, drawX, y, currentSize, currentSize);
     }
 
-    // ── Collision bounds — match the current scaled size ─────────
     @Override
     public Polygon getBounds() {
         float drawX = x - currentSize / 2f;
@@ -90,21 +68,23 @@ public class OnComingFood extends MovableEntity implements iDrawableSprite,iMova
         return p;
     }
 
-    // ── Getters ───────────────────────────────────────────────────
-    public FoodType getFoodType()  { return foodType;     }
-    public Texture  getTexture()   { return texture;      }
-    public boolean  isActive()     { return active;       }
+    public FoodType getFoodType()  { return foodType; }
+    public Texture  getTexture()   { return texture;  }
+    public boolean  isActive()     { return active;   }
+    public void     deactivate()   { active = false;  }
 
-    public void deactivate() { active = false; }
+    // new: scene tutorial
+    public boolean isCountedByTutorial()  { return countedByTutorial; }
+    public void    markCountedByTutorial() { this.countedByTutorial = true; }
 
-    public void performMovement(float speed, boolean isAI, Keyboard kb, UserMovement userMove, AImovement aiMove){
+    @Override
+    public void performMovement(float speed, boolean isAI, Keyboard kb,
+                                UserMovement userMove, AImovement aiMove) {
         if (!active) return;
-        float delta     = Gdx.graphics.getDeltaTime();
-        // Food knows it acts as an AI, so it uses the Engine's AI tool to fall!
+        float delta = Gdx.graphics.getDeltaTime();
         aiMove.moveDown(this, speed, delta);
     }
+
     @Override
-    public void dispose() {
-        // Textures are shared — disposal handled by GameMaster, not here
-    }
+    public void dispose() {}
 }
