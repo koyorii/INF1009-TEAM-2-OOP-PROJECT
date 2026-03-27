@@ -10,13 +10,26 @@ import io.github.some_example_name.lwjgl3.Engine.movementManager.MovementManager
 import io.github.some_example_name.lwjgl3.Game.PlayerStats;
 
 
-// defines the contract for any SceneManager
 public interface ISceneManager {
     void setScene(SceneManager.State state);
     void update(float delta);
     void render(ShapeRenderer shape, SpriteBatch batch);
+<<<<<<< Updated upstream
     void setEngineTools(EntityManager em, CollisionManager cm, MovementManager mm, IOManager io, PlayerStats ps, AssetManager am);
     AssetManager getAssets(); // All scenes will call this to borrow textures
     io.github.some_example_name.lwjgl3.Engine.iomanager.Audio getAudio(); // All scenes can trigger audio
+=======
+    void setEngineTools(EntityManager em, CollisionManager cm,
+                        MovementManager mm, IOManager io,
+                        PlayerStats ps, AssetManager am);
+    AssetManager getAssets();
+    io.github.some_example_name.lwjgl3.Engine.iomanager.Audio getAudio();
+    PlayerStats getPlayerStats();
+
+    // Called by SceneDifficulty for both modes.
+    // Checks username-based Preferences to decide whether to show the tutorial.
+    void startGame(PlayerStats.GameMode mode);
+
+>>>>>>> Stashed changes
     void dispose();
 }

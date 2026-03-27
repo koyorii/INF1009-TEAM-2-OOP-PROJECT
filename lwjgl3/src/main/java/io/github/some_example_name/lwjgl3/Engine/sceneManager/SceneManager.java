@@ -1,24 +1,34 @@
 package io.github.some_example_name.lwjgl3.Engine.sceneManager;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.assets.AssetManager;
+<<<<<<< Updated upstream
 
 import io.github.some_example_name.lwjgl3.*;
+=======
+>>>>>>> Stashed changes
 import io.github.some_example_name.lwjgl3.Engine.collisionManager.CollisionManager;
 import io.github.some_example_name.lwjgl3.Engine.entityManager.EntityManager;
 import io.github.some_example_name.lwjgl3.Engine.iomanager.IOManager;
 import io.github.some_example_name.lwjgl3.Engine.movementManager.MovementManager;
 import io.github.some_example_name.lwjgl3.Game.*;
+import io.github.some_example_name.lwjgl3.SceneTutorial;
 
-// implements ISceneManager interface (abstraction)
 public class SceneManager implements ISceneManager {
 
-    // all fields are private (encapsulation)
     private Scene currentScene;
     private Scene cachedGame;
 
+<<<<<<< Updated upstream
     public enum State {MENU, GAME, PAUSE, DIFFICULTY, NAME, LEADERBOARD, STARVED, HEALTH, GOOD}
+=======
+    public enum State {
+        MENU, GAME, PAUSE, DIFFICULTY, NAME, LEADERBOARD, STARVED, HEALTH, GOOD, TUTORIAL
+    }
+>>>>>>> Stashed changes
 
     private EntityManager em;
     private CollisionManager cm;
@@ -27,10 +37,25 @@ public class SceneManager implements ISceneManager {
     private PlayerStats ps;
     private AssetManager am;
 
+    // Preferences file shared across sessions
+    private static final String PREFS_NAME = "SustenancePrefs";
+
+    // Key pattern: "seen_tutorial_<username>_<mode>"
+    // This ensures every new username gets a tutorial for each mode,
+    // but returning players skip it automatically.
+    private String buildTutorialKey(String username, PlayerStats.GameMode mode) {
+        String safeUser = (username == null || username.trim().isEmpty()) ? "Guest" : username.trim();
+        String modeSuffix = (mode == PlayerStats.GameMode.FEARLESS_HUNGER) ? "fear" : "normal";
+        return "seen_tutorial_" + safeUser.toLowerCase() + "_" + modeSuffix;
+    }
+
     public SceneManager() {
     }
 
-    public void setEngineTools(EntityManager em, CollisionManager cm, MovementManager mm, IOManager io, PlayerStats ps,  AssetManager am) {
+    @Override
+    public void setEngineTools(EntityManager em, CollisionManager cm,
+            MovementManager mm, IOManager io,
+            PlayerStats ps, AssetManager am) {
         this.em = em;
         this.cm = cm;
         this.mm = mm;
@@ -39,25 +64,18 @@ public class SceneManager implements ISceneManager {
         this.am = am;
     }
 
-    // Function to set scenes accordingly to conditions
     @Override
     public void setScene(State state) {
-
         if (currentScene != null && state != State.PAUSE) {
-            // Only pause don't dispose of scene
             currentScene.dispose();
         }
 
         switch (state) {
-            // First scene of the game
             case MENU:
-                if (em != null) {
+                if (em != null)
                     em.clearEntities();
-                }
-                if (ps != null) {
+                if (ps != null)
                     ps.reset();
-                }
-
                 cachedGame = null;
                 currentScene = new SceneMenu(this);
                 break;
@@ -66,33 +84,42 @@ public class SceneManager implements ISceneManager {
                 currentScene = new SceneLeaderboard(this, ps);
                 break;
 
-            // Scene to pick name default to Blank if empty
             case NAME:
                 currentScene = new SceneName(this, ps);
                 break;
 
-            // Select difficulty scene
             case DIFFICULTY:
                 currentScene = new SceneDifficulty(this);
                 break;
 
-            // If a cache of your progress exists, restore, else start new
+            case TUTORIAL:
+                // Should not be called directly — use startGame(mode) instead.
+                // Fallback: show Normal tutorial if somehow reached.
+                if (em != null)
+                    em.clearEntities();
+                if (ps != null)
+                    ps.reset();
+                currentScene = new SceneTutorial(this, em, cm, mm, io,
+                        PlayerStats.GameMode.NORMAL);
+                break;
+
             case GAME:
                 if (cachedGame != null) {
                     currentScene = cachedGame;
                     cachedGame = null;
                 } else {
-                    if (em != null) {
+                    if (em != null)
                         em.clearEntities();
-                    }
-                    if (ps != null) {
+                    if (ps != null)
                         ps.reset();
-                    }
                     currentScene = new SceneGame(this, em, cm, mm, io, ps);
                 }
                 break;
 
+<<<<<<< Updated upstream
                 // Pause scene
+=======
+>>>>>>> Stashed changes
             case PAUSE:
                 cachedGame = currentScene;
                 currentScene = new ScenePause(this, io);
@@ -112,6 +139,56 @@ public class SceneManager implements ISceneManager {
         }
     }
 
+    /**
+     * Called by SceneDifficulty for both Normal and Fear & Hunger.
+     *
+     * Tutorial logic:
+     * - Key = "seen_tutorial_<username>_<mode>" stored in libGDX Preferences.
+     * - If the key is absent (new username OR first time picking this mode),
+     * show the tutorial and write the key so the next run skips it.
+     * - If the key exists (same username played this mode before), go straight to
+     * GAME.
+     *
+     * This means:
+     * - "Alice" playing Normal for the first time → tutorial shown.
+     * - "Alice" playing Normal again → tutorial skipped.
+     * - "Alice" switching to Fear & Hunger → tutorial shown (different key).
+     * - "Bob" on the same machine → tutorial shown (different username key).
+     */
+    public void startGame(PlayerStats.GameMode mode) {
+        ps.setMode(mode);
+
+        String key = buildTutorialKey(ps.getName(), mode);
+        Preferences prefs = Gdx.app.getPreferences(PREFS_NAME);
+        boolean hasSeen = prefs.getBoolean(key, false);
+
+        if (!hasSeen) {
+            prefs.putBoolean(key, true);
+            prefs.flush();
+
+            // Dispose current scene, then open tutorial for this mode
+            if (currentScene != null)
+                currentScene.dispose();
+            if (em != null)
+                em.clearEntities();
+            if (ps != null)
+                ps.reset();
+            currentScene = new SceneTutorial(this, em, cm, mm, io, mode);
+        } else {
+            // Returning player — jump straight to game
+            if (em != null)
+                em.clearEntities();
+            if (ps != null)
+                ps.reset();
+            if (currentScene != null)
+                currentScene.dispose();
+            currentScene = new SceneGame(this, em, cm, mm, io, ps);
+        }
+    }
+
+    public void startNormalMode() {
+        startGame(PlayerStats.GameMode.NORMAL);
+    }
 
     @Override
     public void update(float delta) {
@@ -122,7 +199,6 @@ public class SceneManager implements ISceneManager {
 
     @Override
     public void render(ShapeRenderer shape, SpriteBatch batch) {
-        // Render cached game first (underneath pause overlay)
         if (cachedGame != null) {
             cachedGame.render(shape, batch);
         }
@@ -131,7 +207,6 @@ public class SceneManager implements ISceneManager {
         }
     }
 
-    // This would allow top level clear of progression to properly clear resources
     @Override
     public void dispose() {
         if (currentScene != null) {
