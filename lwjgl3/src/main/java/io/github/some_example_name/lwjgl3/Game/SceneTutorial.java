@@ -68,16 +68,6 @@ public class SceneTutorial extends Scene {
                 3) {
             @Override
             public TutorialPhase next() {
-                return FEAR_VITAMIN;
-            }
-        },
-        FEAR_VITAMIN(
-                "Grab VITAMINS for Armor!",
-                "You only have 2 Armor slots.\nVitamins are your only shield — catch every one you can.",
-                OnComingFood.FoodType.VITAMIN,
-                2) {
-            @Override
-            public TutorialPhase next() {
                 return FEAR_UNHEALTHY;
             }
         },
@@ -128,9 +118,6 @@ public class SceneTutorial extends Scene {
     private final MovementManager mm;
     private final IOManager io;
 
-    // The mode determines which phase chain to start on
-    private final PlayerStats.GameMode mode;
-
     // Isolated stats so tutorial catches never affect the real game state
     private final PlayerStats tutorialStats;
 
@@ -141,7 +128,7 @@ public class SceneTutorial extends Scene {
 
     private final Player player;
 
-  
+
     private final Stage stage;
     private Skin skin;
     private final Label titleLabel;
@@ -168,7 +155,6 @@ public class SceneTutorial extends Scene {
         this.cm = cm;
         this.mm = mm;
         this.io = io;
-        this.mode = mode;
 
         this.tutorialStats = new PlayerStats();
         this.tutorialStats.setMode(mode);

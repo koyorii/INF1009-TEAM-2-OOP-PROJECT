@@ -140,22 +140,36 @@ public class SceneManager implements ISceneManager {
 
         String key = buildTutorialKey(ps.getName(), mode);
         Preferences prefs = Gdx.app.getPreferences(PREFS_NAME);
-        boolean hasSeen = prefs.getBoolean(key, false);
+
+        // Always show tutorial for guest player, they can skip if they want
+        boolean isBlankName = ps.getName() == "Blank" || ps.getName().trim().isEmpty();
+
+        boolean hasSeen;
+        if (isBlankName) {
+            hasSeen = false;
+            prefs.remove(key);
+            prefs.flush();
+        } else {
+            hasSeen = prefs.getBoolean(key, false);
+        }
 
         if (!hasSeen) {
-            prefs.putBoolean(key, true);
-            prefs.flush();
+            if (!isBlankName) {
+                prefs.putBoolean(key, true);
+                prefs.flush();
+            }
 
-            // Dispose current scene, then open tutorial for this mode
             if (currentScene != null) currentScene.dispose();
             if (em != null) em.clearEntities();
             if (ps != null) ps.reset();
+
             currentScene = new SceneTutorial(this, em, cm, mm, io, mode);
+
         } else {
-            // Returning player — jump straight to game
             if (em != null) em.clearEntities();
             if (ps != null) ps.reset();
             if (currentScene != null) currentScene.dispose();
+
             currentScene = new SceneGame(this, em, cm, mm, io, ps);
         }
     }
