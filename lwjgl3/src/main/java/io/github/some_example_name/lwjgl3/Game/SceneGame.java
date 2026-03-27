@@ -207,12 +207,12 @@ public class SceneGame extends Scene {
             if (ps.getHp() == 0) {
                 // Died from damage
                 sceneManager.setScene(SceneManager.State.HEALTH);
-            } else if (ps.getHunger() == 0 && ps.getScore() <= 1000) {
+            } else if (ps.getHunger() == 0 && ps.getScore() <= 1700) {
                 // Starved AND score was too low to survive
                 sceneManager.setScene(SceneManager.State.STARVED);
             } else {
                 // Starved but with a decent score — still a bad health ending
-                sceneManager.setScene(SceneManager.State.HEALTH);
+                sceneManager.setScene(SceneManager.State.GOOD);
             }
         }
     }
