@@ -36,14 +36,42 @@ For example, `core:clean` removes `build` folder only from the `core` project.
 
 This project uses externally sourced audio files. We would like to thank the original creators:
 
-* **`catch.wav`**
+* **`bgm_ending_bad.mp3`**
   * **Source:** [https://freesound.org/people/gkillhour/sounds/267221/]
   * **Creator:** [gkillhour]
 
-* **`hit.wav`**
+* **`bgm_ending_good.mp3`**
   * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
   * **Creator:** [Anthousai]
 
+ * **`bgm_game.mp3`**
+  * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
+  * **Creator:** [Anthousai]
+   
+* **`bgm_menu.mp3`**
+  * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
+  * **Creator:** [Anthousai]
+  
+* **`sfx_button_click.mp3`**
+  * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
+  * **Creator:** [Anthousai]
+ 
+* **`sfx_eat_healthy.mp3`**
+  * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
+  * **Creator:** [Anthousai]
+
+* **`sfx_eat_junk.mp3`**
+  * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
+  * **Creator:** [Anthousai]
+
+ * **`sfx_eat_vitamin.mp3`**
+  * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
+  * **Creator:** [Anthousai]
+
+* **`sfx_game_over.mp3`**
+  * **Source:** [https://freesound.org/people/Anthousai/sounds/406260/]
+  * **Creator:** [Anthousai]
+   
 * **`craftacular-ui gdx-skins`**
   * **Source:** [https://github.com/czyzby/gdx-skins]
   * **Creator:** [yuripourre, czyzby. crykn]
