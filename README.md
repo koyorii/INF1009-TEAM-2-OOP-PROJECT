@@ -37,35 +37,35 @@ For example, `core:clean` removes `build` folder only from the `core` project.
 This project uses externally sourced audio files. We would like to thank the original creators:
 
 * **`bgm_ending_bad.mp3`**
-  * **Source:** [https://freesound.org/people/SunixMuz/sounds/267221/]
+  * **Source:** [https://freesound.org/people/SunixMuz/sounds]
   * **Creator:** [SunixMuz]
 
 * **`bgm_ending_good.mp3`**
-  * **Source:** [https://freesound.org/people/FunWithSound/sounds/406260/]
+  * **Source:** [https://freesound.org/people/FunWithSound/sounds]
   * **Creator:** [FunWithSound]
    
 * **`bgm_menu.mp3`**
-  * **Source:** [https://freesound.org/people/Link-Boy/sounds/406260/]
+  * **Source:** [https://freesound.org/people/Link-Boy/sounds]
   * **Creator:** [Link-Boy]
   
 * **`sfx_button_click.mp3`**
-  * **Source:** [https://freesound.org/people/MT4000/sounds/406260/]
+  * **Source:** [https://freesound.org/people/MT4000/sounds]
   * **Creator:** [MT4000]
  
 * **`sfx_eat_healthy.mp3`**
-  * **Source:** [https://freesound.org/people/jivatma07/sounds/406260/]
+  * **Source:** [https://freesound.org/people/jivatma07/sounds]
   * **Creator:** [jivatma07]
 
 * **`sfx_eat_junk.mp3`**
-  * **Source:** [https://freesound.org/people/dersuperanton/sounds/406260/]
+  * **Source:** [https://freesound.org/people/dersuperanton/sounds]
   * **Creator:** [dersuperanton]
 
 * **`sfx_game_over.mp3`**
-  * **Source:** [https://freesound.org/people/Scrampunk/sounds/406260/]
+  * **Source:** [https://freesound.org/people/Scrampunk/sounds]
   * **Creator:** [Scrampunk]
 
 * **`sfx_game_over.mp3`**
-  * **Source:** [https://freesound.org/people/Raclure/sounds/406260/]
+  * **Source:** [https://freesound.org/people/Raclure/sounds]
   * **Creator:** [Raclure]
  
 * **`craftacular-ui gdx-skins`**
