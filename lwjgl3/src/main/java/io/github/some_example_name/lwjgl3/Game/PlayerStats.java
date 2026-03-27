@@ -50,7 +50,7 @@ public class PlayerStats {
             this.hunger    = maxHunger;
         } else { // FEARLESS_HUNGER — capped at 3 HP / 3 armor
             this.maxHp     = 2;
-            this.maxArmor  = 2;
+            this.maxArmor  = 0; // No armor for hard mode
             this.maxHunger = MAX_HUNGER_FEARLESS;
             this.startHp   = 2;
             this.hunger    = maxHunger;
