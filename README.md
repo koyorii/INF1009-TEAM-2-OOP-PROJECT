@@ -34,7 +34,7 @@ For example, `core:clean` removes `build` folder only from the `core` project.
 
 ## Credits & Attributions
 
-This project uses externally sourced audio files. We would like to thank the original creators:
+This project uses externally sourced asset files. We would like to thank the original creators:
 
 * **`bgm_ending_bad.mp3`**
   * **Source:** [https://freesound.org/people/SunixMuz/sounds]
